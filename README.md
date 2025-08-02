@@ -1,3 +1,22 @@
+<p align="center">
+<a href="https://yourusername.github.io/sccf-website">
+<img src="https://via.placeholder.com/150/6366f1/ffffff?text=SCCF" alt="SCCF Logo">
+</a>
+</p>
+<h1 align="center">Social Contribution Collective Foundation (SCCF) Website</h1>
+<p align="center">
+A modern, responsive website for the <strong>Social Contribution Collective Foundation</strong> — a Non-Governmental Organization dedicated to social contribution and community development worldwide.
+<br />
+<br />
+<a href="#">View Demo</a>
+·
+<a href="https://github.com/yourusername/sccf-website/issues">Report Bug</a>
+·
+<a href="https://github.com/yourusername/sccf-website/issues">Request Feature</a>
+</p>
+<p align="center">
+<img src="https://via.placeholder.com/800x400/6366f1/ffffff?text=SCCF+Website+Preview" alt="SCCF Website Preview">
+</p>
 🌟 About SCCF
 The Social Contribution Collective Foundation emerged from a grassroots movement of dedicated individuals committed to creating lasting positive change in underserved communities worldwide. Founded in 2015, we focus on education, healthcare, environmental sustainability, and economic development while fostering local leadership and self-reliance.
 🚀 Features
@@ -106,3 +125,6 @@ Address: 123 Community Drive, Development City, DC 12345
 Design inspiration from modern NGO websites.
 Icons and graphics from various open-source projects.
 All volunteers and contributors who made this possible.
+<hr>
+<p align="center">Made with ❤️ for community development.</p>
+<p align="center"><em>Empowering communities through collective action and sustainable development.</em></p>
