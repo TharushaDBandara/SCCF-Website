@@ -772,11 +772,25 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Resolve media URLs that come from the admin server (e.g., /uploads/..)
+  // In production (no API_BASE), map /uploads/* to local placeholders so cards don’t break.
+  const PLACEHOLDER_IMAGES = [
+    'assets/images/education/e1.jpg',
+    'assets/images/education/e2.jpg',
+    'assets/images/education/e3.jpg',
+    'assets/images/education/e4.jpg'
+  ];
+  function pickPlaceholder(seedStr = '') {
+    try { let h=0,s=String(seedStr); for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return PLACEHOLDER_IMAGES[h%PLACEHOLDER_IMAGES.length]; } catch { return PLACEHOLDER_IMAGES[0]; }
+  }
   function resolveMedia(url) {
     if (!url) return '';
     // If the URL is an absolute path coming from the admin API, prefix with API host in dev
     if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
       return API_BASE + url;
+    }
+    // In production, map /uploads/* to bundled assets at assets/uploads/*
+    if (!API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
+      return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
     }
     return url;
   }
@@ -811,7 +825,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         article.innerHTML = `
           <div class="project-image">
-            <img src="${imgSrc}" alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy">
+            <img src="${imgSrc}" alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy" onerror="this.onerror=null; this.src='${pickPlaceholder(proj.id || proj.title)}'">
             <div class="project-overlay">
               <div class="project-overlay-content">
                 <h3 data-en="${escapeHtml(proj.title?.en || proj.title)}" data-si="${escapeHtml(proj.title?.si || '')}" data-ta="${escapeHtml(proj.title?.ta || '')}">${escapeHtml(proj.title?.en || proj.title)}</h3>
@@ -882,6 +896,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!url) return '';
     if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
       return API_BASE + url;
+    }
+    if (!API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
+      return 'assets' + url;
     }
     return url;
   }
@@ -957,7 +974,7 @@ document.addEventListener('DOMContentLoaded', function() {
         div.setAttribute('data-category', it.category || 'community');
         div.setAttribute('data-tags', (it.tags || []).join(','));
         div.innerHTML = `
-          <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy">
+          <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy" onerror="this.onerror=null; this.src='assets/images/education/e2.jpg'">
           <div class="gallery-overlay"><div class="gallery-info">
             <h4>${escapeHtml((it.category || 'Photo'))}</h4>
             <p>${escapeHtml(truncate(it.description || (it.tags || []).join(', ')))}</p>
