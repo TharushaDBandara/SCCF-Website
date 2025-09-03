@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Details - SCCF</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <style>
+    /* Force full-width sticky header on this page (override floating glass) */
+    body[data-page='project'] header,
+    body[data-page='project'] header.scrolled,
+    body[data-page='project'] header.visible,
+    body[data-page='project'] header.hidden {
+      position: sticky !important;
+      top: 0 !important;
+      left: 0 !important;
+      transform: none !important;
+      width: 100% !important;
+      max-width: none !important;
+      border-radius: 0 !important;
+      opacity: 1 !important;
+      background: rgba(255,255,255,0.97) !important;
+      box-shadow: var(--shadow-lg) !important;
+    }
+    /* Neutralize global section top line */
+    body[data-page='project'] .section::before { display: none !important; height: 0 !important; }
+
+    /* Page-local layout */
+    .p-container { padding-left: 1rem; padding-right: 1rem; max-width: 1200px; margin: 0 auto; }
+    .p-main { padding-top: 0; }
+    .p-back { display:inline-block; margin: .5rem 0 1rem; }
+    .p-header { margin: 0 0 1rem; }
+    .p-title { font-size: clamp(1.9rem, 2.2vw + 1rem, 2.6rem); font-weight: 800; margin: .25rem 0 .5rem; }
+    .p-summary { max-width: 75ch; color: var(--text-secondary); }
+    .p-cover { margin: 1rem 0 1.25rem; }
+    .p-cover img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-lg); display:block; }
+
+    .p-info { margin: .5rem 0 2rem; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 900px) { .p-info { grid-template-columns: 1fr 1fr; } }
+    .p-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); }
+    .p-card strong { color: var(--primary); }
+    .p-stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+    .p-stat { text-align:center; background: var(--background-secondary); border-radius: 12px; padding: 1rem; }
+    .p-stat .num { display:block; font-size: 2rem; font-weight: 800; color: #0ea5b7; }
+
+    .p-desc { margin: .5rem 0 2rem; }
+    .p-desc p { margin: 0; }
+
+    .p-gallery { margin: 1rem 0 2rem; }
+    .p-gallery h2 { margin: 0 0 .75rem; }
+    .p-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    @media (min-width: 800px) { .p-grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    .p-grid .item img { width: 100%; height: auto; border-radius: 10px; display:block; }
+  </style>
+  <script defer src="assets/main.js"></script>
+</head>
+<body data-page="project">
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="index.html#home" class="logo" aria-label="SCCF Home">
+        <img src="assets/logo.png" width="40" height="40" alt="SCCF Logo" class="logo-icon">
+      </a>
+      <div class="nav-content">
+        <ul id="nav-menu" class="nav-menu">
+          <li><a href="index.html#home" data-en="Home" data-si="මුල් පිටුව" data-ta="முகப்பு">Home</a></li>
+          <li><a href="index.html#about" data-en="About Us" data-si="අප ගැන" data-ta="எங்களைப் பற்றி">About Us</a></li>
+          <li class="active"><a href="index.html#projects" data-en="Projects" data-si="ව්‍යාපෘති" data-ta="திட்டங்கள்">Projects</a></li>
+          <li><a href="index.html#gallery" data-en="Gallery" data-si="ගැලරිය" data-ta="தொகுப்பு">Gallery</a></li>
+          <li><a href="index.html#contact" data-en="Contact" data-si="සම්බන්ධ වන්න" data-ta="தொடர்பு">Contact</a></li>
+        </ul>
+        <div class="language-toggle">
+          <button class="lang-btn active" data-lang="en" aria-label="English">EN</button>
+          <button class="lang-btn" data-lang="si" aria-label="Sinhala">සි</button>
+          <button class="lang-btn" data-lang="ta" aria-label="Tamil">த</button>
+        </div>
+      </div>
+      <div class="navbar-social">
+        <a href="https://facebook.com/sccf" aria-label="Follow us on Facebook" class="social-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="https://instagram.com/sccf" aria-label="Follow us on Instagram" class="social-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="https://wa.me/15551234567" aria-label="Contact us on WhatsApp" class="social-link"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0 0 20.51 3.488"/></svg></a>
+      </div>
+      <button class="nav-toggle" aria-label="Open navigation menu" aria-controls="nav-menu" aria-expanded="false">
+        <span class="hamburger"></span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="p-container p-main" id="page-main">
+    <a href="index.html#projects" class="btn p-back">← Back to Projects</a>
+
+    <section class="p-header" id="project-header">
+      <h1 id="title" class="p-title">Loading…</h1>
+      <p id="summary" class="p-summary"></p>
+      <div class="p-cover" id="cover-wrap" hidden><img id="cover" alt="Project cover"></div>
+    </section>
+
+    <section class="p-info" id="project-info">
+      <div class="p-card"><p><strong>Category:</strong> <span id="category"></span> &nbsp;|&nbsp; <strong>Status:</strong> <span id="status"></span></p></div>
+      <div class="p-stats" id="stats"></div>
+    </section>
+
+    <section class="p-desc" id="project-desc"><div id="description"></div></section>
+
+    <section id="gallery" class="p-gallery" hidden>
+      <h2 data-en="Project Gallery" data-si="විධානයේ ඡායාරූප" data-ta="திட்டத் தொகுப்பு">Project Gallery</h2>
+      <div class="p-grid" id="gallery-grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="p-container"><p>&copy; 2025 SCCF</p></div>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
+    function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'})[s]); }
+    function resolveMedia(url){ if(!url) return ''; if(API_BASE && typeof url==='string' && url.startsWith('/')) return API_BASE+url; return url; }
+    function fetchFromAPI(pid){ if(!API_BASE) return Promise.resolve(null); return fetch(API_BASE + '/api/projects/' + encodeURIComponent(pid)).then(r=>r.ok?r.json():null).catch(()=>null); }
+    function fetchFromStatic(pid){ return fetch('assets/projects.json', { cache: 'no-store' }).then(r=>r.ok?r.json():[]).then(list=>Array.isArray(list)?list.find(p=>String(p.id)===String(pid)):null).catch(()=>null); }
+
+    // Apply a precise top padding equal to current header height + spacing
+    function applyHeaderOffset(){
+      const header = document.querySelector('header');
+      const mainEl = document.getElementById('page-main');
+      if (!header || !mainEl) return;
+      const h = header.getBoundingClientRect().height || 0;
+      mainEl.style.paddingTop = (h + 16) + 'px'; // 16px breathing space
+    }
+    window.addEventListener('resize', applyHeaderOffset);
+    document.addEventListener('DOMContentLoaded', applyHeaderOffset);
+
+    (id ? fetchFromAPI(id).then(p=>p||fetchFromStatic(id)) : Promise.resolve(null))
+      .then(proj => {
+        if(!proj){ document.getElementById('title').textContent = 'Project not found'; return; }
+        applyHeaderOffset();
+
+        // Title + summary
+        const t = document.getElementById('title');
+        const s = document.getElementById('summary');
+        t.setAttribute('data-en', proj.title?.en || proj.title || '');
+        t.setAttribute('data-si', proj.title?.si || '');
+        t.setAttribute('data-ta', proj.title?.ta || '');
+        t.textContent = proj.title?.en || proj.title || '';
+        s.setAttribute('data-en', proj.summary?.en || proj.summary || '');
+        s.setAttribute('data-si', proj.summary?.si || '');
+        s.setAttribute('data-ta', proj.summary?.ta || '');
+        s.textContent = proj.summary?.en || proj.summary || '';
+
+        // Cover image
+        const coverUrl = resolveMedia(proj.main_image || proj.image || '');
+        const coverWrap = document.getElementById('cover-wrap');
+        if (coverUrl) {
+          const img = document.getElementById('cover');
+          img.src = coverUrl; img.alt = proj.title?.en || proj.title || 'Project image';
+          coverWrap.hidden = false;
+        } else {
+          coverWrap.hidden = true;
+        }
+
+        // Meta + stats
+        document.getElementById('category').textContent = proj.category || '';
+        document.getElementById('status').textContent = proj.status || '';
+        const stats = document.getElementById('stats');
+        stats.innerHTML = '';
+        const addStat = (st) => {
+          const d=document.createElement('div'); d.className='p-stat';
+          d.innerHTML = `<span class='num'>${escapeHtml(st.number||'')}</span><span class='label' data-en='${escapeHtml(st.label?.en||'')}' data-si='${escapeHtml(st.label?.si||'')}' data-ta='${escapeHtml(st.label?.ta||'')}'>${escapeHtml(st.label?.en||'')}</span>`;
+          stats.appendChild(d);
+        };
+        if (proj.stat1) addStat(proj.stat1);
+        if (proj.stat2) addStat(proj.stat2);
+
+        // Description (support both description.long... and longDescription shapes)
+        const desc = document.getElementById('description');
+        const longEn = (proj.description && (proj.description.en || proj.description.long_en)) || proj.longDescription?.en || '';
+        const longSi = (proj.description && (proj.description.si || proj.description.long_si)) || proj.longDescription?.si || '';
+        const longTa = (proj.description && (proj.description.ta || proj.description.long_ta)) || proj.longDescription?.ta || '';
+        if (longEn || longSi || longTa) {
+          const p = document.createElement('p'); p.className='lead';
+          p.setAttribute('data-en', escapeHtml(longEn));
+          p.setAttribute('data-si', escapeHtml(longSi));
+          p.setAttribute('data-ta', escapeHtml(longTa));
+          p.textContent = longEn || s.textContent; desc.appendChild(p);
+        }
+
+        // Gallery
+        const gallery = Array.isArray(proj.gallery_images) ? proj.gallery_images : [];
+        if (gallery.length) {
+          document.getElementById('gallery').hidden = false;
+          const grid = document.getElementById('gallery-grid');
+          grid.innerHTML = '';
+          gallery.forEach(u => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.setAttribute('data-category', proj.category || 'community');
+            div.innerHTML = `<img src='${escapeHtml(resolveMedia(u))}' alt='${escapeHtml(proj.title?.en || 'Project image')}' />`;
+            grid.appendChild(div);
+          });
+        }
+
+        // Apply saved language
+        try { const lang = localStorage.getItem('preferredLanguage') || 'en'; if (typeof switchLanguage === 'function') switchLanguage(lang); } catch {}
+      })
+      .catch(err => { console.error(err); document.getElementById('title').textContent = 'Failed to load project data'; });
+  </script>
+</body>
+</html>

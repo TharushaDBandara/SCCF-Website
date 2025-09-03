@@ -49,6 +49,50 @@ window.addEventListener('scroll', throttledScroll, { passive: true });
 // Initialize header state
 header.classList.add('visible');
 
+// Language switching functionality
+const langButtons = document.querySelectorAll('.lang-btn');
+
+// Set default language
+let currentLanguage = 'en';
+
+// Language switching function
+function switchLanguage(lang) {
+  currentLanguage = lang;
+  
+  // Update all translatable elements
+  // Re-query elements to include any dynamically injected content
+  const elementsToTranslate = document.querySelectorAll('[data-en]');
+  elementsToTranslate.forEach(element => {
+    const translation = element.getAttribute(`data-${lang}`);
+    if (translation) {
+      element.textContent = translation;
+    }
+  });
+  
+  // Update active language button
+  langButtons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.getAttribute('data-lang') === lang) {
+      btn.classList.add('active');
+    }
+  });
+  
+  // Store language preference
+  localStorage.setItem('preferredLanguage', lang);
+}
+
+// Add event listeners to language buttons
+langButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const lang = button.getAttribute('data-lang');
+    switchLanguage(lang);
+  });
+});
+
+// Load saved language preference or default to English
+const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
+switchLanguage(savedLanguage);
+
 // Ensure elements exist before adding event listeners
 if (navToggle && navContent) {
   // Mobile navigation toggle with enhanced animations
@@ -709,4 +753,280 @@ Please reply directly to: ${email}`;
       }
     }, 8000);
   }
+});
+
+// Projects renderer: load from API (dev) or fallback to static JSON (prod) and inject into .projects-grid
+document.addEventListener('DOMContentLoaded', function() {
+  const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
+  const projectsGrid = document.querySelector('.projects-grid');
+  if (!projectsGrid) return;
+
+  // Helper: fetch with timeout
+  function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 5000 } = options;
+    const finalOptions = Object.assign({ cache: 'no-store', mode: 'cors' }, options);
+    return Promise.race([
+      fetch(resource, finalOptions),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))
+    ]);
+  }
+
+  // Resolve media URLs that come from the admin server (e.g., /uploads/..)
+  function resolveMedia(url) {
+    if (!url) return '';
+    // If the URL is an absolute path coming from the admin API, prefix with API host in dev
+    if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
+      return API_BASE + url;
+    }
+    return url;
+  }
+
+  function loadProjects() {
+    if (API_BASE) {
+      return fetchWithTimeout(`${API_BASE}/api/projects`).then(r => r.json()).catch(() => null);
+    }
+    return Promise.resolve(null);
+  }
+
+  function loadProjectsFallback() {
+    return fetch('assets/projects.json').then(r => r.json()).catch(() => []);
+  }
+
+  loadProjects()
+    .then(apiProjects => apiProjects || loadProjectsFallback())
+    .catch(() => loadProjectsFallback())
+    .then(projects => {
+      try { console.log('[projects] source:', Array.isArray(projects) ? (API_BASE ? 'api' : 'static') : 'unknown', 'count=', (projects||[]).length); } catch {}
+      if (!Array.isArray(projects)) projects = [];
+      if (projects.length === 0) {
+        const empty = document.createElement('p');
+        empty.textContent = 'No projects yet.';
+        projectsGrid.appendChild(empty);
+        return;
+      }
+      projects.forEach(proj => {
+        const imgSrc = resolveMedia(proj.main_image || proj.image || '');
+        const article = document.createElement('article');
+        article.className = 'project-card';
+
+        article.innerHTML = `
+          <div class="project-image">
+            <img src="${imgSrc}" alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy">
+            <div class="project-overlay">
+              <div class="project-overlay-content">
+                <h3 data-en="${escapeHtml(proj.title?.en || proj.title)}" data-si="${escapeHtml(proj.title?.si || '')}" data-ta="${escapeHtml(proj.title?.ta || '')}">${escapeHtml(proj.title?.en || proj.title)}</h3>
+                <p data-en="${escapeHtml(proj.summary?.en || proj.summary || '')}" data-si="${escapeHtml(proj.summary?.si || '')}" data-ta="${escapeHtml(proj.summary?.ta || '')}">${escapeHtml(proj.summary?.en || proj.summary || '')}</p>
+                <a href="projects.html?id=${encodeURIComponent(proj.id)}" class="btn-overlay">View Project</a>
+              </div>
+            </div>
+          </div>
+          <div class="project-content">
+            <div class="project-meta">
+              <span class="project-category" data-en="${escapeHtml(proj.category || '')}">${escapeHtml(proj.category || '')}</span>
+              <span class="project-status" data-en="${escapeHtml(proj.status || '')}">${escapeHtml(proj.status || '')}</span>
+            </div>
+            <h3 data-en="${escapeHtml(proj.title?.en || proj.title)}" data-si="${escapeHtml(proj.title?.si || '')}" data-ta="${escapeHtml(proj.title?.ta || '')}">${escapeHtml(proj.title?.en || proj.title)}</h3>
+            <p data-en="${escapeHtml(proj.summary?.en || proj.summary || '')}" data-si="${escapeHtml(proj.summary?.si || '')}" data-ta="${escapeHtml(proj.summary?.ta || '')}">${escapeHtml(proj.summary?.en || proj.summary || '')}</p>
+            <div class="project-stats">
+              <div class="stat">
+                <span class="stat-number">${escapeHtml(proj.stat1?.number || '')}</span>
+                <span class="stat-label" data-en="${escapeHtml(proj.stat1?.label?.en || '')}" data-si="${escapeHtml(proj.stat1?.label?.si || '')}" data-ta="${escapeHtml(proj.stat1?.label?.ta || '')}">${escapeHtml(proj.stat1?.label?.en || '')}</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">${escapeHtml(proj.stat2?.number || '')}</span>
+                <span class="stat-label" data-en="${escapeHtml(proj.stat2?.label?.en || '')}" data-si="${escapeHtml(proj.stat2?.label?.si || '')}" data-ta="${escapeHtml(proj.stat2?.label?.ta || '')}">${escapeHtml(proj.stat2?.label?.en || '')}</span>
+              </div>
+            </div>
+            <a href="projects.html?id=${encodeURIComponent(proj.id)}" class="project-link" data-en="Learn More">Learn More</a>
+          </div>
+        `;
+
+        projectsGrid.appendChild(article);
+      });
+
+      // Re-run translation to apply current language to newly added elements
+      switchLanguage(currentLanguage);
+
+      // Observe animations for new elements
+      document.querySelectorAll('.project-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(el);
+      });
+    })
+  .catch(err => console.error('Failed to load projects list', err));
+
+  // Simple HTML escaper to prevent injection from JSON
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, function (s) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[s];
+    });
+  }
+});
+
+// Gallery: fetch dynamic items from API (dev) or derive from static projects.json (prod)
+document.addEventListener('DOMContentLoaded', function() {
+  // On the project detail page, we render a project-specific gallery.
+  // Skip the global gallery loader to avoid overriding that content.
+  if (document.body && document.body.getAttribute('data-page') === 'project') {
+    return;
+  }
+  const galleryGrid = document.querySelector('.gallery-grid');
+  const filtersContainer = document.querySelector('.gallery-filters');
+  if (!galleryGrid) return;
+
+  const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
+
+  function resolveMedia(url) {
+    if (!url) return '';
+    if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
+      return API_BASE + url;
+    }
+    return url;
+  }
+
+  // Local escaper for this block
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, function (s) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[s];
+    });
+  }
+
+  function fetchWithTimeout(resource, options = {}) {
+    const { timeout = 1500 } = options;
+    return Promise.race([
+      fetch(resource, options),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout))
+    ]);
+  }
+
+  function deriveGalleryFromProjects(projects) {
+    const items = [];
+    (projects || []).forEach(p => {
+      const desc = (p.summary && (p.summary.en || p.summary)) || (p.title && (p.title.en || p.title)) || '';
+      if (p.main_image || p.image) items.push({ url: resolveMedia(p.main_image || p.image), category: p.category || '', tags: p.tags || [], projectId: p.id, description: desc });
+      (p.gallery_images || []).forEach(u => items.push({ url: resolveMedia(u), category: p.category || '', tags: p.tags || [], projectId: p.id, description: desc }));
+    });
+    return items;
+  }
+
+  function loadGallery() {
+    if (API_BASE) {
+      return fetchWithTimeout(`${API_BASE}/api/gallery`).then(r => r.json()).catch(() => null);
+    }
+    return Promise.resolve(null);
+  }
+
+  function loadProjectsFallback() {
+    return fetch('assets/projects.json').then(r => r.json()).then(deriveGalleryFromProjects).catch(() => []);
+  }
+
+  loadGallery()
+    .then(items => items || loadProjectsFallback())
+    .catch(() => loadProjectsFallback())
+    .then(items => {
+      const allItems = Array.isArray(items) ? items : [];
+
+      // Limit on homepage to first 25; show all on dedicated gallery page
+      const isFullGalleryPage = document.body && document.body.getAttribute('data-page') === 'gallery';
+      const renderItems = isFullGalleryPage ? allItems : allItems.slice(0, 25);
+
+      const truncate = (text, n = 90) => {
+        const t = String(text || '').trim();
+        return t.length > n ? t.slice(0, n - 1) + '…' : t;
+      };
+
+  // If nothing to render, keep existing static items and just add See more button
+      if (!renderItems.length) {
+        if (!isFullGalleryPage && galleryGrid.children.length > 0) {
+          const moreWrap = document.createElement('div');
+          moreWrap.className = 'gallery-see-more';
+          moreWrap.innerHTML = `<a class="btn btn-primary" href="gallery.html">See more</a>`;
+          const container = galleryGrid.parentElement || document.getElementById('gallery') || document.body;
+          container.appendChild(moreWrap);
+        }
+        return;
+      }
+
+      galleryGrid.innerHTML = '';
+
+      renderItems.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+        div.setAttribute('data-category', it.category || 'community');
+        div.setAttribute('data-tags', (it.tags || []).join(','));
+        div.innerHTML = `
+          <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy">
+          <div class="gallery-overlay"><div class="gallery-info">
+            <h4>${escapeHtml((it.category || 'Photo'))}</h4>
+            <p>${escapeHtml(truncate(it.description || (it.tags || []).join(', ')))}</p>
+            <span class="gallery-category">${it.category || ''}</span>
+          </div></div>`;
+        galleryGrid.appendChild(div);
+      });
+
+      // Build dynamic filter buttons from categories
+      if (filtersContainer) {
+        const uniqueCats = Array.from(new Set(allItems.map(it => (it.category || '').trim()).filter(Boolean)));
+        filtersContainer.innerHTML = '';
+        const makeBtn = (label, value, active=false) => {
+          const btn = document.createElement('button');
+          btn.className = 'filter-btn' + (active ? ' active' : '');
+          btn.setAttribute('data-filter', value);
+          btn.textContent = label;
+          // Add i18n data for language switcher
+          if (value === 'all') {
+            btn.setAttribute('data-en', 'All Photos');
+            btn.setAttribute('data-si', '\u0dc3\u0dd2\u0dba\u0dd4\u0dbd\u0dd4\u0db8 \u0da2\u0dcf\u0dba\u0dcf\u0dbb\u0dd4\u0db4');
+            btn.setAttribute('data-ta', '\u0b85\u0ba9\u0bc8\u0ba4\u0bcd\u0ba4\u0bc1 \u0baa\u0bc1\u0b95\u0bc8\u0baa\u0bcd\u0baa\u0b9f\u0b99\u0bcd\u0b95\u0bb3\u0bcd');
+          } else {
+            // Default to English label for other languages when translations are not provided
+            btn.setAttribute('data-en', label);
+            btn.setAttribute('data-si', label);
+            btn.setAttribute('data-ta', label);
+          }
+          return btn;
+        };
+        filtersContainer.appendChild(makeBtn('All Photos', 'all', true));
+        uniqueCats.forEach(cat => filtersContainer.appendChild(makeBtn(cat, cat, false)));
+      }
+
+      // Append See more button on homepage (always visible)
+      if (!isFullGalleryPage) {
+        const container = galleryGrid.parentElement || document.getElementById('gallery');
+        if (container && !container.querySelector('.gallery-see-more')) {
+          const moreWrap = document.createElement('div');
+          moreWrap.className = 'gallery-see-more';
+          moreWrap.innerHTML = `<a class="btn btn-primary" href="gallery.html">See more</a>`;
+          container.appendChild(moreWrap);
+        }
+      }
+
+  // Hook filters (rebinding to dynamic buttons)
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          const filterValue = this.getAttribute('data-filter');
+          const galleryItems = document.querySelectorAll('.gallery-item');
+          galleryItems.forEach(item => {
+            const itemCategory = item.getAttribute('data-category');
+            if (filterValue === 'all' || itemCategory === filterValue) {
+              item.classList.remove('hidden');
+              item.style.display = 'block';
+            } else {
+              item.classList.add('hidden');
+              setTimeout(() => {
+                if (item.classList.contains('hidden')) {
+                  item.style.display = 'none';
+                }
+              }, 300);
+            }
+          });
+        });
+      });
+  })
+  .catch(err => console.error('Failed to load gallery items', err));
 });

@@ -59,3 +59,10 @@ pids
 # Temporary files
 tmp/
 temp/
+
+# Admin server local data (do not commit uploads or runtime data)
+server/uploads/
+server/data/projects.json
+
+# Python virtual environment
+.venv/

@@ -332,6 +332,61 @@ header.visible {
   z-index: 2;
 }
 
+/* Language Toggle */
+.language-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.5rem;
+  padding: 0.25rem;
+  z-index: 10;
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: #1f2937;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-width: 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.lang-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  border-radius: 1.25rem;
+}
+
+.lang-btn:hover::before,
+.lang-btn.active::before {
+  opacity: 1;
+}
+
+.lang-btn:hover,
+.lang-btn.active {
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
 /* Mobile Navigation Toggle - Reconstructed */
 .nav-toggle {
   display: none;
@@ -392,6 +447,10 @@ header.visible {
   .mobile-social {
     display: none !important;
   }
+  
+  .mobile-language-toggle {
+    display: none !important;
+  }
 }
 
 @media (max-width: 767px) {
@@ -407,6 +466,10 @@ header.visible {
   
   .navbar-social {
     display: none; /* Hide social icons on mobile to save space */
+  }
+  
+  .language-toggle {
+    display: none; /* Hide on mobile, will show in mobile menu */
   }
   
   .nav-content {
@@ -441,6 +504,23 @@ header.visible {
     padding: 1rem 0;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     margin-top: 1rem;
+  }
+  
+  /* Show language toggle in mobile menu */
+  .nav-content.active .mobile-language-toggle {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 0.5rem;
+  }
+  
+  .mobile-language-toggle {
+    display: none;
+  }
+  
+  .mobile-language-toggle .language-toggle {
+    display: flex;
   }
   
   .nav-content.active {
@@ -506,7 +586,7 @@ html {
 }
 
 .section {
-  padding: 3rem 0; /* Reduced padding */
+  padding: 1rem 0;
   position: relative;
 }
 
@@ -618,12 +698,12 @@ html {
 .hero {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b  50%, #334155 100%);
   color: white;
-  padding: 6rem 2rem 4rem; /* Reduced top and bottom padding */
+  padding: 7rem 2rem 4rem; /* Slightly reduced top/bottom padding */
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem; /* Reduced gap between content and image */
+  gap: 4rem;
   align-items: center;
-  min-height: 90vh; /* Reduced viewport height */
+  min-height: 92vh; /* Slightly less than full viewport height */
   position: relative;
   overflow: hidden;
   margin-top: 0;
@@ -651,15 +731,15 @@ html {
 .hero h1 {
   font-size: clamp(3rem, 6vw, 4.5rem);
   font-weight: 700;
-  margin-bottom: 1rem; /* Reduced margin */
+  margin-bottom: 1.5rem;
   line-height: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem; /* Reduced gap between welcome and title */
+  gap: 0.5rem;
 }
 
 .hero-welcome {
-  font-size: clamp(5rem, 12vw, 8rem);
+  font-size: clamp(4.5rem, 11vw, 7.5rem); /* Slightly smaller */
   font-weight: 900;
   background: linear-gradient(135deg, #b1d7de 0%, #10b981 50%, #ffffff 100%);
   -webkit-background-clip: text;
@@ -703,7 +783,7 @@ html {
 
 .hero-subtitle {
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-  margin-bottom: 2rem; /* Reduced margin */
+  margin-bottom: 3rem;
   color: #cbd5e1;
   font-weight: 400;
   line-height: 1.6;
@@ -711,7 +791,7 @@ html {
 
 .hero-actions {
   display: flex;
-  gap: 1rem; /* Reduced gap between buttons */
+  gap: 1.5rem;
   flex-wrap: wrap;
 }
 
@@ -725,9 +805,9 @@ html {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: repeat(8, 1fr);
-  gap: 0.75rem; /* Reduced gap */
-  height: 400px; /* Reduced height */
-  max-width: 500px; /* Reduced max-width */
+  gap: 1rem;
+  height: 450px; /* Slightly reduced collage height */
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -794,6 +874,13 @@ html {
   letter-spacing: 0.5px;
 }
 
+/* See more button under gallery */
+.gallery-see-more {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
 /* Grid Layout Positioning */
 .main-image {
   grid-column: 1 / 8;
@@ -845,9 +932,9 @@ html {
 /* Modern Section Headers */
 .section h2 {
   text-align: center;
-  margin-bottom: 2.5rem; /* Reduced margin */
+  margin-bottom: 4rem;
   position: relative;
-  padding-top: 1rem; /* Reduced padding */
+  padding-top: 2rem;
 }
 
 .section h2::after {
@@ -866,8 +953,8 @@ html {
 .about-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 2.5rem; /* Reduced gap */
-  margin-top: 1rem; /* Reduced margin */
+  gap: 4rem;
+  margin-top: 2rem;
 }
 
 .about-content h3 {
@@ -988,8 +1075,8 @@ html {
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem; /* Reduced gap */
-  margin-top: 2rem; /* Reduced margin */
+  gap: 2rem;
+  margin-top: 4rem;
 }
 
 .project-card {
@@ -1994,8 +2081,8 @@ html {
   .hero {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2rem; /* Reduced gap */
-    padding: 5rem 2rem 3rem; /* Reduced padding */
+    gap: 3rem;
+    padding: 4rem 2rem;
   }
   
   .hero-title-secondary {
@@ -2048,7 +2135,7 @@ html {
 
 @media (max-width: 768px) {
   .section {
-    padding: 2rem 0; /* Reduced section padding on mobile */
+    padding: 4rem 0;
   }
   
   .container {
@@ -2056,13 +2143,13 @@ html {
   }
   
   .hero {
-    padding: 4rem 1rem 2rem; /* Reduced padding for mobile */
+    padding: 5rem 1rem 2rem; /* Adjusted for floating navbar */
     min-height: 70vh;
   }
   
   .hero h1 {
     font-size: 2rem;
-    gap: 0.2rem; /* Reduced gap between title elements */
+    gap: 0.3rem;
   }
   
   .hero-welcome {
@@ -2083,7 +2170,7 @@ html {
   .hero-image-grid {
     height: 300px;
     max-width: 350px;
-    gap: 0.5rem; /* Reduced gap for mobile */
+    gap: 0.5rem;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(6, 1fr);
   }
@@ -2128,7 +2215,7 @@ html {
   .hero-actions {
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem; /* Reduced gap between buttons */
+    gap: 1rem;
   }
   
   .hero-actions .btn {

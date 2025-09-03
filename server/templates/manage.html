@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Projects - SCCF Admin</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;max-width:1000px;margin:24px auto;padding:12px}
+    table{width:100%;border-collapse:collapse;margin-top:16px}
+    th,td{border:1px solid #ddd;padding:8px}
+    th{background:#f6f6f6;text-align:left}
+    .pill{display:inline-block;padding:2px 8px;border-radius:14px;font-size:12px}
+    .pub{background:#e6ffed;color:#065f46}
+    .unpub{background:#fff5f5;color:#742a2a}
+  </style>
+  </head>
+<body>
+  <h1>Manage Projects</h1>
+  <p><a href="/admin">← Back to Upload</a></p>
+
+  <form method="post" action="/admin/republish">
+    <button type="submit">Rebuild Public projects.json</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th>Published</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in projects %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.title.en or p.title }}</td>
+        <td>{{ p.category }}</td>
+        <td>{{ p.status }}</td>
+        <td>
+          {% if p.published %}
+            <span class="pill pub">Yes</span>
+          {% else %}
+            <span class="pill unpub">No</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if not p.published %}
+          <form method="post" action="/admin/publish/{{ p.id }}" style="display:inline-block">
+            <button type="submit">Publish</button>
+          </form>
+          {% else %}
+          <form method="post" action="/admin/unpublish/{{ p.id }}" style="display:inline-block">
+            <button type="submit">Unpublish</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </body>
+  </html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upload Project - SCCF Admin</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;max-width:800px;margin:24px auto;padding:12px}
+    label{display:block;margin-top:12px;font-weight:600}
+    input[type=text], textarea, select{width:100%;padding:8px;margin-top:6px}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .small{max-width:160px}
+    .note{font-size:0.9rem;color:#555}
+    button{margin-top:12px;padding:10px 14px}
+  </style>
+</head>
+<body>
+  <h1>Upload New Project</h1>
+  <p class="note">Fill the form and upload an image; project will be appended to <code>assets/projects.json</code>.</p>
+  <form action="/admin/upload" method="post" enctype="multipart/form-data">
+    <label for="id">Project ID (unique, no spaces)</label>
+    <input type="text" name="id" id="id" required placeholder="proj-education-01">
+
+    <label>Title (English)</label>
+    <input type="text" name="title_en" required>
+    <label>Title (Sinhala)</label>
+    <input type="text" name="title_si">
+    <label>Title (Tamil)</label>
+    <input type="text" name="title_ta">
+
+    <label>Short Summary (English)</label>
+    <textarea name="summary_en" rows="3"></textarea>
+    <label>Short Summary (Sinhala)</label>
+    <textarea name="summary_si" rows="3"></textarea>
+    <label>Short Summary (Tamil)</label>
+    <textarea name="summary_ta" rows="3"></textarea>
+
+    <label>Category</label>
+    <input type="text" name="category">
+    <label>Status</label>
+    <input type="text" name="status">
+
+    <div class="row">
+      <div class="col">
+        <label>Stat 1 Number</label>
+        <input type="text" name="stat1_number">
+      </div>
+      <div class="col">
+        <label>Stat 1 Label (EN)</label>
+        <input type="text" name="stat1_label_en">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label>Stat 2 Number</label>
+        <input type="text" name="stat2_number">
+      </div>
+      <div class="col">
+        <label>Stat 2 Label (EN)</label>
+        <input type="text" name="stat2_label_en">
+      </div>
+    </div>
+
+  <label>Main Image (preferred)</label>
+  <input type="file" name="image" accept="image/*">
+    <label>Or Image URL</label>
+    <input type="text" name="image_url" placeholder="https://example.com/photo.jpg">
+
+  <label>Gallery Images (up to 15)</label>
+  <input type="file" name="gallery_images" accept="image/*" multiple>
+
+  <label>Tags (comma separated)</label>
+  <input type="text" name="tags" placeholder="education, healthcare, community">
+
+    <h3>Optional longer description</h3>
+    <label>Long Description (English)</label>
+    <textarea name="long_en" rows="6"></textarea>
+
+    <label style="display:flex;align-items:center;gap:8px;margin-top:6px">
+      <input type="checkbox" name="publish_now" value="1">
+      Publish now (make this visible on the public site)
+    </label>
+
+    <button type="submit">Upload Project</button>
+  </form>
+  <p><a href="/admin/manage">Manage existing projects →</a></p>
+</body>
+</html>
