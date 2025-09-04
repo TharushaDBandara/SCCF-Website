@@ -119,7 +119,7 @@ This project is licensed under the MIT License. See the LICENSE file for details
 📞 Contact
 Social Contribution Collective Foundation
 Website: https://yourusername.github.io/sccf-website
-Email: info@sccf.org
+Email: sccf.lk@gmail.com
 Address: 123 Community Drive, Development City, DC 12345
 🙏 Acknowledgments
 Design inspiration from modern NGO websites.

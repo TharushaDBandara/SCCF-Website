@@ -79,6 +79,11 @@ function switchLanguage(lang) {
   
   // Store language preference
   localStorage.setItem('preferredLanguage', lang);
+
+  // Re-apply adaptive title sizing after language updates (titles may change length)
+  try {
+    applyAdaptiveTitleSizes && applyAdaptiveTitleSizes('.project-overlay-content h3, .gallery-info h4');
+  } catch {}
 }
 
 // Add event listeners to language buttons
@@ -679,6 +684,21 @@ window.checkImageStatus = function() {
 
 // Enhanced Contact Form Handler
 document.addEventListener('DOMContentLoaded', function() {
+  // Footer Programs quick-filter: clicking a program in footer jumps to Gallery and applies filter
+  const programLinks = document.querySelectorAll('a.program-link[data-filter]');
+  if (programLinks.length) {
+    programLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const targetFilter = link.getAttribute('data-filter');
+        // Allow anchor to navigate to #gallery first, then apply filter shortly after
+        setTimeout(() => {
+          const btn = document.querySelector(`.gallery-filters .filter-btn[data-filter="${targetFilter}"]`);
+          if (btn) btn.click();
+        }, 50);
+      });
+    });
+  }
+
   const contactForm = document.getElementById('contact-form');
   
   if (contactForm) {
@@ -712,13 +732,13 @@ This message was sent from the SCCF website contact form.
 Please reply directly to: ${email}`;
       
       // Create mailto link with formatted content
-      const mailtoLink = `mailto:info@sccf.org?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+  const mailtoLink = `mailto:sccf.lk@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       
       // Open email client
       window.location.href = mailtoLink;
       
       // Show success message
-      showFormMessage('Thank you for your message! Your email client should open shortly. If it doesn\'t, please copy the information and send it manually to info@sccf.org', 'success');
+  showFormMessage('Thank you for your message! Your email client should open shortly. If it doesn\'t, please copy the information and send it manually to sccf.lk@gmail.com', 'success');
       
       // Reset form after a delay
       setTimeout(() => {
@@ -760,6 +780,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
   const projectsGrid = document.querySelector('.projects-grid');
   if (!projectsGrid) return;
+  const isAllProjectsPage = (document.body && document.body.getAttribute('data-page') === 'projects-list');
 
   // Helper: fetch with timeout
   function fetchWithTimeout(resource, options = {}) {
@@ -818,7 +839,8 @@ document.addEventListener('DOMContentLoaded', function() {
         projectsGrid.appendChild(empty);
         return;
       }
-      projects.forEach(proj => {
+      const list = isAllProjectsPage ? projects : projects.slice(0, 9);
+      list.forEach(proj => {
         const imgSrc = resolveMedia(proj.main_image || proj.image || '');
         const article = document.createElement('article');
         article.className = 'project-card';
@@ -829,8 +851,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="project-overlay">
               <div class="project-overlay-content">
                 <h3 data-en="${escapeHtml(proj.title?.en || proj.title)}" data-si="${escapeHtml(proj.title?.si || '')}" data-ta="${escapeHtml(proj.title?.ta || '')}">${escapeHtml(proj.title?.en || proj.title)}</h3>
-                <p data-en="${escapeHtml(proj.summary?.en || proj.summary || '')}" data-si="${escapeHtml(proj.summary?.si || '')}" data-ta="${escapeHtml(proj.summary?.ta || '')}">${escapeHtml(proj.summary?.en || proj.summary || '')}</p>
-                <a href="projects.html?id=${encodeURIComponent(proj.id)}" class="btn-overlay">View Project</a>
+                <a href="projects.html?id=${encodeURIComponent(proj.id)}" class="btn-overlay" data-en="Learn More" data-si="තව දැනගන්න" data-ta="மேலும் அறிக">Learn More</a>
               </div>
             </div>
           </div>
@@ -855,7 +876,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         `;
 
-        projectsGrid.appendChild(article);
+  projectsGrid.appendChild(article);
       });
 
       // Re-run translation to apply current language to newly added elements
@@ -868,6 +889,9 @@ document.addEventListener('DOMContentLoaded', function() {
         el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
         observer.observe(el);
       });
+
+  // Adaptive title sizing for project overlays
+  try { applyAdaptiveTitleSizes('.project-overlay-content h3'); } catch {}
     })
   .catch(err => console.error('Failed to load projects list', err));
 
@@ -922,8 +946,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const items = [];
     (projects || []).forEach(p => {
       const desc = (p.summary && (p.summary.en || p.summary)) || (p.title && (p.title.en || p.title)) || '';
-      if (p.main_image || p.image) items.push({ url: resolveMedia(p.main_image || p.image), category: p.category || '', tags: p.tags || [], projectId: p.id, description: desc });
-      (p.gallery_images || []).forEach(u => items.push({ url: resolveMedia(u), category: p.category || '', tags: p.tags || [], projectId: p.id, description: desc }));
+      const title = (p.title && (p.title.en || p.title)) || '';
+      if (p.main_image || p.image) items.push({ url: resolveMedia(p.main_image || p.image), category: p.category || '', tags: p.tags || [], projectId: p.id, description: desc, title });
+      (p.gallery_images || []).forEach(u => items.push({ url: resolveMedia(u), category: p.category || '', tags: p.tags || [], projectId: p.id, description: desc, title }));
     });
     return items;
   }
@@ -973,12 +998,12 @@ document.addEventListener('DOMContentLoaded', function() {
         div.className = 'gallery-item';
         div.setAttribute('data-category', it.category || 'community');
         div.setAttribute('data-tags', (it.tags || []).join(','));
-        div.innerHTML = `
+        const moreLink = it.projectId ? `<a class="btn-overlay" href="projects.html?id=${encodeURIComponent(it.projectId)}" data-en="Learn More" data-si="තව දැනගන්න" data-ta="மேலும் அறிக">Learn More</a>` : '';
+    div.innerHTML = `
           <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy" onerror="this.onerror=null; this.src='assets/images/education/e2.jpg'">
           <div class="gallery-overlay"><div class="gallery-info">
-            <h4>${escapeHtml((it.category || 'Photo'))}</h4>
-            <p>${escapeHtml(truncate(it.description || (it.tags || []).join(', ')))}</p>
-            <span class="gallery-category">${it.category || ''}</span>
+      <h4>${escapeHtml((it.title || it.category || 'Photo'))}</h4>
+            ${moreLink}
           </div></div>`;
         galleryGrid.appendChild(div);
       });
@@ -1044,6 +1069,52 @@ document.addEventListener('DOMContentLoaded', function() {
           });
         });
       });
+
+      // Use gallery images in the hero shuffle
+      try {
+        if (window.heroImageManager && allItems.length) {
+          // Build a unique, resolved list of image URLs
+          const urls = Array.from(new Set(allItems
+            .map(it => resolveMedia(it.url))
+            .filter(Boolean)));
+
+          if (urls.length) {
+            // Always populate 'education' with the full set as a safe fallback
+            window.heroImageManager.replaceImages('education', urls.slice(0, 40));
+
+            // Distribute chunks to other categories for variety (if enough images)
+            const chunkSize = Math.max(6, Math.floor(urls.length / 4));
+            const cdev = urls.slice(0, chunkSize);
+            const health = urls.slice(chunkSize, chunkSize * 2);
+            const env = urls.slice(chunkSize * 2, chunkSize * 3);
+            const emp = urls.slice(chunkSize * 3, chunkSize * 4);
+
+            if (cdev.length) window.heroImageManager.replaceImages('community-development', cdev);
+            if (health.length) window.heroImageManager.replaceImages('healthcare', health);
+            if (env.length) window.heroImageManager.replaceImages('environment', env);
+            if (emp.length) window.heroImageManager.replaceImages('empowerment', emp);
+
+            // Immediately rotate to show the new images
+            window.heroImageManager.shuffleImages();
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to feed hero from gallery', e);
+      }
   })
   .catch(err => console.error('Failed to load gallery items', err));
 });
+
+// Utility: adapt title font-size by text length so long titles fit better
+function applyAdaptiveTitleSizes(selector) {
+  const nodes = document.querySelectorAll(selector);
+  nodes.forEach(el => {
+    const len = (el.textContent || '').trim().length;
+    let sizeRem = 1.05; // base for gallery h4, acceptable for project overlay h3 too
+    if (len > 60) sizeRem = 0.85;
+    else if (len > 45) sizeRem = 0.9;
+    else if (len > 32) sizeRem = 0.95;
+    el.style.fontSize = sizeRem + 'rem';
+    el.style.lineHeight = '1.2';
+  });
+}
