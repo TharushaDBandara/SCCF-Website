@@ -10,6 +10,7 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/banner.jpg">
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/custom-overrides.css">
 </head>
 <body>
   <header>
@@ -116,7 +117,7 @@
           <span class="hero-welcome" 
             data-en="Welcome" 
             data-si="ආයුබෝවන්" 
-            data-ta="வரவேற்கிறோம்">Welcome</span>
+            data-ta="வணக்கம்">Welcome</span>
           <span class="hero-title-secondary" 
             data-en="to Social Contribution Collective Foundation" 
             data-si="සමාජ දායකත්ව සාමූහික පදනම වෙත" 
@@ -178,7 +179,8 @@
       <div class="container">
         <h2 data-en="About Us" data-si="අප ගැන" data-ta="எங்களைப் பற்றி">About Us</h2>
         <div class="about-grid">
-          <div class="about-content">
+          <div class="about-main-content">
+            <div class="about-content">
         <h3 data-en="Our History" data-si="අපගේ ඉතිහාසය" data-ta="எங்கள் வரலாறு">Our History</h3>
         <p data-en="Founded in 2022, the Social Community Contribution Foundation emerged from a grassroots movement of dedicated individuals committed to creating lasting positive change in communities." 
           data-si="2022 වසරේදී ආරම්භ කරන ලද සමාජ දායකත්ව සාමූහික පදනම, ප්‍රජාවන් තුළ කල්පවත්නා ධනාත්මක වෙනසක් ඇති කිරීමට කැප වූ පුද්ගලයන්ගේ ජනතා ව්‍යාපාරයක් ලෙස බිහි විය." 
@@ -210,27 +212,59 @@
               data-ta="இளைஞர்களின் அரசியல் அறிவை மேம்படுத்துதல். இளம் அரசியல் தலைவர்களை உருவாக்குதல் மற்றும் இளைஞர் அரசியல் அமைப்புகளை உருவாக்குவதற்கு பங்களித்தல்.">
               To improve the political literacy of young people. To create young political leaders and contribute to the creation of youth political organizations.
             </p>
+            </div>
           </div>
+          
           <div class="team-section">
-            <h3>Our Team</h3>
-            <div class="team-grid">
-              <div class="team-member">
-                <img src="https://picsum.photos/300/300?random=2" alt="Sarah Johnson, Executive Director" loading="lazy">
-                <h4>Sarah Johnson</h4>
-                <p>Executive Director</p>
-                <p>15+ years in international development and community organizing.</p>
+            <h3 data-en="Our Team" data-si="අපගේ කණ්ඩායම" data-ta="எங்கள் குழு">Our Team</h3>
+            
+            <!-- Executive Team -->
+            <div class="team-subsection" id="executive-team">
+              <h4 data-en="Executive Team" data-si="කාර්යාල මණ්ඩලය" data-ta="நிறுவன குழு">Executive Team</h4>
+              <div class="team-grid">
+                <div class="team-member">
+                  <img src="https://picsum.photos/300/300?random=2" alt="Sarah Johnson, Executive Director" loading="lazy">
+                  <h4>Tharusha Dilshan Bandara</h4>
+                  <p>Executive Director</p>
+                  <p>15+ years in international development and community organizing.</p>
+                </div>
+                <div class="team-member">
+                  <img src="assets/team/Executive Team/K. Arjuna.png" alt="K. Arjuna, Program Coordinator" loading="lazy">
+                  <h4>K. Arjuna</h4>
+                  <p>Program Coordinator</p>
+                  <p>Expertise in sustainable development and environmental science.</p>
+                </div>
+                <div class="team-member">
+                  <img src="https://picsum.photos/300/300?random=4" alt="Maria Rodriguez, Community Outreach" loading="lazy">
+                  <h4>Maria Rodriguez</h4>
+                  <p>Community Outreach</p>
+                  <p>Passionate advocate for education and youth empowerment.</p>
+                </div>
               </div>
-              <div class="team-member">
-                <img src="https://picsum.photos/300/300?random=3" alt="Dr. Michael Chen, Program Coordinator" loading="lazy">
-                <h4>Dr. Michael Chen</h4>
-                <p>Program Coordinator</p>
-                <p>Expertise in sustainable development and environmental science.</p>
-              </div>
-              <div class="team-member">
-                <img src="https://picsum.photos/300/300?random=4" alt="Maria Rodriguez, Community Outreach" loading="lazy">
-                <h4>Maria Rodriguez</h4>
-                <p>Community Outreach</p>
-                <p>Passionate advocate for education and youth empowerment.</p>
+            </div>
+
+            <!-- Advisory Team -->
+            <div class="team-subsection" id="advisory-team">
+              <h4 data-en="Advisory Team" data-si="උපදෙස්කාර මණ්ඩලය" data-ta="ஆலோசனை குழு">Advisory Team</h4>
+              <div class="team-grid">
+                <div class="team-member">
+                  <img src="assets/team/Advisory Team/Mahinda Deshapriya.jpg" alt="Advisor 1" loading="lazy">
+                  <h4>Mahinda Deshapriya</h4>
+                  <p>Senior Advisor</p>
+                  <p>Former Chairman, Election Commission of Sri Lanka.</p>
+                </div>
+                <div class="team-member">
+                  <img src="https://picsum.photos/300/300?random=6" alt="Advisor 2" loading="lazy">
+                  <h4>Advisor Name</h4>
+                  <p>Program Advisor</p>
+                  <p>Advises on program design, monitoring, and evaluation.</p>
+                </div>
+                <div class="team-member">
+                  <img src="https://picsum.photos/300/300?random=7" alt="Advisor 3" loading="lazy">
+                  <h4>Advisor Name</h4>
+                  <p>Community Advisor</p>
+                  <p>Supports outreach, partnerships, and community engagement.</p>
+                </div>
               </div>
             </div>
           </div>

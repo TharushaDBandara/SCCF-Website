@@ -1,0 +1,401 @@
+/* Custom Overrides for SCCF Website */
+/* Add your custom styles here to override the main styles.css without editing it */
+/* This file is loaded after styles.css, so your rules will take precedence */
+
+/* Usage Instructions:
+ * - Add CSS rules here to customize the site's appearance
+ * - Use !important if needed to override existing styles
+ * - Examples below show how to change colors, fonts, etc.
+ * - Commit changes to this file in the 'site-adjustments' branch
+ * - Merge to main only when ready to deploy customizations
+ */
+
+/* Example: Change primary color */
+/* :root { --primary: #your-color !important; } */
+
+/* Example: Adjust navbar background */
+/* header { background: rgba(255, 255, 255, 0.9) !important; } */
+
+/* Example: Change font family */
+/* body { font-family: 'Your Font', sans-serif !important; } */
+
+/* Add your adjustments below this line */
+
+/* --------------------------------------------------
+	 Global Palette Overrides (Gunmetal / Cerulean set)
+-------------------------------------------------- */
+:root {
+	--primary: #152530 !important;           /* Gunmetal */
+	--primary-light: #1f3644 !important;
+	--secondary: #70A5BE !important;         /* Air Superiority Blue */
+	--secondary-light: #a2c8d9 !important;
+	--accent: #49778E !important;            /* Cerulean */
+	--accent-light: #70A5BE !important;
+	--background: #fefefe !important;        /* White */
+	--background-secondary: #f2f6f8 !important;
+	--background-tertiary: #e5eef3 !important;
+	--text: #152530 !important;
+	--text-secondary: #49778E !important;
+	--text-light: #70A5BE !important;
+	--border: #d1e3eb !important;
+	--gradient-primary: linear-gradient(135deg, #152530 0%, #49778E 55%, #70A5BE 100%) !important;
+	--gradient-accent: linear-gradient(135deg, #49778E 0%, #70A5BE 60%, #a2c8d9 100%) !important;
+	--shadow: 0 12px 26px rgba(21, 37, 48, 0.14), 0 4px 6px rgba(21, 37, 48, 0.08) !important;
+	--shadow-lg: 0 18px 35px rgba(21, 37, 48, 0.18), 0 10px 18px rgba(21, 37, 48, 0.12) !important;
+	--shadow-xl: 0 24px 45px rgba(21, 37, 48, 0.22), 0 16px 26px rgba(21, 37, 48, 0.14) !important;
+}
+
+body {
+	background: var(--background) !important;
+	color: var(--text) !important;
+}
+
+/* --------------------------------------------------
+	 Navigation & Header
+-------------------------------------------------- */
+header {
+	background: rgba(254, 254, 254, 0.7) !important;
+	border: 1px solid rgba(112, 165, 190, 0.35) !important;
+	box-shadow: 0 12px 30px rgba(21, 37, 48, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+header.scrolled {
+	background: rgba(248, 252, 254, 0.85) !important;
+	border-color: rgba(73, 119, 142, 0.45) !important;
+}
+
+.logo,
+.navbar-social .social-link,
+.nav-toggle {
+	color: var(--primary) !important;
+}
+
+.nav-menu li a {
+	color: var(--primary) !important;
+}
+
+.nav-menu li a:hover,
+.nav-menu li.active a {
+	color: var(--accent) !important;
+	transform: translateY(-1px);
+}
+
+.nav-menu li a::before,
+.btn-cta {
+	background: rgba(73, 119, 142, 0.12) !important;
+}
+
+.btn-cta {
+	background: var(--gradient-primary) !important;
+	box-shadow: 0 10px 24px rgba(73, 119, 142, 0.35) !important;
+}
+
+.btn-cta:hover {
+	background: linear-gradient(135deg, #152530 0%, #49778E 45%, #70A5BE 100%) !important;
+	box-shadow: 0 14px 28px rgba(21, 37, 48, 0.24) !important;
+}
+
+.language-toggle,
+.social-link {
+	border-color: rgba(112, 165, 190, 0.35) !important;
+	background: rgba(254, 254, 254, 0.35) !important;
+}
+
+.social-link:hover {
+	color: #fefefe !important;
+	box-shadow: 0 12px 28px rgba(73, 119, 142, 0.35) !important;
+}
+
+.social-link:nth-child(1):hover::before,
+.social-link:nth-child(2):hover::before,
+.social-link:nth-child(3):hover::before {
+	background: var(--gradient-primary) !important;
+}
+
+/* --------------------------------------------------
+	 Hero Section
+-------------------------------------------------- */
+.hero {
+	background: linear-gradient(135deg, rgba(21, 37, 48, 0.94) 0%, rgba(73, 119, 142, 0.85) 50%, rgba(112, 165, 190, 0.8) 100%) !important;
+}
+
+.hero::before {
+	background: radial-gradient(circle at 20% 40%, rgba(112, 165, 190, 0.35) 0%, transparent 55%),
+							radial-gradient(circle at 80% 25%, rgba(73, 119, 142, 0.3) 0%, transparent 60%),
+							radial-gradient(circle at 50% 80%, rgba(112, 165, 190, 0.25) 0%, transparent 60%) !important;
+}
+
+.hero-welcome {
+	color: #ffffff !important;
+	background: none !important;
+	background-color: transparent !important;
+	-webkit-background-clip: initial !important;
+	-webkit-text-fill-color: initial !important;
+	background-clip: initial !important;
+	text-shadow: 
+		0 0 10px #70A5BE,
+		0 0 20px #70A5BE,
+		0 0 30px #70A5BE,
+		0 0 40px #49778E !important;
+}
+
+.hero-title-secondary,
+.hero-subtitle {
+	color: rgba(254, 254, 254, 0.85) !important;
+}
+
+.hero-actions .btn {
+	border-radius: 999px !important;
+}
+
+/* --------------------------------------------------
+	 Button System
+-------------------------------------------------- */
+.btn-primary,
+.btn-overlay {
+	background: var(--gradient-primary) !important;
+	color: #fefefe !important;
+	box-shadow: 0 14px 32px rgba(21, 37, 48, 0.18) !important;
+}
+
+.btn-primary:hover,
+.btn-overlay:hover,
+.btn-primary:focus,
+.btn-overlay:focus {
+	box-shadow: 0 16px 38px rgba(21, 37, 48, 0.24) !important;
+}
+
+.btn-secondary {
+	color: var(--primary) !important;
+	border: 2px solid rgba(73, 119, 142, 0.6) !important;
+	background: rgba(112, 165, 190, 0.1) !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+	background: rgba(73, 119, 142, 0.18) !important;
+	color: var(--primary) !important;
+	box-shadow: 0 12px 28px rgba(21, 37, 48, 0.12) !important;
+}
+
+.btn-accent {
+	background: var(--gradient-accent) !important;
+	color: #fefefe !important;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+	box-shadow: 0 14px 30px rgba(73, 119, 142, 0.25) !important;
+}
+
+.btn,
+.project-link {
+	letter-spacing: 0.6px !important;
+}
+
+.project-link {
+	border-color: rgba(73, 119, 142, 0.5) !important;
+	color: var(--accent) !important;
+}
+
+.project-link:hover {
+	background: var(--accent) !important;
+	color: #fefefe !important;
+}
+
+.read-more,
+.read-more::after,
+.gallery-info p a,
+.program-link {
+	color: var(--accent) !important;
+}
+
+.read-more:hover,
+.program-link:hover {
+	color: var(--secondary) !important;
+}
+
+/* --------------------------------------------------
+	 Card & Section Treatments
+-------------------------------------------------- */
+.section::before {
+	background: var(--gradient-primary) !important;
+}
+
+.section h2::after {
+	background: var(--gradient-primary) !important;
+}
+
+.project-card,
+.team-member,
+.news-card,
+.involvement-card,
+.contact-info,
+.contact-form-container,
+.projects-cta,
+.gallery-item,
+.gallery-cta,
+.team-section {
+	border: 1px solid rgba(112, 165, 190, 0.25) !important;
+	background: rgba(254, 254, 254, 0.9) !important;
+	box-shadow: var(--shadow) !important;
+}
+
+.project-card:hover,
+.team-member:hover,
+.news-card:hover,
+.gallery-item:hover {
+	box-shadow: var(--shadow-xl) !important;
+}
+
+.project-image::after,
+.gallery-overlay,
+.project-overlay {
+	background: linear-gradient(135deg, rgba(21, 37, 48, 0.82), rgba(73, 119, 142, 0.72)) !important;
+}
+
+.gallery-info h4,
+.project-overlay-content h3 {
+	color: #fefefe !important;
+}
+
+.project-category {
+	background: rgba(73, 119, 142, 0.18) !important;
+	color: var(--primary) !important;
+	border: 1px solid rgba(73, 119, 142, 0.35) !important;
+}
+
+.project-content h3,
+.news-content h3,
+.team-member h4,
+.involvement-card h3,
+.projects-cta h3,
+.contact-info h3 {
+	color: var(--primary) !important;
+}
+
+.project-content p,
+.section-description,
+.news-content p,
+.team-member p,
+.contact-item p,
+.gallery-info p {
+	color: var(--text-secondary) !important;
+}
+
+.project-stats {
+	background: rgba(112, 165, 190, 0.12) !important;
+	border-left-color: var(--accent) !important;
+}
+
+.stat-number {
+	color: var(--accent) !important;
+}
+
+/* --------------------------------------------------
+	 Project Status & Pills
+-------------------------------------------------- */
+.project-status[data-status="active"],
+.project-status:contains("Active") {
+	background: rgba(112, 165, 190, 0.18) !important;
+	color: var(--accent) !important;
+	border: 1px solid rgba(73, 119, 142, 0.35) !important;
+}
+
+.project-status:contains("Growing"),
+.project-status:contains("Expanding") {
+	background: rgba(21, 37, 48, 0.1) !important;
+	color: var(--primary) !important;
+	border: 1px solid rgba(21, 37, 48, 0.2) !important;
+}
+
+.pill.pub {
+	background: rgba(73, 119, 142, 0.15) !important;
+	color: var(--primary) !important;
+}
+
+.pill.unpub {
+	background: rgba(21, 37, 48, 0.07) !important;
+	color: var(--primary) !important;
+}
+
+.filter-btn {
+	border: 2px solid rgba(73, 119, 142, 0.35) !important;
+	color: var(--primary) !important;
+	background: rgba(254, 254, 254, 0.7) !important;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+	background: var(--gradient-accent) !important;
+	color: #fefefe !important;
+	border-color: transparent !important;
+	box-shadow: 0 12px 26px rgba(73, 119, 142, 0.28) !important;
+}
+
+/* --------------------------------------------------
+	 Footer & Utilities
+-------------------------------------------------- */
+.footer {
+	background: linear-gradient(180deg, #152530 0%, #1f3644 60%, #0f1d27 100%) !important;
+}
+
+.footer-section h4,
+.footer-section ul li a,
+.footer-section p,
+.footer-bottom {
+	color: rgba(254, 254, 254, 0.82) !important;
+}
+
+.footer-section ul li a:hover {
+	color: var(--secondary-light) !important;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--gradient-accent) !important;
+}
+
+::selection,
+::-moz-selection {
+	background: rgba(112, 165, 190, 0.65) !important;
+	color: var(--primary) !important;
+}
+
+/* --------------------------------------------------
+	 Scroll-to-top & Misc Widgets
+-------------------------------------------------- */
+button[aria-label="Scroll to top"],
+button[aria-label="Scroll to top"]:hover {
+	background: var(--gradient-primary) !important;
+	color: #fefefe !important;
+	box-shadow: 0 12px 28px rgba(21, 37, 48, 0.22) !important;
+}
+
+.donation-btn.active {
+	background: var(--gradient-primary) !important;
+	color: #fefefe !important;
+	border-color: transparent !important;
+}
+
+.donation-btn {
+	border-color: rgba(73, 119, 142, 0.35) !important;
+	background: rgba(112, 165, 190, 0.08) !important;
+	color: var(--primary) !important;
+}
+
+.contact-item {
+	border-left-color: var(--accent) !important;
+}
+
+.language-toggle .lang-btn.active,
+.language-toggle .lang-btn:hover,
+.nav-content.active,
+.mobile-language-toggle .language-toggle {
+	background: rgba(112, 165, 190, 0.12) !important;
+	color: var(--primary) !important;
+}
+
+.nav-content {
+	border-color: rgba(112, 165, 190, 0.35) !important;
+	box-shadow: 0 18px 32px rgba(21, 37, 48, 0.18) !important;
+}
