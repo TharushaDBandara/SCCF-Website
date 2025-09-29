@@ -43,6 +43,25 @@ body {
   padding-top: 0; /* Remove padding to eliminate white strip */
 }
 
+/* Skip navigation for accessibility */
+.skip-nav {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 10000;
+  font-weight: 600;
+  transition: top 0.3s;
+}
+
+.skip-nav:focus {
+  top: 6px;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
@@ -71,10 +90,13 @@ header {
   height: 4rem;
   z-index: 1000;
   
-  /* Glass Effect - Forced */
-  background: rgba(255, 255, 255, 0.5) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  /* Fallback background for browsers without backdrop-filter support */
+  background: rgba(255, 255, 255, 0.9);
+  
+  /* Glass Effect - Enhanced with fallback */
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   
   /* Floating Design */
   border-radius: 2rem;
@@ -93,17 +115,31 @@ header {
   padding: 0;
 }
 
-/* Enhanced glass effect when scrolled */
+/* Enhanced glass effect when scrolled with fallback */
 header.scrolled {
-  background: rgba(255, 255, 255, 0.6) !important;
-  backdrop-filter: blur(25px) saturate(200%) !important;
-  -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+  background: rgba(255, 255, 255, 0.95); /* Fallback */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
     0 12px 40px rgba(31, 38, 135, 0.2),
     0 4px 12px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transform: translateX(-50%) translateY(-2px);
+}
+
+/* Accessibility improvements for focus states */
+header *:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Better contrast for text over glass */
+header .nav-menu a {
+  color: var(--primary);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 /* Hide/Show Animation */
@@ -1846,145 +1882,152 @@ body[data-page='projects-list'] main.section {
   background: transparent;
 }
 
-/* Modern Donation Section */
-.donation-amounts {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.donation-btn {
-  padding: 1rem;
-  border: 2px solid var(--border);
-  background: white;
-  color: var(--text);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: var(--transition);
-  font-weight: 600;
-  font-size: 1.1rem;
+/* Two-Tier Get Involved Section */
+.involvement-tier {
+  margin: 3rem 0;
+  padding: 2.5rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
 }
 
-.donation-btn::before {
+.involvement-tier::before {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--gradient-primary);
-  transition: var(--transition);
-  z-index: 1;
-}
-
-.donation-btn:hover::before,
-.donation-btn.active::before {
   left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
 }
 
-.donation-btn:hover,
-.donation-btn.active {
-  color: white;
-  border-color: var(--secondary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
 
-.donation-btn span {
-  position: relative;
-  z-index: 2;
-}
 
-.donation-note {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  margin-top: 1.5rem;
+.tier-header {
   text-align: center;
-  font-style: italic;
+  margin-bottom: 2.5rem;
 }
 
-/* Modern News Section */
-.news-grid {
+.tier-header h3 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.tier-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Volunteer Section Styles */
+.volunteer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2.5rem;
-  margin-top: 3rem;
+  grid-template-columns: 2fr 1fr;
+  gap: 3rem;
+  align-items: start;
 }
 
-.news-card {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-  border: 1px solid var(--border);
+.volunteer-benefits {
+  display: grid;
+  gap: 1.5rem;
 }
 
-.news-card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
 }
 
-.news-card img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  transition: var(--transition);
+.benefit-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.news-card:hover img {
-  transform: scale(1.02);
+.benefit-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 50%;
+  margin-top: 0.5rem;
 }
 
-.news-content {
+.benefit-item h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.benefit-item p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.volunteer-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   padding: 2rem;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1), rgba(80, 200, 120, 0.1));
+  border-radius: 12px;
+  border: 2px dashed var(--primary-color);
 }
 
-.news-content time {
-  color: var(--secondary);
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.news-content h3 {
-  color: var(--primary);
-  margin: 1rem 0;
-  font-size: 1.3rem;
-  line-height: 1.4;
-}
-
-.news-content p {
-  margin-bottom: 1.5rem;
-  line-height: 1.7;
-}
-
-.read-more {
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 0.875rem;
-  letter-spacing: 0.5px;
+.volunteer-form-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: var(--transition);
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
 }
 
-.read-more::after {
-  content: '→';
-  transition: var(--transition);
+.volunteer-form-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(74, 144, 226, 0.3);
 }
 
-.read-more:hover {
-  color: var(--secondary);
-  transform: translateX(5px);
+.volunteer-form-btn svg {
+  transition: transform 0.3s ease;
 }
+
+.volunteer-form-btn:hover svg {
+  transform: translateX(2px);
+}
+
+.form-note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+
+
+
+
+
 
 /* Modern Contact Section */
 .contact-grid {
@@ -2362,8 +2405,7 @@ body[data-page='projects-list'] main.section {
     max-width: 300px;
   }
   
-  .projects-grid,
-  .news-grid {
+  .projects-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
     margin-top: 2rem;
@@ -2459,9 +2501,7 @@ body[data-page='projects-list'] main.section {
     grid-template-columns: 1fr;
   }
   
-  .donation-amounts {
-    grid-template-columns: 1fr;
-  }
+
   
   .involvement-card,
   .contact-form-container,
@@ -2469,6 +2509,37 @@ body[data-page='projects-list'] main.section {
   .team-section {
     padding: 2rem;
   }
+  
+  /* New Get Involved Section Responsive */
+  .involvement-tier {
+    margin: 2rem 0;
+    padding: 1.5rem;
+  }
+  
+  .volunteer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .volunteer-action {
+    padding: 1.5rem;
+  }
+  
+  .benefit-item {
+    padding: 1rem;
+  }
+  
+  .benefit-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .tier-header h3 {
+    font-size: 1.5rem;
+  }
+  
+
   
   .footer-content {
     grid-template-columns: 1fr;
@@ -2588,6 +2659,49 @@ textarea:focus,
 img {
   transition: opacity 0.3s ease;
   opacity: 1; /* Ensure images are visible by default */
+}
+
+/* Form error styles */
+.form-group input.error,
+.form-group textarea.error,
+.form-group select.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.form-group input.error:focus,
+.form-group textarea.error:focus,
+.form-group select.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+}
+
+/* Responsive image improvements */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Better focus indicators for accessibility */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Temporarily disabled lazy loading styles

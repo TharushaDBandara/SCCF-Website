@@ -1,53 +1,64 @@
 // Enhanced Responsive Navigation for Modern SCCF Website
+// Enhanced error handling and null checks
 const navToggle = document.querySelector('.nav-toggle');
 const navContent = document.querySelector('.nav-content');
 const navMenu = document.getElementById('nav-menu');
 const navbar = document.querySelector('.navbar');
 const header = document.querySelector('header');
 
-// Navbar scroll behavior
+// Navbar scroll behavior with error handling
 let lastScrollTop = 0;
 let scrollTimer = null;
 
 function handleScroll() {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  
-  // Add scrolled class when scrolled down
-  if (scrollTop > 50) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
+  try {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Add scrolled class when scrolled down
+    if (scrollTop > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+    
+    // Show/hide navbar based on scroll direction
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+      // Scrolling down - hide navbar
+      header?.classList.add('hidden');
+      header?.classList.remove('visible');
+    } else {
+      // Scrolling up - show navbar
+      header?.classList.remove('hidden');
+      header?.classList.add('visible');
+    }
+    
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+  } catch (error) {
+    console.warn('Error in handleScroll:', error);
   }
-  
-  // Show/hide navbar based on scroll direction
-  if (scrollTop > lastScrollTop && scrollTop > 100) {
-    // Scrolling down - hide navbar
-    header.classList.add('hidden');
-    header.classList.remove('visible');
-  } else {
-    // Scrolling up - show navbar
-    header.classList.remove('hidden');
-    header.classList.add('visible');
-  }
-  
-  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
 }
 
-// Throttled scroll event
+// Throttled scroll event with error handling
 function throttledScroll() {
   if (scrollTimer) return;
   
   scrollTimer = setTimeout(() => {
-    handleScroll();
-    scrollTimer = null;
+    try {
+      handleScroll();
+    } catch (error) {
+      console.warn('Error in throttledScroll:', error);
+    } finally {
+      scrollTimer = null;
+    }
   }, 10);
 }
 
-// Add scroll event listener
-window.addEventListener('scroll', throttledScroll, { passive: true });
-
-// Initialize header state
-header.classList.add('visible');
+// Add scroll event listener with error handling
+if (window && header) {
+  window.addEventListener('scroll', throttledScroll, { passive: true });
+  // Initialize header state
+  header.classList.add('visible');
+}
 
 // Language switching functionality
 const langButtons = document.querySelectorAll('.lang-btn');
@@ -230,27 +241,16 @@ document.addEventListener('DOMContentLoaded', function() {
   updateActiveNavLink('#home');
 });
 
-// Enhanced donation selection
-document.querySelectorAll('.donation-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.donation-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    
-    if (this.dataset.amount === 'custom') {
-      const customAmount = prompt('Enter your custom donation amount:');
-      if (customAmount && !isNaN(customAmount) && customAmount > 0) {
-        this.innerHTML = `<span>$${customAmount}</span>`;
-      }
-    }
-  });
-});
 
-// Modern form handling
-function showModernAlert(message) {
+
+// Modern form handling with improved error handling
+function showModernAlert(message, type = 'success') {
   const notification = document.createElement('div');
+  const bgColor = type === 'error' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #10b981, #059669)';
+  
   notification.style.cssText = `
     position: fixed; top: 20px; right: 20px; z-index: 9999;
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: ${bgColor};
     color: white; padding: 1rem 1.5rem; border-radius: 12px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     transform: translateX(400px); transition: transform 0.3s ease;
@@ -262,21 +262,69 @@ function showModernAlert(message) {
   setTimeout(() => notification.style.transform = 'translateX(0)', 100);
   setTimeout(() => {
     notification.style.transform = 'translateX(400px)';
-    setTimeout(() => document.body.removeChild(notification), 300);
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
+    }, 300);
   }, 4000);
 }
 
-document.querySelector('.volunteer-form')?.addEventListener('submit', function(e) {
-  e.preventDefault();
-  showModernAlert('Thank you for your interest in volunteering! We will contact you soon.');
-  this.reset();
-});
+// Enhanced form validation and handling
+function validateForm(form) {
+  const requiredFields = form.querySelectorAll('[required]');
+  let isValid = true;
+  
+  requiredFields.forEach(field => {
+    if (!field.value.trim()) {
+      field.classList.add('error');
+      isValid = false;
+    } else {
+      field.classList.remove('error');
+    }
+  });
+  
+  // Email validation
+  const emailFields = form.querySelectorAll('input[type="email"]');
+  emailFields.forEach(field => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (field.value && !emailRegex.test(field.value)) {
+      field.classList.add('error');
+      isValid = false;
+    }
+  });
+  
+  return isValid;
+}
 
-document.querySelector('.contact-form')?.addEventListener('submit', function(e) {
-  e.preventDefault();
-  showModernAlert('Thank you for your message! We will get back to you soon.');
-  this.reset();
-});
+// Improved form event handlers with validation
+const volunteerForm = document.querySelector('.volunteer-form');
+if (volunteerForm) {
+  volunteerForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (validateForm(this)) {
+      showModernAlert('Thank you for your interest in volunteering! We will contact you soon.');
+      this.reset();
+    } else {
+      showModernAlert('Please fill in all required fields correctly.', 'error');
+    }
+  });
+}
+
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    if (validateForm(this)) {
+      showModernAlert('Thank you for your message! We will get back to you soon.');
+      this.reset();
+    } else {
+      showModernAlert('Please fill in all required fields correctly.', 'error');
+    }
+  });
+}
 
 // Modern scroll animations
 const observer = new IntersectionObserver((entries) => {
@@ -289,7 +337,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
 
 document.addEventListener('DOMContentLoaded', () => {
-  const animateElements = document.querySelectorAll('.section, .project-card, .news-card, .team-member');
+  const animateElements = document.querySelectorAll('.section, .project-card, .team-member');
   
   animateElements.forEach(el => {
     el.style.opacity = '0';
@@ -298,9 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(el);
   });
   
-  const style = document.createElement('style');
-  style.textContent = `.donation-btn.active { background: linear-gradient(135deg, #06b6d4, #0891b2) !important; color: white !important; }`;
-  document.head.appendChild(style);
+
 });
 
 // Scroll to top button
@@ -805,13 +851,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   function resolveMedia(url) {
     if (!url) return '';
+    // Always use local assets for /uploads/ paths when serving static files
+    if (typeof url === 'string' && url.startsWith('/uploads/')) {
+      return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
+    }
     // If the URL is an absolute path coming from the admin API, prefix with API host in dev
     if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
       return API_BASE + url;
-    }
-    // In production, map /uploads/* to bundled assets at assets/uploads/*
-    if (!API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
-      return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
     }
     return url;
   }
@@ -918,11 +964,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resolveMedia(url) {
     if (!url) return '';
+    // Always use local assets for /uploads/ paths when serving static files
+    if (typeof url === 'string' && url.startsWith('/uploads/')) {
+      return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
+    }
     if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
       return API_BASE + url;
-    }
-    if (!API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
-      return 'assets' + url;
     }
     return url;
   }
