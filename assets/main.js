@@ -844,20 +844,10 @@ document.addEventListener('DOMContentLoaded', function() {
     'assets/images/education/e1.jpg',
     'assets/images/education/e2.jpg',
     'assets/images/education/e3.jpg',
-    'assets/images/education/e4.jpg',
-    'https://picsum.photos/400/300?random=11',
-    'https://picsum.photos/400/300?random=12',
-    'https://picsum.photos/400/300?random=13',
-    'https://picsum.photos/400/300?random=14'
+    'assets/images/education/e4.jpg'
   ];
   function pickPlaceholder(seedStr = '') {
-    try { 
-      let h=0,s=String(seedStr); 
-      for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; 
-      return PLACEHOLDER_IMAGES[h%PLACEHOLDER_IMAGES.length]; 
-    } catch { 
-      return PLACEHOLDER_IMAGES[0]; 
-    }
+    try { let h=0,s=String(seedStr); for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return PLACEHOLDER_IMAGES[h%PLACEHOLDER_IMAGES.length]; } catch { return PLACEHOLDER_IMAGES[0]; }
   }
   function resolveMedia(url) {
     if (!url) return '';
