@@ -54,13 +54,17 @@ body {
 	 Navigation & Header
 -------------------------------------------------- */
 header {
-	background: rgba(254, 254, 254, 0.7) !important;
+	background: rgba(254, 254, 254, 0.92) !important;
+	backdrop-filter: blur(20px) saturate(180%) !important;
+	-webkit-backdrop-filter: blur(20px) saturate(180%) !important;
 	border: 1px solid rgba(112, 165, 190, 0.35) !important;
 	box-shadow: 0 12px 30px rgba(21, 37, 48, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
 }
 
 header.scrolled {
-	background: rgba(248, 252, 254, 0.85) !important;
+	background: rgba(248, 252, 254, 0.95) !important;
+	backdrop-filter: blur(25px) saturate(200%) !important;
+	-webkit-backdrop-filter: blur(25px) saturate(200%) !important;
 	border-color: rgba(73, 119, 142, 0.45) !important;
 }
 
@@ -72,12 +76,15 @@ header.scrolled {
 
 .nav-menu li a {
 	color: var(--primary) !important;
+	text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+	font-weight: 500;
 }
 
 .nav-menu li a:hover,
 .nav-menu li.active a {
 	color: var(--accent) !important;
 	transform: translateY(-1px);
+	font-weight: 600;
 }
 
 .nav-menu li a::before,
@@ -98,7 +105,18 @@ header.scrolled {
 .language-toggle,
 .social-link {
 	border-color: rgba(112, 165, 190, 0.35) !important;
-	background: rgba(254, 254, 254, 0.35) !important;
+	background: rgba(254, 254, 254, 0.5) !important;
+}
+
+.lang-btn {
+	color: var(--primary) !important;
+	font-weight: 500;
+}
+
+.lang-btn.active {
+	background: var(--accent) !important;
+	color: white !important;
+	font-weight: 600;
 }
 
 .social-link:hover {
@@ -381,6 +399,28 @@ button[aria-label="Scroll to top"]:hover {
 	border-color: rgba(73, 119, 142, 0.35) !important;
 	background: rgba(112, 165, 190, 0.08) !important;
 	color: var(--primary) !important;
+}
+
+/* --------------------------------------------------
+	 Page-specific Header Adjustments
+-------------------------------------------------- */
+/* Gallery and Projects List pages - ensure navbar is clearly visible */
+body[data-page="gallery"] header,
+body[data-page="projects-list"] header {
+	background: rgba(254, 254, 254, 0.96) !important;
+	backdrop-filter: blur(25px) saturate(200%) !important;
+	-webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+	box-shadow: 0 4px 20px rgba(21, 37, 48, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+body[data-page="gallery"] .nav-menu li a,
+body[data-page="projects-list"] .nav-menu li a {
+	font-weight: 600;
+}
+
+body[data-page="gallery"] .logo-icon,
+body[data-page="projects-list"] .logo-icon {
+	filter: drop-shadow(0 2px 4px rgba(21, 37, 48, 0.2));
 }
 
 .contact-item {
