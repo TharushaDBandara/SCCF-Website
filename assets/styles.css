@@ -2243,9 +2243,9 @@ body[data-page='projects-list'] main.section {
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1800px) {
   .container {
-    padding: 0 1.5rem;
+    padding: 6rem 1.5rem;
   }
   
   .hero {
