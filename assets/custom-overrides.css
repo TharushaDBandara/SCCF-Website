@@ -80,16 +80,32 @@ header.scrolled {
 	font-weight: 500;
 }
 
-.nav-menu li a:hover,
-.nav-menu li.active a {
+.nav-menu li a:hover {
 	color: var(--accent) !important;
 	transform: translateY(-1px);
 	font-weight: 600;
 }
 
-.nav-menu li a::before,
-.btn-cta {
-	background: rgba(73, 119, 142, 0.12) !important;
+.nav-menu li.active a {
+	color: var(--accent) !important;
+	font-weight: 700;
+	position: relative;
+}
+
+.nav-menu li.active a::after {
+	content: '';
+	position: absolute;
+	bottom: -4px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--accent);
+	border-radius: 2px;
+}
+
+.nav-menu li a::before {
+	opacity: 0 !important;
+	pointer-events: none !important;
 }
 
 .btn-cta {

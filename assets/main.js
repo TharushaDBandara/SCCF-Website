@@ -237,8 +237,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 10);
   });
   
-  // Initialize with home section active
-  updateActiveNavLink('#home');
+  // Initialize with home section active only on index page
+  const currentPage = window.location.pathname;
+  if (currentPage === '/' || currentPage.includes('index.html') || currentPage === '') {
+    updateActiveNavLink('#home');
+  } else {
+    // Remove all active states on non-index pages
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => link.classList.remove('active'));
+  }
 });
 
 
