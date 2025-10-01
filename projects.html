@@ -117,7 +117,15 @@
     const id = params.get('id');
     const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
     function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'})[s]); }
-    function resolveMedia(url){ if(!url) return ''; if(API_BASE && typeof url==='string' && url.startsWith('/')) return API_BASE+url; return url; }
+    function resolveMedia(url){ 
+      if(!url) return ''; 
+      // Always use local assets for /uploads/ paths when serving static files
+      if (typeof url === 'string' && url.startsWith('/uploads/')) {
+        return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
+      }
+      if(API_BASE && typeof url==='string' && url.startsWith('/')) return API_BASE+url; 
+      return url; 
+    }
     function fetchFromAPI(pid){ if(!API_BASE) return Promise.resolve(null); return fetch(API_BASE + '/api/projects/' + encodeURIComponent(pid)).then(r=>r.ok?r.json():null).catch(()=>null); }
     function fetchFromStatic(pid){ return fetch('assets/projects.json', { cache: 'no-store' }).then(r=>r.ok?r.json():[]).then(list=>Array.isArray(list)?list.find(p=>String(p.id)===String(pid)):null).catch(()=>null); }
 
