@@ -333,7 +333,7 @@ if (contactForm) {
   });
 }
 
-// Modern scroll animations
+// Modern scroll animations with mobile-friendly settings
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -341,7 +341,10 @@ const observer = new IntersectionObserver((entries) => {
       entry.target.style.transform = 'translateY(0)';
     }
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+}, { 
+  threshold: 0.05,  // Reduced from 0.1 for better mobile detection
+  rootMargin: window.innerWidth < 768 ? '0px 0px -20px 0px' : '0px 0px -80px 0px'  // Less aggressive margin on mobile
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const animateElements = document.querySelectorAll('.section, .project-card, .team-member');
@@ -353,6 +356,15 @@ document.addEventListener('DOMContentLoaded', () => {
     observer.observe(el);
   });
   
+  // Fallback: ensure content is visible after 2 seconds if observer doesn't trigger (mobile safety)
+  setTimeout(() => {
+    document.querySelectorAll('.section, .project-card, .team-member, .gallery-item').forEach(el => {
+      if (el.style.opacity === '0') {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }
+    });
+  }, 2000);
 
 });
 
@@ -942,6 +954,16 @@ document.addEventListener('DOMContentLoaded', function() {
         el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
         observer.observe(el);
       });
+      
+      // Fallback for dynamically loaded projects (mobile safety)
+      setTimeout(() => {
+        document.querySelectorAll('.project-card').forEach(el => {
+          if (el.style.opacity === '0') {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          }
+        });
+      }, 1500);
 
   // Adaptive title sizing for project overlays
   try { applyAdaptiveTitleSizes('.project-overlay-content h3'); } catch {}
