@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCCF News Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+
+        .news-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .news-item {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .news-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .news-item h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            flex: 1;
+        }
+
+        .news-item-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-category {
+            background: #667eea;
+            color: white;
+        }
+
+        .badge-date {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .news-item-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .news-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            max-width: 100%;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .message-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .message-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📰 SCCF News Admin Panel</h1>
+            <p>Manage news articles, events, and announcements</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Create/Edit Form -->
+            <div class="card">
+                <h2 id="form-title">Create New Article</h2>
+                <div id="message"></div>
+                
+                <form id="news-form" enctype="multipart/form-data">
+                    <input type="hidden" id="news-id" value="">
+                    
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="Events">Events</option>
+                            <option value="Projects">Projects</option>
+                            <option value="Community">Community</option>
+                            <option value="Announcements">Announcements</option>
+                            <option value="Success Stories">Success Stories</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author" value="SCCF Team">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="excerpt">Excerpt (Short Summary)</label>
+                        <textarea id="excerpt" name="excerpt" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Content *</label>
+                        <textarea id="content" name="content" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Main Image</label>
+                        <input type="file" id="image" name="image" accept="image/*">
+                        <div id="image-preview" class="image-preview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additional-images">Additional Images (Gallery)</label>
+                        <input type="file" id="additional-images" name="additional-images" accept="image/*" multiple>
+                        <small style="color: #666; display: block; margin-top: 0.5rem;">Select multiple images for the article gallery</small>
+                        <div id="additional-images-preview" class="image-preview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 1rem;"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span id="submit-text">Publish Article</span>
+                    </button>
+                    <button type="button" class="btn" onclick="resetForm()" style="background: #6b7280; color: white; margin-left: 0.5rem;">
+                        Cancel
+                    </button>
+                </form>
+            </div>
+
+            <!-- News List -->
+            <div class="card">
+                <h2>Published Articles</h2>
+                <div id="news-list" class="news-list">
+                    <div class="empty-state">
+                        <p>Loading articles...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration - automatically detects environment
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5001/api/news'
+            : '/api/news';
+        
+        let editingId = null;
+
+        // Load all news on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNews();
+            setupImagePreview();
+        });
+
+        // Load news articles
+        async function loadNews() {
+            try {
+                const response = await fetch(API_URL);
+                const news = await response.json();
+                
+                displayNews(news);
+            } catch (error) {
+                console.error('Error loading news:', error);
+                document.getElementById('news-list').innerHTML = `
+                    <div class="empty-state">
+                        <p>⚠️ Error loading articles</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Display news articles
+        function displayNews(news) {
+            const newsList = document.getElementById('news-list');
+            
+            if (news.length === 0) {
+                newsList.innerHTML = `
+                    <div class="empty-state">
+                        <p>📝 No articles yet. Create your first one!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            newsList.innerHTML = news.map(article => `
+                <div class="news-item">
+                    <div class="news-item-header">
+                        <div style="flex: 1;">
+                            <h3>${article.title}</h3>
+                            <div class="news-item-meta">
+                                <span class="badge badge-category">${article.category}</span>
+                                <span class="badge badge-date">${formatDate(article.date)}</span>
+                                <span class="badge badge-date">By ${article.author}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="news-item-excerpt">${article.excerpt || truncateText(article.content, 150)}</p>
+                    ${article.image ? `<img src="${article.image}" style="max-width: 200px; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+                    <div class="news-item-actions">
+                        <button class="btn btn-edit" onclick="editNews('${article.id}')">✏️ Edit</button>
+                        <button class="btn btn-danger" onclick="deleteNews('${article.id}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle form submission
+        document.getElementById('news-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newsId = document.getElementById('news-id').value;
+            
+            try {
+                const url = newsId ? `${API_URL}/${newsId}` : API_URL;
+                const method = newsId ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    resetForm();
+                    loadNews();
+                } else {
+                    showMessage(result.error || 'Error saving article', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error saving article', 'error');
+            }
+        });
+
+        // Edit news article
+        async function editNews(id) {
+            try {
+                const response = await fetch(`${API_URL}/${id}`);
+                const article = await response.json();
+                
+                document.getElementById('form-title').textContent = 'Edit Article';
+                document.getElementById('news-id').value = article.id;
+                document.getElementById('title').value = article.title;
+                document.getElementById('category').value = article.category;
+                document.getElementById('author').value = article.author;
+                document.getElementById('excerpt').value = article.excerpt || '';
+                document.getElementById('content').value = article.content;
+                document.getElementById('submit-text').textContent = 'Update Article';
+                
+                if (article.image) {
+                    document.getElementById('image-preview').innerHTML = `
+                        <img src="${article.image}" alt="Current image">
+                    `;
+                }
+                
+                // Scroll to form
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error loading article:', error);
+                showMessage('Error loading article', 'error');
+            }
+        }
+
+        // Delete news article
+        async function deleteNews(id) {
+            if (!confirm('Are you sure you want to delete this article?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    loadNews();
+                } else {
+                    showMessage(result.error || 'Error deleting article', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Error deleting article', 'error');
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('form-title').textContent = 'Create New Article';
+            document.getElementById('news-form').reset();
+            document.getElementById('news-id').value = '';
+            document.getElementById('image-preview').innerHTML = '';
+            document.getElementById('submit-text').textContent = 'Publish Article';
+        }
+
+        // Show message
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = `message message-${type}`;
+            messageDiv.textContent = text;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Setup image preview
+        function setupImagePreview() {
+            // Main image preview
+            document.getElementById('image').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('image-preview').innerHTML = `
+                            <img src="${e.target.result}" alt="Preview">
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Additional images preview
+            document.getElementById('additional-images').addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                const previewContainer = document.getElementById('additional-images-preview');
+                previewContainer.innerHTML = '';
+                
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgDiv = document.createElement('div');
+                        imgDiv.style.cssText = 'position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; border: 2px solid #e0e0e0;';
+                        imgDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Gallery preview" style="width: 100%; height: 100%; object-fit: cover;">
+                        `;
+                        previewContainer.appendChild(imgDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        function truncateText(text, maxLength) {
+            if (text.length <= maxLength) return text;
+            return text.substr(0, maxLength).trim() + '...';
+        }
+    </script>
+</body>
+</html>
