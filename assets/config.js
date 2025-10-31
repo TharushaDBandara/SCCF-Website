@@ -1,19 +1,18 @@
 // API Configuration
-// For development: use localhost
-// For production: use your actual domain or relative paths
+// For development: use localhost backend
+// For production: use static JSON file from assets folder
 
 const API_CONFIG = {
-  // Change this to your production URL when deploying
+  // News API URL
   NEWS_API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5001/api/news'
-    : '/api/news', // Will use the same domain in production
+    : 'assets/data/news.json', // Static JSON file in production
   
-  ADMIN_API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:5001/api/news'
-    : '/api/news',
+  // Admin API URL (only works on localhost)
+  ADMIN_API_URL: 'http://localhost:5001/api/news',
   
   // Image base URL
   IMAGE_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5001'
-    : '' // Use relative paths in production
+    : '' // Use relative paths in production (images in assets/uploads/news/)
 };
