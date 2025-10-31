@@ -2,6 +2,7 @@
 
 // Configuration - Uses config.js for API URLs
 const NEWS_API_URL = typeof API_CONFIG !== 'undefined' ? API_CONFIG.NEWS_API_URL : 'http://localhost:5001/api/news';
+const IMAGE_BASE_URL = typeof API_CONFIG !== 'undefined' ? API_CONFIG.IMAGE_BASE_URL : 'http://localhost:5001';
 let allNews = [];
 let currentPage = 1;
 const newsPerPage = 9;
@@ -52,7 +53,7 @@ function displayFeaturedNews() {
     <div class="featured-news-card">
       <div class="featured-news-image">
         <span class="featured-badge">Featured</span>
-        <img src="${featuredNews.image || 'assets/images/placeholder-news.jpg'}" 
+        <img src="${IMAGE_BASE_URL}${featuredNews.image || 'assets/images/placeholder-news.jpg'}" 
              alt="${featuredNews.title}"
              onerror="this.src='https://picsum.photos/800/600?random=1'">
       </div>
@@ -102,7 +103,7 @@ function displayNews() {
     <div class="news-card" data-category="${news.category.toLowerCase()}">
       <div class="news-card-image">
         <span class="news-card-category">${news.category}</span>
-        <img src="${news.image || 'assets/images/placeholder-news.jpg'}" 
+        <img src="${IMAGE_BASE_URL}${news.image || 'assets/images/placeholder-news.jpg'}" 
              alt="${news.title}"
              onerror="this.src='https://picsum.photos/400/300?random=' + Math.random()">
       </div>
@@ -200,7 +201,7 @@ function openNewsDetail(newsId) {
         <div class="news-gallery-grid">
           ${news.images.map(img => `
             <div class="news-gallery-item">
-              <img src="${img}" alt="Gallery image" onerror="this.src='https://picsum.photos/400/300?random=' + Math.random()">
+              <img src="${IMAGE_BASE_URL}${img}" alt="Gallery image" onerror="this.src='https://picsum.photos/400/300?random=' + Math.random()">
             </div>
           `).join('')}
         </div>
@@ -216,7 +217,7 @@ function openNewsDetail(newsId) {
     <div class="news-modal-content">
       <button class="news-modal-close" onclick="closeNewsModal()" aria-label="Close">&times;</button>
       <div class="news-modal-header">
-        <img src="${news.image || 'assets/images/placeholder-news.jpg'}" 
+        <img src="${IMAGE_BASE_URL}${news.image || 'assets/images/placeholder-news.jpg'}" 
              alt="${news.title}"
              onerror="this.src='https://picsum.photos/1200/600?random=1'">
       </div>

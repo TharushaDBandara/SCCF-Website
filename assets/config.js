@@ -10,5 +10,10 @@ const API_CONFIG = {
   
   ADMIN_API_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:5001/api/news'
-    : '/api/news'
+    : '/api/news',
+  
+  // Image base URL
+  IMAGE_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:5001'
+    : '' // Use relative paths in production
 };
