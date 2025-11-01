@@ -72,6 +72,7 @@
   max-width: 900px;
   margin: 0 auto;
   height: 350px;
+  cursor: pointer;
 }
 
 .featured-news-card:hover {
@@ -532,23 +533,69 @@
   }
   
   .featured-news-section {
-    padding: 3rem 0;
+    padding: 2rem 1rem;
+  }
+  
+  /* Fix featured card for mobile - stack vertically */
+  .featured-news-card {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-width: 100%;
+    margin: 0;
   }
   
   .featured-news-image {
-    min-height: 250px;
+    min-height: 200px;
+    height: 200px;
   }
   
   .featured-news-content {
-    padding: 2rem;
+    padding: 1.5rem;
+    height: auto;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  
+  .news-meta {
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+  
+  .news-category {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+  }
+  
+  .news-date {
+    font-size: 0.85rem;
   }
   
   .featured-news-content h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    -webkit-line-clamp: 2;
+    margin-bottom: 0.75rem;
   }
   
   .featured-news-content p {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    -webkit-line-clamp: 3;
+    margin-bottom: 1rem;
+  }
+  
+  .read-more-btn {
+    margin-top: auto;
+    font-size: 0.9rem;
+  }
+  
+  .featured-badge {
+    top: 1rem;
+    left: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
   }
   
   .news-section {
@@ -588,11 +635,53 @@
     padding: 5rem 1rem 2rem;
   }
   
-  .news-card-content {
-    padding: 1.5rem;
+  .news-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .news-hero .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .featured-news-section {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .featured-news-card {
+    border-radius: 12px;
+  }
+  
+  .featured-news-image {
+    min-height: 180px;
+    height: 180px;
   }
   
   .featured-news-content {
+    padding: 1.25rem;
+  }
+  
+  .news-meta {
+    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+  }
+  
+  .featured-news-content h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .featured-news-content p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    -webkit-line-clamp: 2;
+    margin-bottom: 0.75rem;
+  }
+  
+  .read-more-btn {
+    font-size: 0.85rem;
+  }
+  
+  .news-card-content {
     padding: 1.5rem;
   }
   
