@@ -50,7 +50,7 @@ function displayFeaturedNews() {
   const featuredNews = allNews[0]; // Most recent news
   
   featuredContainer.innerHTML = `
-    <div class="featured-news-card">
+    <div class="featured-news-card" onclick="openNewsDetail('${featuredNews.id}')" style="cursor: pointer;">
       <div class="featured-news-image">
         <span class="featured-badge">Featured</span>
         <img src="${IMAGE_BASE_URL}${featuredNews.image || 'assets/images/placeholder-news.jpg'}" 
@@ -64,7 +64,7 @@ function displayFeaturedNews() {
         </div>
         <h2>${featuredNews.title}</h2>
         <p>${featuredNews.excerpt || truncateText(featuredNews.content, 200)}</p>
-        <a href="#" class="read-more-btn" onclick="openNewsDetail('${featuredNews.id}'); return false;">
+        <a href="#" class="read-more-btn" onclick="event.stopPropagation(); openNewsDetail('${featuredNews.id}'); return false;">
           Read Full Story
         </a>
       </div>
