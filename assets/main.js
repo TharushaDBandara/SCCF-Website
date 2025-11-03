@@ -467,19 +467,20 @@ class HeroImageManager {
     this.reassignGridItems(); // Set up proper grid assignments
     this.loadInitialImages();
     this.startImageRotation();
+    // After initial load, try to populate from hero folder manifest if available
+    this.loadHeroFolderImages();
   }
   
-  // Setup image arrays with actual files available
+  // Setup image arrays with defaults/fallbacks
   setupImageArrays() {
-    // Education images - using actual files in folder
+    // Prefer using assets/hero image/manifest.json when available (loaded asynchronously in loadHeroFolderImages)
+    // Provide a small local fallback so UI isn't empty before manifest loads
     this.imageFolders['education'] = [
       'assets/images/education/e1.jpg',
       'assets/images/education/e2.jpg',
       'assets/images/education/e3.jpg',
       'assets/images/education/e4.jpg'
     ];
-    
-    // Other folders currently empty - will use fallbacks
     this.imageFolders['community-development'] = [];
     this.imageFolders['healthcare'] = [];
     this.imageFolders['environment'] = [];
@@ -489,6 +490,29 @@ class HeroImageManager {
     Object.keys(this.imageFolders).forEach(category => {
       this.currentImageIndex[category] = 0;
     });
+  }
+
+  // Try to load images from assets/hero image/manifest.json and use them for the hero grid
+  async loadHeroFolderImages() {
+    try {
+      // Encode the space in the folder name for a proper URL
+      const manifestUrl = 'assets/hero%20image/manifest.json';
+      const resp = await fetch(manifestUrl, { cache: 'no-store' });
+      if (!resp.ok) return;
+      const arr = await resp.json();
+      if (!Array.isArray(arr) || arr.length === 0) return;
+      // De-dup and basic validation
+      const urls = Array.from(new Set(arr.filter(u => typeof u === 'string' && u.trim().length)));
+      if (!urls.length) return;
+      // Use the folder images for the 'education' bucket and reassign all grid items to it as needed
+      this.replaceImages('education', urls);
+      // Ensure the grid updates immediately
+      this.loadInitialImages();
+      this.shuffleImages();
+    } catch (e) {
+      // Ignore if manifest missing; fall back to defaults
+      console.warn('Hero folder manifest not found or invalid; using fallback images.');
+    }
   }
   
   // Load initial images
@@ -872,7 +896,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   function resolveMedia(url) {
     if (!url) return '';
-    // Always use local assets for /uploads/ paths when serving static files
+    // Prefer the admin server for /uploads/ in dev so no local copy is required
+    if (API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
+      return API_BASE + url;
+    }
+    // In static/prod builds, map /uploads/* to assets/uploads/* where we mirror files
     if (typeof url === 'string' && url.startsWith('/uploads/')) {
       return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
     }
@@ -1106,7 +1134,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resolveMedia(url) {
     if (!url) return '';
-    // Always use local assets for /uploads/ paths when serving static files
+    // Prefer the admin server for /uploads/ in dev so we don't need a local copy
+    if (API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
+      return API_BASE + url;
+    }
+    // In static/prod builds, map /uploads/* to assets/uploads/* where files are mirrored
     if (typeof url === 'string' && url.startsWith('/uploads/')) {
       return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
     }
@@ -1260,8 +1292,9 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       // Use gallery images in the hero shuffle
+      const HERO_SOURCE = (window.HERO_IMAGES_SOURCE || 'folder');
       try {
-        if (window.heroImageManager && allItems.length) {
+        if (HERO_SOURCE === 'gallery' && window.heroImageManager && allItems.length) {
           // Build a unique, resolved list of image URLs
           const urls = Array.from(new Set(allItems
             .map(it => resolveMedia(it.url))

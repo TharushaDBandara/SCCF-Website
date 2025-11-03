@@ -163,7 +163,7 @@
       "ta": ""
     },
     "featured": true,
-    "priority": 2
+    "priority": 0
   },
   {
     "id": "janasabha-community-forum",
@@ -277,8 +277,8 @@
       "si": "",
       "ta": ""
     },
-    "featured": true,
-    "priority": 2
+    "featured": false,
+    "priority": 0
   },
   {
     "id": "human-rights-course-thalawakale",
@@ -448,6 +448,379 @@
     },
     "longDescription": {
       "en": "A mobile service was conducted to facilitate the preparation of National Identity Cards for the students of Hunnasgiriya Nugethenna Maha Vidyalaya in the Ududumbara Divisional Secretariat. This valuable program was jointly organized by the Ududumbara Divisional Secretariat Office and the Social Collective Contribution Foundation. The event was successfully concluded with the participation of key figures including Mr. Chamara Alahakoon, the Assistant Divisional Secretary, and his staff, as well as Mr. K. Arjuna, the Chairman of the Social Collective Contribution Foundation, and his team.",
+      "si": "",
+      "ta": ""
+    }
+  },
+  {
+    "id": "model-polling-station",
+    "title": {
+      "en": "“Protect the Right to Vote” Model Polling Station Launch Event",
+      "si": "“ඡන්ද අයිතිය සුරකිමු” ආදර්ශ ඡන්ද මධ්‍යස්ථානය සමාරම්භක උළෙල",
+      "ta": ""
+    },
+    "summary": {
+      "en": "The Social Contribution Collective Foundation organized the “Protect the Right to Vote” Model Polling Station launch event to mark International Democracy Day. The event was attended by Attorney-at-Law Jagath Liyanarachchi, a member of the Right to Information Commission, and Attorney-at-Law D. M. Dissanayake, Director of the Centre for Monitoring Election Violence (CMEV).",
+      "si": "රජාතන්ත්‍රවාදී තරුණ කොංග්‍රසය මඟින් ජාත්‍යන්තර ප්‍රජාතන්ත්‍රවාදී දිනය නිමිත්තෙන් සංවිධානය කරනු ලැබූ ඡන්ද අයිතිය සුරකිමු ආදර්ශ ඡන්ද මධ්‍යස්ථානය සමාරම්භක උළෙල සඳහා\r\nතොරතුරු දැනගැනීමේ කොමිෂන් සභාවේ සාමාජික නීතිඥ ජගත් ලියනාරච් මහත්මයා\r\nමැතිවරණ ප්‍රචණ්ඩ ක්‍රියා නිරීක්ෂණ මධ්‍යස්ථානයේ අධ්‍යක්ෂ නීතිඥ ඩි.එම් දිසානායක මහතා සහභාගී වූ අවස්ථාවරජාතන්ත්‍රවාදී තරුණ කොංග්‍රසය මඟින් ජාත්‍යන්තර ප්‍රජාතන්ත්‍රවාදී දිනය නිමිත්තෙන් සංවිධානය කරනු ලැබූ ඡන්ද අයිතිය සුරකිමු ආදර්ශ ඡන්ද මධ්‍යස්ථානය සමාරම්භක උළෙල සඳහා\r\nතොරතුරු දැනගැනීමේ කොමිෂන් සභාවේ සාමාජික නීතිඥ ජගත් ලියනාරච් මහත්මයා\r\nමැතිවරණ ප්‍රචණ්ඩ ක්‍රියා නිරීක්ෂණ මධ්‍යස්ථානයේ අධ්‍යක්ෂ නීතිඥ ඩි.එම් දිසානායක මහතා සහභාගී වූ අවස්ථාව",
+      "ta": ""
+    },
+    "category": "Democracy, Civic Engagement",
+    "status": "Complete",
+    "featured": false,
+    "priority": 1,
+    "main_image": "/uploads/projects/model-polling-station/IMG-20251103-WA0087.jpg",
+    "gallery_images": [
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0086.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0087-1.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0089.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0090.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0092.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0093.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0094.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0095.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0096.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0097.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0098.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0099.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0102.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0103.jpg",
+      "/uploads/projects/model-polling-station/IMG-20251103-WA0104.jpg"
+    ],
+    "tags": [],
+    "published": true,
+    "stat1": {
+      "number": "Date",
+      "label": {
+        "en": "2023-10-15",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "stat2": {
+      "number": "Guest",
+      "label": {
+        "en": "Attorney-at-Law Jagath Liyanarachchi",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "longDescription": {
+      "en": "The Social Contribution Collective Foundation organized the “Protect the Right to Vote” Model Polling Station launch event to mark International Democracy Day. The event was attended by Attorney-at-Law Jagath Liyanarachchi, a member of the Right to Information Commission, and Attorney-at-Law D. M. Dissanayake, Director of the Centre for Monitoring Election Violence (CMEV).",
+      "si": "",
+      "ta": ""
+    }
+  },
+  {
+    "id": "trust-Unity",
+    "title": {
+      "en": "Youth Proposal for Building Interfaith and Interethnic Trust and Unity",
+      "si": "ජාතීන් අතර හා ආගම අතර විශ්වාසය හා එක්සත් බව ගොඩනැගීම සඳහා තරුණ යෝජනාවලිය",
+      "ta": ""
+    },
+    "summary": {
+      "en": "The Social Contribution Collective Foundation, along with 100 youth organizations, launched the Youth Proposal aimed at fostering interfaith and interethnic trust and unity. The initiative began at the Temple of the Sacred Tooth Relic in Kandy and extended to the Nallur Kandaswamy Kovil in Jaffna, symbolizing harmony and cooperation among all religious leaders.",
+      "si": "The Social Contribution Collective Foundation ඇතුළු තරුණ සංවිධාන සීයක් විසින් මහනුවර ශ්‍රී දළදා මාලිගාවේ සිට යාපනය නල්ලූර් කන්ද ස්වාමි කෝවිල දක්වා සියලු ආගමික නායකයන් වෙත ජාතීන් අතර හා ආගම අතර විශ්වාසය හා එක්සත් බව ගොඩනැගීම සඳහා වූ තරුණ යෝජනාවලිය එළිදැක්වීය.",
+      "ta": ""
+    },
+    "category": "Peacebuilding",
+    "status": "Completed",
+    "featured": true,
+    "priority": 60,
+    "main_image": "/uploads/projects/trust-Unity/IMG-20251103-WA0082.jpg",
+    "gallery_images": [
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0059.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0061.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0062.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0068.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0071.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0074.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0077.jpg",
+      "/uploads/projects/trust-Unity/IMG-20251103-WA0084.jpg"
+    ],
+    "tags": [
+      "peace",
+      "unity",
+      "interfaith",
+      "youth",
+      "sri-lanka",
+      "SCCF"
+    ],
+    "published": true,
+    "stat1": {
+      "number": "100",
+      "label": {
+        "en": "Youth Organizations Participated",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "stat2": {
+      "number": "Date",
+      "label": {
+        "en": "2023-12-04",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "longDescription": {
+      "en": "The Social Contribution Collective Foundation, along with 100 youth organizations, launched the Youth Proposal aimed at fostering interfaith and interethnic trust and unity. The initiative began at the Temple of the Sacred Tooth Relic in Kandy and extended to the Nallur Kandaswamy Kovil in Jaffna, symbolizing harmony and cooperation among all religious leaders.",
+      "si": "",
+      "ta": ""
+    }
+  },
+  {
+    "id": "proj-youthpolicy-01",
+    "title": {
+      "en": "Youth Involvement in Policy Making — A Revolutionary Step",
+      "si": "තරුණයන් ප්‍රතිපත්ති සම්පාදනයට දායක වීම විප්ලවියයි",
+      "ta": "இளைஞர்கள் கொள்கை உருவாக்கத்தில் பங்கேற்பது புரட்சிகரமானது"
+    },
+    "summary": {
+      "en": "Members of Parliament including Rajitha Senaratne, Mano Ganesan, Dayasiri Jayasekara, Premnath C. Dolawatte, and former provincial councillors Varuna Rajapakse and Shiral Lakthilaka collectively declared that youth participation in policy-making represents a revolutionary development. Their remarks were made at the launch of a comprehensive policy framework prepared by the People's Movement for Democratic Reforms (PMDR), in collaboration with civil and youth organizations, including activists from the Galle Face Aragalaya movement.",
+      "si": "තරුණයන් ප්‍රතිපත්ති සම්පාදනයට දායක වීම විප්ලවීය කාර්යයක් බව පාර්ලිමේන්තු මන්ත්‍රීවරුන් රාජිත සේනාරත්න, මනෝ ගනේෂන්, දයාසිරි ජයසේකර, ප්‍රේම්නාත් සී. දොලවත්ත සහ හිටපු පළාත් සභා මන්ත්‍රීවරුන් වරුණ රාජපක්ෂ හා ශිරාල් ලක්තිලක පවසති. ඔවුන් මෙම අදහස් පළකළේ ප්‍රජාතාන්ත්‍රික ප්‍රතිසංස්කරණ සඳහා වන ජනතා ව්‍යාපාරය (PMDR) විසින් තවත් සිවිල් සහ තරුණ සංවිධාන හා ගාළු මුවදොර අරගලයේ ක්‍රියාකාරීව සිටි තරුණ කණ්ඩායම් සමග එක්ව සකස් කළ ප්‍රතිපත්ති මාලාව එළිදැක්වීමේ අවස්ථාවේදීය.",
+      "ta": "இளைஞர்களின் கொள்கை உருவாக்க பங்களிப்பு ஒரு புரட்சிகர முன்னேற்றம் என நாடாளுமன்ற உறுப்பினர்கள் ராஜித சேனரத்ன, மனோ கணேசன், தயாசிரி ஜயசேகர, ப்ரேம்நாத் டோலவத்தே மற்றும் மாகாண சபை உறுப்பினர்கள் வருண ராஜபக்ஷ, சிறால் லக்திலகா ஆகியோர் தெரிவித்தனர். இந்த கருத்துக்கள் ஜனநாயக மறுசீரமைப்புக்கான மக்களாட்சி இயக்கம் (PMDR) மற்றும் இளைஞர் அமைப்புகளின் ஒத்துழைப்புடன் உருவாக்கப்பட்ட கொள்கை வடிவமைப்பை வெளியிடும் நிகழ்வில் கூறப்பட்டன."
+    },
+    "category": "Democratic Reform",
+    "status": "Completed",
+    "featured": true,
+    "priority": 80,
+    "main_image": "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0056.jpg",
+    "gallery_images": [
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0037.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0053.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0054.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0055.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0056-1.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0057.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0058.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0133.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0134.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0135.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0136.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0137.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0138.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0139.jpg",
+      "/uploads/projects/proj-youthpolicy-01/IMG-20251103-WA0140.jpg"
+    ],
+    "tags": [
+      "youth",
+      "democracy",
+      "policy-making",
+      "civic-engagement",
+      "governance",
+      "sri-lanka",
+      "SCCF",
+      "PMDR"
+    ],
+    "published": true,
+    "stat1": {
+      "number": "20000",
+      "label": {
+        "en": "Youth Participants Nationwide",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "stat2": {
+      "number": "20",
+      "label": {
+        "en": "Youth Organizations Involved",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "longDescription": {
+      "en": "The People's Movement for Democratic Reforms (PMDR), in collaboration with various civil and youth organizations, including the Social Contribution Collective Foundation (SCCF), organized the launch of a national youth policy framework developed with contributions from over 14,000 young people across 20 youth organizations. The event was attended by notable parliamentarians Dr. Rajitha Senaratne, Mano Ganesan, Attorneys-at-Law Dayasiri Jayasekara and Premnath C. Dolawatte, as well as former provincial councillors Varuna Rajapaksa and Shiral Lakthilaka. The policy document covers key reform areas such as power devolution, electoral reform, transitional justice, constitutional amendments, governance, public service, media law, and digital transformation.\r\n\r\nKey intellectual and professional contributors included Mahinda Deshapriya (former Chairman of the Election Commission), Piyathissa Ranasinghe (Senior Administrative Officer), Sampath Mallawarachchi (Senior Planning Officer), Dr. Nimalka Fernando, Dr. Ranga Kalansuriya, Attorney-at-Law Akalanka Hettiarachchi, and journalist Vimukthi Dushyantha.\r\nYouth representatives including Usama Liyawdeen, K. Arjuna, Ayesha Rilwana, and Ishara Madhuwanthi also expressed their perspectives at the event.\r\n\r\nParticipating organizations included: PMDR, Next Step Collective, South Asian Centre for Democracy and Regional Empowerment (SACRED), Democratic Youth Congress, Youth for Democracy, View Election Monitoring Network, Voice for Rights, SCCF, Haritha Udaya, Tomorrow Organization, Commitment to Citizens (C2), Youth Voice for Social Equality, People’s Union for Social Welfare (PUSW), KITE Youth Organization, Ideal Hub, Black Cap Movement, AFRIEL Youth Network, People’s Foundation, and the Youth Initiative for Participatory Democracy (YIPD).",
+      "si": "",
+      "ta": ""
+    }
+  },
+  {
+    "id": "proj-provincialcouncil-02",
+    "title": {
+      "en": "“Strengthening Provincial Councils” — Training of Trainers and Community Engagement Programme",
+      "si": "“පළාත් සභා ශක්තිමත් කරමු” පුහුණු කරුවන් පුහුණු කිරීම සහ ගාමීය සමාජ එක්රැස්වීම් වැඩසටහන",
+      "ta": "“மாகாண சபைகளை வலுப்படுத்துவோம்” — பயிற்சியாளர்களுக்கான பயிற்சி மற்றும் சமூக ஈடுபாட்டு திட்டம்"
+    },
+    "summary": {
+      "en": "The “Strengthening Provincial Councils” Training of Trainers (TOT) workshop was held at the National Arts Center in Kundasale, Kandy. The program focused on the provincial council system and its structural framework, enabling trainers to gain deeper knowledge of local governance. Following the workshop, trained youth facilitators organized over one thousand small-scale community discussions across 25 districts of Sri Lanka, gathering public opinions on the importance of empowering provincial councils and improving local democratic participation.",
+      "si": "“පළාත් සභා ශක්තිමත් කරමු” පුහුණු කරුවන් පුහුණු කිරීමේ වැඩමුළුව මහනුවර කුණ්ඩසාලේ ජාතික කලානිකේතයේදී පැවැත්වුණි. මෙම වැඩසටහන මගින් පළාත් සභා ක්‍රමවේදය සහ එහි ව්‍යුහය පිළිබඳව අධ්‍යයනය සිදුකොට තරුණ පුහුණුකරුවන්ට පළාත් පාලන පද්ධතිය පිළිබඳ ගැඹුරු අවබෝධයක් ලබාදීමට හැකි විය. එම පුහුණුකරුවන් පසුව දිවයින පුරා දිස්ත්‍රික්ක 25ක් ආවරණය වන පරිදි ගම්මාන මට්ටමින් කුඩා කණ්ඩායම් රැස්වීම් දාහක් සංවිධානය කරමින් පළාත් සභා ශක්තිමත් කිරීමේ වැදගත්කම පිළිබඳව ජනතාවගේ අදහස් එකතු කළහ.",
+      "ta": "“மாகாண சபைகளை வலுப்படுத்துவோம்” என்ற தலைப்பில் பயிற்சியாளர்களுக்கான பயிற்சி பட்டறை குண்டசாலே தேசிய கலை மையத்தில் நடைபெற்றது. இப்பயிற்சி மாகாண சபை அமைப்பு மற்றும் அதன் செயல்முறை பற்றிய அறிவை விரிவாக்கியது. பின்னர் பயிற்சியாளர்கள் இலங்கையின் 25 மாவட்டங்களில் 1,000க்கும் மேற்பட்ட கிராம மட்டக் கலந்துரையாடல்களை ஏற்பாடு செய்து மாகாண சபைகளை வலுப்படுத்துவதின் முக்கியத்துவம் குறித்த மக்களின் கருத்துகளை சேகரித்தனர்."
+    },
+    "category": "Governance",
+    "status": "Completed",
+    "featured": true,
+    "priority": 100,
+    "main_image": "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0004.jpg",
+    "gallery_images": [
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0003.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0004-1.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0005.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0006.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0007.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0008.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0009.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0010.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0011.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0012.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0013.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0014.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0015.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0016.jpg",
+      "/uploads/projects/proj-provincialcouncil-02/IMG-20251103-WA0017.jpg"
+    ],
+    "tags": [
+      "provincial-councils",
+      "governance",
+      "decentralization",
+      "local-government",
+      "youth",
+      "SCCF",
+      "sri-lanka"
+    ],
+    "published": true,
+    "stat1": {
+      "number": "25",
+      "label": {
+        "en": "Districts Covered",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "stat2": {
+      "number": "1000",
+      "label": {
+        "en": "Village-Level Meetings Organized",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "longDescription": {
+      "en": "The “Strengthening Provincial Councils” initiative was designed to enhance knowledge and engagement around the provincial council system in Sri Lanka. Conducted at the National Arts Center, Kundasale, Kandy, the Training of Trainers (TOT) program educated youth facilitators on governance structures, administrative mechanisms, and the importance of decentralization.\r\nAfter completing the training, youth trainers led extensive community engagement activities covering 25 districts across the country. Through over 1,000 small-scale village-level meetings, they discussed the significance of empowering provincial councils and collected community insights to strengthen participatory democracy and local development.",
+      "si": "",
+      "ta": ""
+    }
+  },
+  {
+    "id": "proj-provincialcouncil-03",
+    "title": {
+      "en": "Discussion on Strengthening Provincial Councils — Integration of Northern Political and Civil Perspectives",
+      "si": "පළාත් සභා ශක්තිමත් කිරීම පිළිබඳව උතුරේ දේශපාලන පක්ෂ සහ සිවිල් සමාජයේ අදහස් ඒකාබද්ධ කිරීමේ වැඩසටහන",
+      "ta": "மாகாண சபைகளை வலுப்படுத்துவது குறித்த வட மாகாண அரசியல் மற்றும் குடிமக்கள் ஆலோசனை நிகழ்வு"
+    },
+    "summary": {
+      "en": "A special discussion was organized in the Northern Province to integrate political and civil perspectives into the proposal developed from public opinions gathered across villages regarding the strengthening of provincial councils. The event facilitated dialogue between political leaders, civil society representatives, and youth organizations, aiming to refine and expand the initial proposal through regional feedback and collaborative participation. The program was conducted with the participation of the Social Contribution Collective Foundation (SCCF) and several other youth organizations.",
+      "si": "පළාත් සභා ශක්තිමත් කිරීම පිළිබඳව ගාමීය ජනතාවගෙන් එකතු කළ අදහස් මත පදනම්ව සකස් කළ යෝජනාවලිය උතුරේ දේශපාලන පක්ෂ හා සිවිල් සංවිධානයන් සමඟ සාකච්ඡා කිරීමේ වැඩසටහනක් පැවැත්වුණි. මෙම අවස්ථාව තුළ දේශපාලන නායකයින් හා සිවිල් සංවිධායකයින් පිරිසක් හමුවූ අතර, ඔවුන්ගේ අදහස් හා යෝජනා යෝජනාවලියට නැවත එක් කරන ලදී. වැඩසටහනට සමාජ දායකතා එකමුතුව (SCCF) ඇතුළු තවත් තරුණ සංවිධාන රැසක් ද සහභාගී විය.",
+      "ta": "மாகாண சபைகளை வலுப்படுத்துவதற்கான மக்கள் கருத்துக்களை அடிப்படையாகக் கொண்டு வட மாகாணத்தில் அரசியல் கட்சிகளும் குடிமக்கள் அமைப்புகளும் இணைந்து கலந்துரையாடும் நிகழ்ச்சி ஒன்று நடைபெற்றது. இந்நிகழ்வில் அரசியல் தலைவர்கள், குடிமக்கள் பிரதிநிதிகள் மற்றும் இளைஞர் அமைப்புகள் பங்கேற்றனர். சமூக பங்களிப்பு குழு (SCCF) மற்றும் பல இளைஞர் அமைப்புகள் இதில் பங்கேற்றன."
+    },
+    "category": "Governance",
+    "status": "Completed",
+    "featured": true,
+    "priority": 80,
+    "main_image": "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0031.jpg",
+    "gallery_images": [
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0024.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0026.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0027.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0028.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0029.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0030.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0031-1.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0032.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0033.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0034.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0035.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0036.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0038.jpg",
+      "/uploads/projects/proj-provincialcouncil-03/IMG-20251103-WA0039.jpg"
+    ],
+    "tags": [
+      "provincial-councils",
+      "decentralization",
+      "governance",
+      "political-dialogue",
+      "youth",
+      "SCCF",
+      "sri-lanka"
+    ],
+    "published": true,
+    "stat1": {
+      "number": "10",
+      "label": {
+        "en": "Political Parties Participated",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "stat2": {
+      "number": "50",
+      "label": {
+        "en": "Civil & Youth Representatives",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "longDescription": {
+      "en": "Following the nationwide collection of community feedback on strengthening provincial councils, the Social Contribution Collective Foundation (SCCF) and partner youth organizations organized a regional dialogue in the Northern Province. The program aimed to present and discuss the compiled proposal with representatives from major political parties and civil society leaders in the region.\r\nThis dialogue enabled participants to share regional perspectives, identify policy gaps, and suggest improvements to the draft proposal, ensuring that local and northern voices were integrated into the final policy document. The event fostered collaboration, mutual understanding, and constructive political discourse between youth-led civil movements and regional political leadership.",
+      "si": "",
+      "ta": ""
+    }
+  },
+  {
+    "id": "proj-landrights-01",
+    "title": {
+      "en": "Empowering Upcountry Tamil Youth for Land Rights",
+      "si": "උඩරට කඳුකර දමිළ තරුණියන් ඉඩම් අයිතිවාසිකම් උදෙසා එක්වෙති",
+      "ta": "மேல்நாட்டு தமிழர் நில உரிமைக்காக ஒன்றிணைகின்றனர்"
+    },
+    "summary": {
+      "en": "The Social Contribution Collective Foundation (SCCF), together with Upcountry Tamil youth, initiated a peaceful campaign at the Talawakelle Divisional Secretariat, Nuwara Eliya, demanding land ownership rights. The event empowered local communities and encouraged collective action for equal land rights.",
+      "si": "උඩරට දමිළ තරුණියන් සමග එක්ව SCCF සංවිධානය විසින් නුවරඑළිය තලවකැලේ ප්‍රාදේශීය ලේකම් කාර්යාලය වෙත ගොස් ඉඩම් අයිතිය ලබාදෙන ලෙස ඉල්ලා ලිඛිත ඉල්ලීමක් භාරදීම සිදු කළහ. මෙම වැඩසටහන මගින් ජනතාව ඔවුන්ගේ අයිතිවාසිකම් පිළිබඳ අවබෝධයක් ලබාගත් අතර, ගම්මාන 30කට ආසන්න ජනතාවගේ සහභාගීත්වය ලැබුණි.",
+      "ta": "மேல்நாட்டு தமிழர் இளைஞர்கள் மற்றும் SCCF இணைந்து, நில உரிமைக்காக தலவாக்கலை பிரதேசச் செயலகத்திற்கு மனு சமர்ப்பித்தனர். இந்நிகழ்ச்சி, சமூகத்தின் விழிப்புணர்வை மேம்படுத்தி, உரிமை பெறும் நடவடிக்கையை ஊக்குவித்தது."
+    },
+    "category": "Community Empowerment",
+    "status": "Completed",
+    "featured": true,
+    "priority": 60,
+    "main_image": "/uploads/projects/proj-landrights-01/IMG-20251103-WA0150.jpg",
+    "gallery_images": [
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0141.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0142.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0143.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0144.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0145.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0146.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0147.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0148.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0149.jpg",
+      "/uploads/projects/proj-landrights-01/IMG-20251103-WA0150-1.jpg"
+    ],
+    "tags": [
+      "Tags: human-rights",
+      "land-rights",
+      "community",
+      "youth",
+      "SCCF"
+    ],
+    "published": true,
+    "stat1": {
+      "number": "30",
+      "label": {
+        "en": "Villages Involved",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "stat2": {
+      "number": "300+",
+      "label": {
+        "en": "Participants",
+        "si": "",
+        "ta": ""
+      }
+    },
+    "longDescription": {
+      "en": "Upcountry Tamil communities have lived and worked in Sri Lanka’s hill country for nearly two centuries, yet many still lack formal land ownership. In response, the Social Contribution Collective Foundation (SCCF) organized a community initiative in collaboration with local youth in Talawakelle, Nuwara Eliya. Participants submitted a written petition to the Divisional Secretariat requesting fair allocation of land rights. Around 30 villages took part, fostering awareness, solidarity, and empowerment among marginalized populations striving for equality and recognition.",
       "si": "",
       "ta": ""
     }

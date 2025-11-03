@@ -9,10 +9,12 @@ DATA_DIR = os.path.join(BASE_DIR, 'server', 'data')
 UPLOAD_ROOT = os.path.join(BASE_DIR, 'server', 'uploads')
 PROJECTS_JSON = os.path.join(DATA_DIR, 'projects.json')
 PUBLIC_PROJECTS_JSON = os.path.join(BASE_DIR, 'assets', 'projects.json')
+PUBLIC_UPLOADS_ROOT = os.path.join(BASE_DIR, 'assets', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(UPLOAD_ROOT, exist_ok=True)
+os.makedirs(PUBLIC_UPLOADS_ROOT, exist_ok=True)
 
 app = Flask(__name__)
 # Allow local static previews to call these APIs in dev (8000, 5500, 5501)
@@ -54,6 +56,21 @@ def _write_public_projects(projects):
         with open(PUBLIC_PROJECTS_JSON, 'w', encoding='utf-8') as pf:
             json.dump(published, pf, ensure_ascii=False, indent=2)
     except Exception:
+        pass
+
+def _mirror_to_public(source_abs_path: str, relative_upload_path: str):
+    """Copy a file saved under server/uploads/* into assets/uploads/* for static site deployments.
+    relative_upload_path should be the part after '/uploads/', e.g. 'projects/slug/file.jpg'.
+    """
+    try:
+        target_abs = os.path.join(PUBLIC_UPLOADS_ROOT, relative_upload_path.replace('\\', '/'))
+        target_dir = os.path.dirname(target_abs)
+        os.makedirs(target_dir, exist_ok=True)
+        # Copy binary content
+        with open(source_abs_path, 'rb') as rf, open(target_abs, 'wb') as wf:
+            wf.write(rf.read())
+    except Exception:
+        # Best-effort; don't fail the request on mirror issues
         pass
 
 
@@ -131,6 +148,16 @@ def admin_unpublish(proj_id):
 def admin_republish():
     projects = _load_projects()
     _write_public_projects(projects)
+    # Best-effort: mirror all files from server/uploads to assets/uploads so static site can access
+    try:
+        for root, _, files in os.walk(UPLOAD_ROOT):
+            for fn in files:
+                src = os.path.join(root, fn)
+                # compute relative path after UPLOAD_ROOT
+                rel = os.path.relpath(src, UPLOAD_ROOT)
+                _mirror_to_public(src, rel)
+    except Exception:
+        pass
     return redirect(url_for('admin_manage'))
 
 
@@ -251,6 +278,8 @@ def upload_project():
             i += 1
         image.save(dest_path)
         main_image_url = f"/uploads/projects/{secure_filename(proj_id)}/{filename}"
+        # Mirror to assets/uploads for static site
+        _mirror_to_public(dest_path, f"projects/{secure_filename(proj_id)}/{filename}")
     else:
         main_image_url = request.form.get('image_url', '').strip()
 
@@ -269,6 +298,7 @@ def upload_project():
                 j += 1
             gf.save(dest_path)
             gallery_urls.append(f"/uploads/projects/{secure_filename(proj_id)}/{gfn}")
+            _mirror_to_public(dest_path, f"projects/{secure_filename(proj_id)}/{gfn}")
 
     new_project = {
         'id': proj_id,
