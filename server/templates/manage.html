@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manage Projects - SCCF Admin</title>
+  <base href="{{ request.host_url }}">
   <style>
     body{font-family:Arial,Helvetica,sans-serif;max-width:1000px;margin:24px auto;padding:12px}
     table{width:100%;border-collapse:collapse;margin-top:16px}
@@ -12,6 +13,8 @@
     .pill{display:inline-block;padding:2px 8px;border-radius:14px;font-size:12px}
     .pub{background:#e6ffed;color:#065f46}
     .unpub{background:#fff5f5;color:#742a2a}
+    .inline{display:inline-block;margin-right:6px}
+    .small{max-width:90px}
   </style>
   </head>
 <body>
@@ -29,6 +32,8 @@
         <th>Title</th>
         <th>Category</th>
         <th>Status</th>
+        <th>Featured</th>
+        <th>Priority</th>
         <th>Published</th>
         <th>Actions</th>
       </tr>
@@ -41,6 +46,14 @@
         <td>{{ p.category }}</td>
         <td>{{ p.status }}</td>
         <td>
+          {% if p.featured %}
+            <span class="pill pub">Yes</span>
+          {% else %}
+            <span class="pill unpub">No</span>
+          {% endif %}
+        </td>
+        <td>{{ p.priority or 0 }}</td>
+        <td>
           {% if p.published %}
             <span class="pill pub">Yes</span>
           {% else %}
@@ -48,12 +61,21 @@
           {% endif %}
         </td>
         <td>
+          <form method="post" action="{{ request.host_url.rstrip('/') }}{{ url_for('admin_update', proj_id=p.id) }}" class="inline update-form">
+            <label>
+              <input type="checkbox" name="featured" value="1" {% if p.featured %}checked{% endif %}> Featured
+            </label>
+            <label for="priority-{{ p.id }}">Priority</label>
+            <input id="priority-{{ p.id }}" type="number" name="priority" min="0" max="100" step="1" value="{{ p.priority or 0 }}" class="small" title="Priority (0-100)">
+            <button type="button" class="save-btn">Save</button>
+            <noscript><button type="submit">Save</button></noscript>
+          </form>
           {% if not p.published %}
-          <form method="post" action="/admin/publish/{{ p.id }}" style="display:inline-block">
+          <form method="post" action="{{ request.host_url.rstrip('/') }}{{ url_for('admin_publish', proj_id=p.id) }}" class="inline">
             <button type="submit">Publish</button>
           </form>
           {% else %}
-          <form method="post" action="/admin/unpublish/{{ p.id }}" style="display:inline-block">
+          <form method="post" action="{{ request.host_url.rstrip('/') }}{{ url_for('admin_unpublish', proj_id=p.id) }}" class="inline">
             <button type="submit">Unpublish</button>
           </form>
           {% endif %}
@@ -62,5 +84,44 @@
       {% endfor %}
     </tbody>
   </table>
+  <script>
+    // Progressive enhancement: save featured/priority via AJAX to avoid full-page navigation
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.addEventListener('click', async function(ev){
+        const btn = ev.target.closest('.save-btn');
+        if (!btn) return;
+        const form = btn.closest('form.update-form');
+        if (!form) return;
+        ev.preventDefault();
+        try {
+          const fd = new FormData(form);
+          const res = await fetch(form.action + '?ajax=1', { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+          let ok = res.ok;
+          try { const j = await res.json(); ok = ok && !!j.ok; } catch {}
+          const msg = document.createElement('span');
+          msg.textContent = ok ? 'Saved' : 'Error';
+          msg.style.marginLeft = '8px';
+          msg.style.fontWeight = '600';
+          msg.style.color = ok ? '#065f46' : '#7f1d1d';
+          form.appendChild(msg);
+          setTimeout(() => { msg.remove(); if (!ok) location.reload(); }, 1500);
+        } catch (err) {
+          console.error('Update failed', err);
+          location.reload();
+        }
+      });
+
+      // Warn if not on port 5000
+      try {
+        if (location.port !== '5000') {
+          const p = document.createElement('p');
+          p.style.color = '#7f1d1d';
+          p.style.fontWeight = '600';
+          p.textContent = 'Note: You are not on port 5000. Open http://127.0.0.1:5000/admin/manage to manage projects.';
+          document.body.insertBefore(p, document.body.firstChild);
+        }
+      } catch {}
+    });
+  </script>
   </body>
   </html>

@@ -2,6 +2,7 @@ Admin upload server (Flask)
 
 Purpose
 - Small local admin to upload project images and append project entries to assets/projects.json for the static site.
+ - Supports basic ordering metadata: `featured` (boolean) and `priority` (number) which the site uses to sort projects.
 
 Quick start (Windows PowerShell)
 
@@ -20,3 +21,6 @@ Quick start (Windows PowerShell)
 Notes
 - This is intended for local development only. Do not expose this admin server to the public without authentication.
 - The server writes directly to files in the repo; commit changes if you want them preserved.
+ - Ordering fields:
+    - Featured: check to mark a project as featured.
+    - Priority: integer (0-100). Higher values appear earlier. The site also supports a pinned order and category weights in `assets/config.js`.

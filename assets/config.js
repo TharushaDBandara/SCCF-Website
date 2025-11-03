@@ -16,3 +16,22 @@ const API_CONFIG = {
     ? 'http://localhost:5001'
     : '' // Use relative paths in production (images in assets/uploads/news/)
 };
+
+// Projects display configuration (optional)
+// - pinnedOrder: IDs listed here will always appear first, in the given order
+// - categoryWeights: higher numbers appear first when other fields are equal
+// - homepageLimit: how many projects to show on the homepage grid
+// Note: All fields are optional; the site will fall back to existing order if not provided.
+window.PROJECTS_CONFIG = {
+  pinnedOrder: [
+    // Example: 'election-law-awareness', 'human-rights-course-gampola'
+  ],
+  categoryWeights: {
+    // Example weights; adjust or leave empty
+    // 'Civic Engagement': 3,
+    // 'Youth Empowerment': 2,
+    // 'Community Development': 2,
+    // 'Community Service': 1
+  },
+  homepageLimit: 9
+};

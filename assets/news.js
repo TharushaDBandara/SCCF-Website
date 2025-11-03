@@ -280,11 +280,35 @@ function showLoading() {
   const featuredNews = document.getElementById('featured-news');
   
   if (newsGrid) {
-    newsGrid.innerHTML = '<div class="loading" style="grid-column: 1/-1;">Loading news</div>';
+    newsGrid.innerHTML = `
+      <div class="loader-wrapper" style="grid-column: 1/-1;">
+        <div class="loader" aria-label="Loading news">
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="logo">
+            <img src="assets/images/loding.svg" alt="Loading" class="svg" />
+          </div>
+        </div>
+      </div>`;
   }
   
   if (featuredNews) {
-    featuredNews.innerHTML = '<div class="loading">Loading featured news</div>';
+    featuredNews.innerHTML = `
+      <div class="loader-wrapper">
+        <div class="loader" aria-label="Loading featured news">
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="logo">
+            <img src="assets/images/loding.svg" alt="Loading" class="svg" />
+          </div>
+        </div>
+      </div>`;
   }
 }
 

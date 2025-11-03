@@ -161,7 +161,9 @@
       "en": "The program was held at the Beck House Hotel in Kandy and focused on raising awareness about citizen observation and election regulations. The event featured the participation of Attorney-at-Law Jagath Liyanarachchi and other distinguished guests.",
       "si": "",
       "ta": ""
-    }
+    },
+    "featured": true,
+    "priority": 2
   },
   {
     "id": "janasabha-community-forum",
@@ -218,7 +220,9 @@
       "en": "The community meeting focused on how the \"Janasabha\" system can be used as a participatory mechanism to address issues faced by people at the village level. It provided a platform to discuss solutions to these problems. The event was attended by the Secretary and the Board of Directors of the National Janasabha Secretariat.",
       "si": "",
       "ta": ""
-    }
+    },
+    "featured": true,
+    "priority": 0
   },
   {
     "id": "ududumbara-nic-mobile-service-01",
@@ -272,7 +276,9 @@
       "en": "A mobile service for the preparation of National Identity Cards was held for the students of Wimaladharma Dwithika School in the Ududumbara Divisional Secretariat division. This event was a joint effort by the Ududumbara Divisional Secretariat Office and the Social Collective Contribution Foundation. The event was successfully concluded with the participation of Mr. Chamara Alahakoon, the Assistant Divisional Secretary of Ududumbara, along with his staff, and Mr. K. Arjuna, the Chairman of the Social Collective Contribution Foundation, and his team.",
       "si": "",
       "ta": ""
-    }
+    },
+    "featured": true,
+    "priority": 2
   },
   {
     "id": "human-rights-course-thalawakale",

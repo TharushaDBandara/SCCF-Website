@@ -134,6 +134,34 @@ def admin_republish():
     return redirect(url_for('admin_manage'))
 
 
+@app.route('/admin/update/<proj_id>', methods=['POST'])
+def admin_update(proj_id):
+    """Update simple ordering metadata (featured, priority) for a project."""
+    projects = _load_projects()
+    updated = False
+    for p in projects:
+        if str(p.get('id')) == str(proj_id):
+            # Featured checkbox
+            p['featured'] = bool(request.form.get('featured'))
+            # Priority as integer, default 0
+            prw = (request.form.get('priority') or '').strip()
+            try:
+                p['priority'] = int(prw) if prw != '' else 0
+            except Exception:
+                p['priority'] = 0
+            updated = True
+            break
+
+    if updated:
+        _save_projects(projects)
+        _write_public_projects(projects)
+    # If request prefers JSON (AJAX), return a JSON result; otherwise redirect back
+    wants_json = ('application/json' in (request.headers.get('Accept') or '')) or (request.args.get('ajax') == '1')
+    if wants_json:
+        return jsonify({'ok': updated})
+    return redirect(url_for('admin_manage'))
+
+
 @app.route('/api/gallery', methods=['GET'])
 def api_gallery():
     items = []
@@ -172,6 +200,12 @@ def upload_project():
     summary_ta = request.form.get('summary_ta', '').strip()
     category = request.form.get('category', '').strip()
     status = request.form.get('status', '').strip()
+    # ordering metadata
+    featured = bool(request.form.get('featured'))
+    try:
+        priority = int(request.form.get('priority', '0').strip() or '0')
+    except Exception:
+        priority = 0
     tags_csv = request.form.get('tags', '').strip()
     tags = [t.strip() for t in tags_csv.split(',') if t.strip()] if tags_csv else []
     publish_now = bool(request.form.get('publish_now'))
@@ -242,6 +276,8 @@ def upload_project():
         'summary': {'en': summary_en, 'si': summary_si, 'ta': summary_ta},
         'category': category,
         'status': status,
+        'featured': featured,
+        'priority': priority,
         'main_image': main_image_url,
         'gallery_images': gallery_urls,
         'tags': tags,

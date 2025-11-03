@@ -395,14 +395,14 @@ scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 's
 
 // Photo Gallery Filter Functionality
 document.addEventListener('DOMContentLoaded', function() {
-  const filterButtons = document.querySelectorAll('.filter-btn');
+  const filterButtons = document.querySelectorAll('.gallery-filters .filter-btn');
   const galleryItems = document.querySelectorAll('.gallery-item');
   
   if (filterButtons.length > 0 && galleryItems.length > 0) {
     filterButtons.forEach(button => {
       button.addEventListener('click', function() {
-        // Remove active class from all buttons
-        filterButtons.forEach(btn => btn.classList.remove('active'));
+  // Remove active class from all gallery filter buttons only
+  document.querySelectorAll('.gallery-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
         // Add active class to clicked button
         this.classList.add('active');
         
@@ -759,6 +759,8 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
           const btn = document.querySelector(`.gallery-filters .filter-btn[data-filter="${targetFilter}"]`);
           if (btn) btn.click();
+          const pbtn = document.querySelector(`.project-filters .filter-btn[data-filter="${targetFilter}"]`);
+          if (pbtn) pbtn.click();
         }, 50);
       });
     });
@@ -904,11 +906,62 @@ document.addEventListener('DOMContentLoaded', function() {
         projectsGrid.appendChild(empty);
         return;
       }
-      const list = isAllProjectsPage ? projects : projects.slice(0, 9);
+      // Sort projects by pinned -> priority -> featured -> category weight -> status -> original order
+      const cfg = (window && window.PROJECTS_CONFIG) ? window.PROJECTS_CONFIG : {};
+      const pinnedOrder = Array.isArray(cfg.pinnedOrder) ? cfg.pinnedOrder : [];
+      const categoryWeights = (cfg.categoryWeights && typeof cfg.categoryWeights === 'object') ? cfg.categoryWeights : {};
+      const homepageLimit = Number.isFinite(cfg.homepageLimit) ? cfg.homepageLimit : 9;
+
+      // Preserve original order for stable tiebreaks
+      const withIndex = projects.map((p, i) => ({ p, i }));
+
+      // Status weights: adjust as needed
+      const statusWeight = (s) => {
+        const v = String(s || '').toLowerCase();
+        if (v.includes('ongoing') || v.includes('in progress')) return 2;
+        if (v.includes('completed') || v.includes('complete')) return 1;
+        return 0;
+      };
+
+      const pinIndex = (id) => {
+        const idx = pinnedOrder.indexOf(id || '');
+        return idx === -1 ? Infinity : idx; // Infinity means not pinned
+      };
+
+      const safeNum = (n) => {
+        const v = typeof n === 'number' ? n : (typeof n === 'string' ? parseFloat(n) : 0);
+        return Number.isFinite(v) ? v : 0;
+      };
+
+      withIndex.sort((a, b) => {
+        const A = a.p, B = b.p;
+        // 1) Pinned order (lower index first)
+        const ap = pinIndex(A.id), bp = pinIndex(B.id);
+        if (ap !== bp) return ap - bp;
+        // 2) Numeric priority (desc). Optional field.
+        const apr = safeNum(A.priority), bpr = safeNum(B.priority);
+        if (apr !== bpr) return bpr - apr;
+        // 3) Featured first (boolean). Optional field.
+        const af = !!A.featured, bf = !!B.featured;
+        if (af !== bf) return bf ? 1 : -1; // true first
+        // 4) Category weight (desc)
+        const acw = safeNum(categoryWeights[A.category] || 0), bcw = safeNum(categoryWeights[B.category] || 0);
+        if (acw !== bcw) return bcw - acw;
+        // 5) Status weight (desc)
+        const asw = statusWeight(A.status), bsw = statusWeight(B.status);
+        if (asw !== bsw) return bsw - asw;
+        // 6) Stable fallback to original order
+        return a.i - b.i;
+      });
+
+      const sorted = withIndex.map(x => x.p);
+      const list = isAllProjectsPage ? sorted : sorted.slice(0, homepageLimit);
       list.forEach(proj => {
         const imgSrc = resolveMedia(proj.main_image || proj.image || '');
         const article = document.createElement('article');
         article.className = 'project-card';
+        // expose category for filtering
+        article.setAttribute('data-category', (proj.category || '').trim());
 
         article.innerHTML = `
           <div class="project-image">
@@ -944,6 +997,15 @@ document.addEventListener('DOMContentLoaded', function() {
   projectsGrid.appendChild(article);
       });
 
+      // If only one project is shown, apply a CSS hook to center and constrain it
+      try {
+        if (list.length === 1) {
+          projectsGrid.classList.add('single');
+        } else {
+          projectsGrid.classList.remove('single');
+        }
+      } catch {}
+
       // Re-run translation to apply current language to newly added elements
       switchLanguage(currentLanguage);
 
@@ -964,6 +1026,57 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       }, 1500);
+
+      // Build Projects filter buttons like Gallery if container exists
+      const projFilters = document.querySelector('.project-filters');
+      if (projFilters) {
+        const uniqueCats = Array.from(new Set(sorted.map(p => (p.category || '').trim()).filter(Boolean)));
+        const makeBtn = (label, value, active=false) => {
+          const btn = document.createElement('button');
+          btn.className = 'filter-btn' + (active ? ' active' : '');
+          btn.setAttribute('data-filter', value);
+          btn.textContent = label || 'All Projects';
+          // i18n attributes
+          if (value === 'all') {
+            btn.setAttribute('data-en', 'All Projects');
+            btn.setAttribute('data-si', 'සියළු ව්‍යාපෘති');
+            btn.setAttribute('data-ta', 'அனைத்து திட்டங்கள்');
+          } else {
+            btn.setAttribute('data-en', label);
+            btn.setAttribute('data-si', label);
+            btn.setAttribute('data-ta', label);
+          }
+          return btn;
+        };
+        projFilters.innerHTML = '';
+        projFilters.appendChild(makeBtn('All Projects', 'all', true));
+        uniqueCats.forEach(cat => projFilters.appendChild(makeBtn(cat, cat)));
+
+        const pfBtns = projFilters.querySelectorAll('.filter-btn');
+        pfBtns.forEach(b => b.addEventListener('click', function() {
+          pfBtns.forEach(x => x.classList.remove('active'));
+          this.classList.add('active');
+          const v = this.getAttribute('data-filter');
+          const cards = document.querySelectorAll('.project-card');
+          cards.forEach(card => {
+            const cat = (card.getAttribute('data-category') || '').trim();
+            const show = (v === 'all' || cat === v);
+            card.style.display = show ? '' : 'none';
+          });
+          // Toggle single layout if only one card remains visible
+          try {
+            const visibleCount = Array.from(cards).filter(el => el.style.display !== 'none').length;
+            if (visibleCount === 1) {
+              projectsGrid.classList.add('single');
+            } else {
+              projectsGrid.classList.remove('single');
+            }
+          } catch {}
+        }));
+
+        // Apply current language to newly added filter buttons
+        try { switchLanguage(currentLanguage); } catch {}
+      }
 
   // Adaptive title sizing for project overlays
   try { applyAdaptiveTitleSizes('.project-overlay-content h3'); } catch {}
@@ -1121,11 +1234,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
-  // Hook filters (rebinding to dynamic buttons)
-  const filterButtons = document.querySelectorAll('.filter-btn');
+  // Hook filters (rebinding to dynamic buttons) – scope to gallery only
+  const filterButtons = document.querySelectorAll('.gallery-filters .filter-btn');
   filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-          filterButtons.forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.gallery-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
           this.classList.add('active');
           const filterValue = this.getAttribute('data-filter');
           const galleryItems = document.querySelectorAll('.gallery-item');
