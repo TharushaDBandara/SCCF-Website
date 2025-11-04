@@ -896,13 +896,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   function resolveMedia(url) {
     if (!url) return '';
-    // Prefer the admin server for /uploads/ in dev so no local copy is required
+    // In dev, prefer hitting the admin server so we don't need local copies
     if (API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
       return API_BASE + url;
     }
-    // In static/prod builds, map /uploads/* to assets/uploads/* where we mirror files
+    // In static/prod, keep /uploads/* as-is (served from site root).
     if (typeof url === 'string' && url.startsWith('/uploads/')) {
-      return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
+      return url; // e.g., /uploads/x stays /uploads/x
     }
     // If the URL is an absolute path coming from the admin API, prefix with API host in dev
     if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
@@ -985,8 +985,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const sorted = withIndex.map(x => x.p);
       const list = isAllProjectsPage ? sorted : sorted.slice(0, homepageLimit);
       list.forEach(proj => {
-        const imgSrc = resolveMedia(proj.main_image || proj.image || '');
-        const fbGallery = (Array.isArray(proj.gallery_images) && proj.gallery_images.length) ? resolveMedia(proj.gallery_images[0]) : '';
+        const rawMain = (proj.main_image || proj.image || '') || '';
+        const imgSrc = resolveMedia(rawMain);
+        const rawGallery0 = (Array.isArray(proj.gallery_images) && proj.gallery_images.length) ? (proj.gallery_images[0] || '') : '';
+        const fbGallery = rawGallery0 ? resolveMedia(rawGallery0) : '';
+        // Extra static fallback path in case site hosts uploads under /server/uploads/*
+        const altPath = (typeof rawMain === 'string' && rawMain.startsWith('/uploads/')) ? ('/server' + rawMain) : '';
+        const altFbk = (typeof rawGallery0 === 'string' && rawGallery0.startsWith('/uploads/')) ? ('/server' + rawGallery0) : '';
         const article = document.createElement('article');
         article.className = 'project-card';
         // expose category for filtering
@@ -994,7 +999,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         article.innerHTML = `
           <div class="project-image">
-            <img src="${imgSrc}" ${fbGallery ? `data-fbk="${fbGallery}"` : ''} alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy" onerror="if(this.dataset.fbk){var u=this.dataset.fbk; this.dataset.fbk=''; this.src=u;} else { this.onerror=null; this.src='${pickPlaceholder(proj.id || proj.title)}'; }">
+            <img src="${imgSrc}" ${fbGallery ? `data-fbk=\"${fbGallery}\"` : ''} ${altPath ? `data-alt=\"${altPath}\"` : ''} ${altFbk ? `data-altfbk=\"${altFbk}\"` : ''} alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy" onerror="if(this.dataset.fbk){var u=this.dataset.fbk; this.dataset.fbk=''; this.src=u;} else if(this.dataset.alt){var a=this.dataset.alt; this.dataset.alt=''; this.src=a;} else if(this.dataset.altfbk){var b=this.dataset.altfbk; this.dataset.altfbk=''; this.src=b;} else { this.onerror=null; this.src='${pickPlaceholder(proj.id || proj.title)}'; }">
             <div class="project-overlay">
               <div class="project-overlay-content">
                 <h3 data-en="${escapeHtml(proj.title?.en || proj.title)}" data-si="${escapeHtml(proj.title?.si || '')}" data-ta="${escapeHtml(proj.title?.ta || '')}">${escapeHtml(proj.title?.en || proj.title)}</h3>
@@ -1135,13 +1140,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resolveMedia(url) {
     if (!url) return '';
-    // Prefer the admin server for /uploads/ in dev so we don't need a local copy
+  // Prefer the admin server for /uploads/ in dev so we don't need a local copy
     if (API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
       return API_BASE + url;
     }
-    // In static/prod builds, map /uploads/* to assets/uploads/* where files are mirrored
+    // In static/prod builds, keep /uploads/* as-is (served from site root)
     if (typeof url === 'string' && url.startsWith('/uploads/')) {
-      return 'assets' + url; // e.g., /uploads/x -> assets/uploads/x
+      return url; // e.g., /uploads/x stays /uploads/x
     }
     if (API_BASE && typeof url === 'string' && url.startsWith('/')) {
       return API_BASE + url;
@@ -1283,8 +1288,10 @@ document.addEventListener('DOMContentLoaded', function() {
         div.setAttribute('data-category', it.category || 'community');
         div.setAttribute('data-tags', (it.tags || []).join(','));
         const moreLink = it.projectId ? `<a class="btn-overlay" href="projects.html?id=${encodeURIComponent(it.projectId)}" data-en="Learn More" data-si="තව දැනගන්න" data-ta="மேலும் அறிக">Learn More</a>` : '';
+        const rawUrl = it.url || '';
+        const altPath = (typeof rawUrl === 'string' && rawUrl.startsWith('/uploads/')) ? ('/server' + rawUrl) : '';
     div.innerHTML = `
-          <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy" onerror="this.onerror=null; const gi=this.closest('.gallery-item'); if(gi) gi.remove();">
+          <img src="${resolveMedia(it.url)}" ${altPath ? `data-alt=\"${altPath}\"` : ''} alt="Gallery item" loading="lazy" onerror="if(this.dataset.alt){var a=this.dataset.alt; this.dataset.alt=''; this.src=a;} else { this.onerror=null; const gi=this.closest('.gallery-item'); if(gi) gi.remove(); }">
           <div class="gallery-overlay"><div class="gallery-info">
       <h4>${escapeHtml((it.title || it.category || 'Photo'))}</h4>
             ${moreLink}
