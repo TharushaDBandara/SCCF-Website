@@ -32,7 +32,7 @@
     .p-back { display:inline-block; margin: .5rem 0 1rem; }
     .p-header { margin: 0 0 1rem; }
     .p-title { font-size: clamp(1.9rem, 2.2vw + 1rem, 2.6rem); font-weight: 800; margin: .25rem 0 .5rem; }
-    .p-summary { max-width: 75ch; color: var(--text-secondary); }
+    .p-summary { display: none; } /* Hide summary in header to avoid redundancy with long description */
     /* Compact, centered cover: reduce width and height proportionally */
     .p-cover { 
       margin: 0.5rem auto 0.75rem; /* center */
@@ -71,9 +71,25 @@
     .p-stat .num { display:block; font-size: clamp(1.25rem, 1.6vw, 2rem); font-weight: 800; color: var(--accent); }
     .p-stat .label { font-size:.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing:.6px; }
 
-    .p-desc { margin: .5rem 0 2rem; }
-    .p-desc p { margin: 0; font-size: 1.05rem; line-height: 1.85; }
-    .p-desc .lead { font-size: 1.1rem; }
+    .p-desc { margin: 1.5rem 0 2rem; }
+    .p-desc p { margin: 0 0 1rem; font-size: 1.05rem; line-height: 1.85; color: var(--text-secondary); }
+    .p-desc .lead { 
+      font-size: 1.15rem; 
+      line-height: 1.75; 
+      color: var(--text); 
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+    /* Add visual separator before description */
+    .p-desc::before {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--gradient-accent);
+      margin-bottom: 1.5rem;
+      border-radius: 2px;
+    }
 
     .p-gallery { margin: 1rem 0 2rem; }
     .p-gallery h2 { margin: 0 0 .75rem; }
@@ -273,12 +289,19 @@
         const longEn = (proj.description && (proj.description.en || proj.description.long_en)) || proj.longDescription?.en || '';
         const longSi = (proj.description && (proj.description.si || proj.description.long_si)) || proj.longDescription?.si || '';
         const longTa = (proj.description && (proj.description.ta || proj.description.long_ta)) || proj.longDescription?.ta || '';
-        if (longEn || longSi || longTa) {
+        
+        // Use long description if available, fallback to summary if long description is empty
+        const finalEn = longEn || proj.summary?.en || proj.summary || '';
+        const finalSi = longSi || proj.summary?.si || '';
+        const finalTa = longTa || proj.summary?.ta || '';
+        
+        if (finalEn || finalSi || finalTa) {
           const p = document.createElement('p'); p.className='lead';
-          p.setAttribute('data-en', escapeHtml(longEn));
-          p.setAttribute('data-si', escapeHtml(longSi));
-          p.setAttribute('data-ta', escapeHtml(longTa));
-          p.textContent = longEn || s.textContent; desc.appendChild(p);
+          p.setAttribute('data-en', escapeHtml(finalEn));
+          p.setAttribute('data-si', escapeHtml(finalSi));
+          p.setAttribute('data-ta', escapeHtml(finalTa));
+          p.textContent = finalEn;
+          desc.appendChild(p);
         }
 
         // Gallery
