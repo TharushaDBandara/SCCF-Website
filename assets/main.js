@@ -1185,8 +1185,8 @@ document.addEventListener('DOMContentLoaded', function() {
     return fetch('assets/projects.json').then(r => r.json()).then(deriveGalleryFromProjects).catch(() => []);
   }
 
-  // Helper: build a Set of featured project IDs (from API or static)
-  async function getFeaturedProjectSet() {
+  // Helper: build featured set and project metadata map (category, featured) from API or static
+  async function getProjectMeta() {
     try {
       let projects = null;
       if (API_BASE) {
@@ -1195,12 +1195,25 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!Array.isArray(projects)) {
         projects = await fetch('assets/projects.json').then(r=>r.json()).catch(()=>[]);
       }
-      if (!Array.isArray(projects)) return new Set();
+      if (!Array.isArray(projects)) return { featuredSet: new Set(), meta: new Map(), urlIndex: new Map() };
       const isTruthy = (v)=>{
         const s = String(v).toLowerCase();
         return v===true || s==='true' || s==='yes' || s==='1';
       };
-      return new Set(projects.filter(p=>isTruthy(p.featured)).map(p=>p.id));
+      const featuredSet = new Set(projects.filter(p=>isTruthy(p.featured)).map(p=>p.id));
+      const meta = new Map(); // id -> { category, featured }
+      const urlIndex = new Map(); // normalized url -> projectId
+      const norm = (u)=>{
+        try { if (!u) return ''; const s = String(u); const i = s.indexOf('/uploads/'); return i>=0 ? s.slice(i) : s; } catch { return String(u||''); }
+      };
+      projects.forEach(p => {
+        meta.set(p.id, { category: p.category || '', featured: isTruthy(p.featured) });
+        // index main image and gallery images for reverse-lookup when API gallery lacks projectId/category
+        [p.main_image || p.image || null].concat(Array.isArray(p.gallery_images) ? p.gallery_images : []).filter(Boolean).forEach(u => {
+          urlIndex.set(norm(u), p.id);
+        });
+      });
+      return { featuredSet, meta, urlIndex };
     } catch { return new Set(); }
   }
 
@@ -1210,10 +1223,21 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(async items => {
       const allItemsRaw = Array.isArray(items) ? items : [];
 
+      // Enrich gallery items with projectId/category when missing
+      const { featuredSet, meta, urlIndex } = await getProjectMeta();
+      const norm = (u)=>{ try { if (!u) return ''; const s=String(u); const i=s.indexOf('/uploads/'); return i>=0?s.slice(i):s; } catch { return String(u||''); } };
+      allItemsRaw.forEach(it => {
+        if (!it) return;
+        if ((!it.projectId || !it.category)) {
+          const pid = urlIndex.get(norm(it.url));
+          if (pid && !it.projectId) it.projectId = pid;
+          if ((!it.category || !it.category.trim()) && pid && meta.has(pid)) it.category = meta.get(pid).category || '';
+        }
+      });
+
       // Reorder so that images from featured projects appear first
-      const featuredSet = await getFeaturedProjectSet();
       const withIndex = allItemsRaw.map((it, i) => ({ it, i }));
-      const isFeaturedItem = (x)=> x && x.projectId != null && featuredSet.has(x.projectId);
+      const isFeaturedItem = (x)=> x && x.projectId != null && featuredSet && featuredSet.has(x.projectId);
       withIndex.sort((a,b)=>{
         const af = isFeaturedItem(a.it) ? 1 : 0;
         const bf = isFeaturedItem(b.it) ? 1 : 0;
@@ -1252,7 +1276,7 @@ document.addEventListener('DOMContentLoaded', function() {
         div.setAttribute('data-tags', (it.tags || []).join(','));
         const moreLink = it.projectId ? `<a class="btn-overlay" href="projects.html?id=${encodeURIComponent(it.projectId)}" data-en="Learn More" data-si="තව දැනගන්න" data-ta="மேலும் அறிக">Learn More</a>` : '';
     div.innerHTML = `
-          <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy" onerror="this.onerror=null; this.src='assets/images/education/e2.jpg'">
+          <img src="${resolveMedia(it.url)}" alt="Gallery item" loading="lazy" onerror="this.onerror=null; const gi=this.closest('.gallery-item'); if(gi) gi.remove();">
           <div class="gallery-overlay"><div class="gallery-info">
       <h4>${escapeHtml((it.title || it.category || 'Photo'))}</h4>
             ${moreLink}
