@@ -36,22 +36,60 @@
     .p-cover { margin: 1rem 0 1.25rem; }
     .p-cover img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-lg); display:block; }
 
+    /* Breadcrumbs + meta */
+    .p-breadcrumbs { font-size: .9rem; color: var(--text-secondary); display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+    .p-breadcrumbs a { color: var(--accent); text-decoration: none; }
+    .p-breadcrumbs .sep { opacity:.6; }
+    .p-meta { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; margin:.5rem 0 0; }
+    .pill { display:inline-flex; align-items:center; gap:.4rem; padding:.35rem .7rem; border-radius:999px; font-size:.75rem; font-weight:700; letter-spacing:.4px; border:1px solid var(--border); background: rgba(112,165,190,.12); color: var(--primary); }
+    .pill.status { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.25); color: #059669; }
+    .share-btn { display:inline-flex; align-items:center; gap:.4rem; padding:.45rem .8rem; border-radius:999px; border:1px solid var(--border); background:#fff; color:var(--accent); cursor:pointer; transition:var(--transition); }
+    .share-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+    .share-btn svg { width:16px; height:16px; }
+
     .p-info { margin: .5rem 0 2rem; display: grid; gap: 1rem; grid-template-columns: 1fr; }
     @media (min-width: 900px) { .p-info { grid-template-columns: 1fr 1fr; } }
-    .p-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); }
+    .p-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); transition: var(--transition); }
+    .p-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
     .p-card strong { color: var(--primary); }
     .p-stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
-    .p-stat { text-align:center; background: var(--background-secondary); border-radius: 12px; padding: 1rem; }
-    .p-stat .num { display:block; font-size: 2rem; font-weight: 800; color: #0ea5b7; }
+    .p-stat { text-align:center; background: var(--background-secondary); border-radius: 14px; padding: 1rem; border:1px solid var(--border); position:relative; overflow:hidden; }
+    .p-stat::before { content:''; position:absolute; inset:auto 0 0 0; height:4px; background: var(--gradient-accent); }
+    .p-stat .num { display:block; font-size: clamp(1.25rem, 1.6vw, 2rem); font-weight: 800; color: var(--accent); }
+    .p-stat .label { font-size:.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing:.6px; }
 
     .p-desc { margin: .5rem 0 2rem; }
-    .p-desc p { margin: 0; }
+    .p-desc p { margin: 0; font-size: 1.05rem; line-height: 1.85; }
+    .p-desc .lead { font-size: 1.1rem; }
 
     .p-gallery { margin: 1rem 0 2rem; }
     .p-gallery h2 { margin: 0 0 .75rem; }
     .p-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
     @media (min-width: 800px) { .p-grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
-    .p-grid .item img { width: 100%; height: auto; border-radius: 10px; display:block; }
+    .p-grid .item { position:relative; overflow:hidden; border-radius: 12px; border:1px solid var(--border); background:#fff; box-shadow: var(--shadow); }
+    .p-grid .item::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(21,37,48,0) 0%, rgba(21,37,48,0.08) 100%); opacity:0; transition:var(--transition); }
+    .p-grid .item:hover::after { opacity:1; }
+    .p-grid .item img { width: 100%; height: auto; display:block; transition: transform .35s ease; }
+    .p-grid .item:hover img { transform: scale(1.06); }
+
+    /* Lightbox */
+    .lb-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center; justify-content: center; z-index: 2000; }
+    .lb-backdrop.active { display: flex; }
+    .lb-frame { max-width: min(92vw, 1200px); max-height: 86vh; position: relative; }
+    .lb-img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-xl); display:block; }
+    .lb-close, .lb-prev, .lb-next { position:absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.9); border:1px solid var(--border); color: var(--primary); width: 44px; height: 44px; border-radius: 999px; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: var(--shadow); }
+    .lb-close { top: -16px; right: -16px; transform: none; }
+    .lb-prev { left: -16px; }
+    .lb-next { right: -16px; }
+    .lb-close:hover, .lb-prev:hover, .lb-next:hover { background:#fff; }
+
+    .lb-caption { position:absolute; left: 0; right: 0; bottom: -48px; display:flex; justify-content: space-between; align-items:center; color:#fff; font-size:.9rem; }
+    .lb-caption .count { opacity:.85; }
+    @media (max-width: 700px){ .lb-prev, .lb-next { display:none; } .lb-caption { font-size:.85rem; } }
+
+    /* Related projects */
+    .p-related { margin: 2rem 0 3rem; }
+    .p-related h2 { margin: 0 0 1rem; }
   </style>
   <script defer src="assets/main.js"></script>
 </head>
@@ -90,7 +128,22 @@
     <a href="index.html#projects" class="btn p-back">← Back to Projects</a>
 
     <section class="p-header" id="project-header">
+      <div class="p-breadcrumbs" aria-label="Breadcrumb">
+        <a href="index.html#home">Home</a>
+        <span class="sep">/</span>
+        <a href="projects-list.html">Projects</a>
+        <span class="sep">/</span>
+        <span id="crumb-title">Loading…</span>
+      </div>
       <h1 id="title" class="p-title">Loading…</h1>
+      <div class="p-meta">
+        <span id="badge-category" class="pill" hidden></span>
+        <span id="badge-status" class="pill status" hidden></span>
+        <button id="share-btn" class="share-btn" type="button" aria-label="Share this project">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 8.5L9 12l6 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/></svg>
+          <span>Share</span>
+        </button>
+      </div>
       <p id="summary" class="p-summary"></p>
       <div class="p-cover" id="cover-wrap" hidden><img id="cover" alt="Project cover"></div>
     </section>
@@ -111,6 +164,17 @@
   <footer class="footer">
     <div class="p-container"><p>&copy; 2025 SCCF</p></div>
   </footer>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lb-backdrop" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="lb-frame">
+      <img id="lb-img" class="lb-img" alt="Project image" />
+      <button class="lb-close" id="lb-close" aria-label="Close">✕</button>
+      <button class="lb-prev" id="lb-prev" aria-label="Previous">‹</button>
+      <button class="lb-next" id="lb-next" aria-label="Next">›</button>
+      <div class="lb-caption"><span class="count" id="lb-count"></span><span class="title" id="lb-title"></span></div>
+    </div>
+  </div>
 
   <script>
     const params = new URLSearchParams(location.search);
@@ -148,10 +212,12 @@
         // Title + summary
         const t = document.getElementById('title');
         const s = document.getElementById('summary');
+        const crumb = document.getElementById('crumb-title');
         t.setAttribute('data-en', proj.title?.en || proj.title || '');
         t.setAttribute('data-si', proj.title?.si || '');
         t.setAttribute('data-ta', proj.title?.ta || '');
         t.textContent = proj.title?.en || proj.title || '';
+        if (crumb) crumb.textContent = proj.title?.en || proj.title || '';
         s.setAttribute('data-en', proj.summary?.en || proj.summary || '');
         s.setAttribute('data-si', proj.summary?.si || '');
         s.setAttribute('data-ta', proj.summary?.ta || '');
@@ -169,8 +235,14 @@
         }
 
         // Meta + stats
-        document.getElementById('category').textContent = proj.category || '';
-        document.getElementById('status').textContent = proj.status || '';
+        const catText = proj.category || '';
+        const statusText = proj.status || '';
+        document.getElementById('category').textContent = catText;
+        document.getElementById('status').textContent = statusText;
+        const bcat = document.getElementById('badge-category');
+        const bsta = document.getElementById('badge-status');
+        if (bcat) { bcat.textContent = catText; bcat.hidden = !catText; }
+        if (bsta) { bsta.textContent = statusText; bsta.hidden = !statusText; }
         const stats = document.getElementById('stats');
         stats.innerHTML = '';
         const addStat = (st) => {
@@ -200,17 +272,101 @@
           document.getElementById('gallery').hidden = false;
           const grid = document.getElementById('gallery-grid');
           grid.innerHTML = '';
-          gallery.forEach(u => {
+          gallery.forEach((u, idx) => {
             const div = document.createElement('div');
             div.className = 'item';
             div.setAttribute('data-category', proj.category || 'community');
-            div.innerHTML = `<img src='${escapeHtml(resolveMedia(u))}' alt='${escapeHtml(proj.title?.en || 'Project image')}' />`;
+            div.innerHTML = `<img data-idx='${String(idx)}' src='${escapeHtml(resolveMedia(u))}' alt='${escapeHtml(proj.title?.en || 'Project image')}' />`;
             grid.appendChild(div);
           });
         }
 
         // Apply saved language
         try { const lang = localStorage.getItem('preferredLanguage') || 'en'; if (typeof switchLanguage === 'function') switchLanguage(lang); } catch {}
+
+        // Share button
+        try {
+          const shareBtn = document.getElementById('share-btn');
+          if (shareBtn) {
+            const shareData = {
+              title: proj.title?.en || proj.title || 'SCCF Project',
+              text: proj.summary?.en || proj.summary || 'Check out this SCCF project',
+              url: window.location.href
+            };
+            shareBtn.addEventListener('click', async () => {
+              if (navigator.share) {
+                try { await navigator.share(shareData); } catch {}
+              } else {
+                try { await navigator.clipboard.writeText(shareData.url); alert('Link copied to clipboard'); } catch { prompt('Copy this link:', shareData.url); }
+              }
+            });
+          }
+        } catch {}
+
+        // Lightbox wiring
+        try {
+          const lb = document.getElementById('lightbox');
+          const lbImg = document.getElementById('lb-img');
+          const lbCount = document.getElementById('lb-count');
+          const lbTitle = document.getElementById('lb-title');
+          const btnClose = document.getElementById('lb-close');
+          const btnPrev = document.getElementById('lb-prev');
+          const btnNext = document.getElementById('lb-next');
+          const imgs = Array.from(document.querySelectorAll('#gallery-grid img'));
+          let current = 0;
+          function show(i){ if(!imgs.length) return; current = (i+imgs.length)%imgs.length; const src = imgs[current].getAttribute('src'); lbImg.src = src; lb.classList.add('active'); document.body.style.overflow='hidden'; if(lbCount) lbCount.textContent = (current+1) + ' / ' + imgs.length; if(lbTitle) lbTitle.textContent = (proj.title?.en || proj.title || ''); btnClose?.focus(); }
+          function hide(){ lb.classList.remove('active'); document.body.style.overflow=''; }
+          imgs.forEach((img, i)=>{ img.style.cursor='zoom-in'; img.addEventListener('click', ()=> show(i)); });
+          btnClose?.addEventListener('click', hide);
+          btnPrev?.addEventListener('click', ()=> show(current-1));
+          btnNext?.addEventListener('click', ()=> show(current+1));
+          lb?.addEventListener('click', (e)=>{ if(e.target===lb) hide(); });
+          window.addEventListener('keydown', (e)=>{ if(!lb.classList.contains('active')) return; if(e.key==='Escape') hide(); if(e.key==='ArrowLeft') show(current-1); if(e.key==='ArrowRight') show(current+1); });
+        } catch {}
+
+        // Related projects (same category)
+        try {
+          const relWrap = document.createElement('section');
+          relWrap.className = 'p-related';
+          relWrap.innerHTML = `<h2 data-en='Related Projects'>Related Projects</h2><div class='projects-grid' id='related-grid'></div>`;
+          document.getElementById('page-main')?.appendChild(relWrap);
+
+          const API_BASE2 = (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://127.0.0.1:5000' : '';
+          const fetchAll = API_BASE2 ? fetch(API_BASE2 + '/api/projects').then(r=>r.json()).catch(()=>null) : Promise.resolve(null);
+          const fallback = () => fetch('assets/projects.json').then(r=>r.json()).catch(()=>[]);
+          (fetchAll.then(d=>d||fallback()).catch(()=>fallback())).then(all => {
+            if (!Array.isArray(all)) return;
+            const list = all.filter(p => String(p.id) !== String(id) && (p.category||'') === (proj.category||''));
+            const top = list.slice(0, 3);
+            const grid = document.getElementById('related-grid');
+            if (!grid || !top.length) { relWrap.remove(); return; }
+            top.forEach(pj => {
+              const imgSrc = resolveMedia(pj.main_image || pj.image || '');
+              const card = document.createElement('article');
+              card.className = 'project-card';
+              card.setAttribute('data-category', (pj.category||'').trim());
+              card.innerHTML = `
+                <div class="project-image">
+                  <img src="${imgSrc}" alt="${escapeHtml(pj.title?.en || pj.title || 'Project')}" loading="lazy" onerror="this.onerror=null; this.src='assets/images/education/e1.jpg'">
+                  <div class="project-overlay"><div class="project-overlay-content">
+                    <h3 data-en="${escapeHtml(pj.title?.en || pj.title)}">${escapeHtml(pj.title?.en || pj.title)}</h3>
+                    <a href="projects.html?id=${encodeURIComponent(pj.id)}" class="btn-overlay" data-en="Learn More">Learn More</a>
+                  </div></div>
+                </div>
+                <div class="project-content">
+                  <div class="project-meta">
+                    <span class="project-category" data-en="${escapeHtml(pj.category || '')}">${escapeHtml(pj.category || '')}</span>
+                    <span class="project-status" data-en="${escapeHtml(pj.status || '')}">${escapeHtml(pj.status || '')}</span>
+                  </div>
+                  <h3 data-en="${escapeHtml(pj.title?.en || pj.title)}">${escapeHtml(pj.title?.en || pj.title)}</h3>
+                  <p data-en="${escapeHtml(pj.summary?.en || pj.summary || '')}">${escapeHtml(pj.summary?.en || pj.summary || '')}</p>
+                  <a href="projects.html?id=${encodeURIComponent(pj.id)}" class="project-link" data-en="Learn More">Learn More</a>
+                </div>`;
+              grid.appendChild(card);
+            });
+            try { if (typeof switchLanguage === 'function') { const lang = localStorage.getItem('preferredLanguage') || 'en'; switchLanguage(lang); } } catch {}
+          });
+        } catch {}
       })
       .catch(err => { console.error(err); document.getElementById('title').textContent = 'Failed to load project data'; });
   </script>
