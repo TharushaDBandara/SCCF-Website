@@ -1228,10 +1228,17 @@ document.addEventListener('DOMContentLoaded', function() {
       const norm = (u)=>{ try { if (!u) return ''; const s=String(u); const i=s.indexOf('/uploads/'); return i>=0?s.slice(i):s; } catch { return String(u||''); } };
       allItemsRaw.forEach(it => {
         if (!it) return;
-        if ((!it.projectId || !it.category)) {
-          const pid = urlIndex.get(norm(it.url));
-          if (pid && !it.projectId) it.projectId = pid;
-          if ((!it.category || !it.category.trim()) && pid && meta.has(pid)) it.category = meta.get(pid).category || '';
+        const pid = urlIndex.get(norm(it.url));
+        if (pid) {
+          // Trust URL->project mapping over possibly stale API gallery fields
+          it.projectId = pid;
+          if (meta.has(pid)) {
+            const m = meta.get(pid);
+            it.category = (m.category || it.category || '').trim();
+          }
+        } else if (!it.category || !it.category.trim()) {
+          // Last resort default when nothing resolvable
+          it.category = (it.category || 'community').trim();
         }
       });
 
