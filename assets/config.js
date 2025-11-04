@@ -33,5 +33,5 @@ window.PROJECTS_CONFIG = {
     // 'Community Development': 2,
     // 'Community Service': 1
   },
-  homepageLimit: 9
+  homepageLimit: 6
 };

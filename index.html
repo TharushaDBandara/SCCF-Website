@@ -17,6 +17,10 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/custom-overrides.css">
+  <link rel="stylesheet" href="assets/project-cards-ux.css">
+  
+  <!-- Site configuration (projects ordering, limits) -->
+  <script src="assets/config.js"></script>
   
   <!-- Theme color for browsers -->
   <meta name="theme-color" content="#152530">
@@ -46,7 +50,7 @@
             data-en="About Us" 
             data-si="අප ගැන" 
             data-ta="எங்களைப் பற்றி">About Us</a></li>
-          <li><a href="#projects" 
+          <li><a href="projects-list.html" 
             data-en="Projects" 
             data-si="ව්‍යාපෘති" 
             data-ta="திட்டங்கள்">Projects</a></li>
@@ -283,8 +287,6 @@
           data-en="Discover the impactful initiatives we're leading to create positive change in communities worldwide" 
           data-si="ලොව පුරා ප්‍රජාවන්හි ධනාත්මක වෙනසක් ඇති කිරීමට අප ප්‍රමුඛතාව දෙන බලපෑම්කාරී මුලපිරීම් සොයා ගන්න" 
           data-ta="உலகம் முழுவதும் சமூகங்களில் நேர்மறையான மாற்றத்தை உருவாக்க நாங்கள் முன்னெடுக்கும் தாக்கமான முன்முயற்சிகளைக் கண்டறியுங்கள்">Discover the impactful initiatives we're leading to create positive change in communities worldwide</p>
-        <!-- Dynamic Projects Filter Tabs (like Gallery) -->
-        <div class="project-filters"></div>
         
         <div class="projects-grid">
           <!-- Projects will be loaded dynamically from the admin API -->
@@ -618,7 +620,7 @@
           <h4>Quick Links</h4>
           <ul>
             <li><a href="#about">About Us</a></li>
-            <li><a href="#projects">Projects</a></li>
+            <li><a href="projects-list.html">Projects</a></li>
             <li><a href="#get-involved">Get Involved</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>

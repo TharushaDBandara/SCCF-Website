@@ -357,6 +357,10 @@ header.scrolled {
 	border: 2px solid rgba(73, 119, 142, 0.35) !important;
 	color: var(--primary) !important;
 	background: rgba(254, 254, 254, 0.7) !important;
+	cursor: pointer !important;
+	pointer-events: auto !important;
+	z-index: 1 !important;
+	position: relative !important;
 }
 
 .filter-btn:hover,
@@ -454,4 +458,137 @@ body[data-page="projects-list"] .logo-icon {
 	background: transparent !important;
 	border: none !important;
 	box-shadow: none !important;
+}
+
+/* ---------------------------------------------
+   Homepage Projects Grid: Optimized 2x3 Layout
+   - Prevents card stretching with max-width constraint
+   - Better spacing and visual hierarchy
+   - Responsive breakpoints for optimal viewing
+---------------------------------------------- */
+body:not([data-page]) .projects-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 2rem !important;
+  max-width: 1300px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Constrain individual cards to prevent stretching */
+body:not([data-page]) .project-card {
+  max-width: 600px !important;
+  width: 100% !important;
+  justify-self: center !important;
+  height: fit-content !important;
+}
+
+/* Optimize card image height for 2-column layout */
+body:not([data-page]) .project-image {
+  height: 240px !important;
+}
+
+/* Adjust content padding for better proportions */
+body:not([data-page]) .project-content {
+  padding: 2rem !important;
+}
+
+/* Responsive: single column on tablets and below */
+@media (max-width: 900px) {
+  body:not([data-page]) .projects-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+  
+  body:not([data-page]) .project-card {
+    max-width: 500px !important;
+  }
+  
+  body:not([data-page]) .project-image {
+    height: 220px !important;
+  }
+}
+
+/* ---------------------------------------------
+   All Projects Page: Prevent Stretching
+   - Apply same constraints to projects-list page
+   - Ensures cards look good when filtered
+---------------------------------------------- */
+body[data-page="projects-list"] .projects-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)) !important;
+  gap: 2rem !important;
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  justify-items: center !important;
+}
+
+body[data-page="projects-list"] .project-card {
+  max-width: 550px !important;
+  width: 100% !important;
+}
+
+body[data-page="projects-list"] .project-image {
+  height: 240px !important;
+}
+
+body[data-page="projects-list"] .project-content {
+  padding: 2rem !important;
+}
+
+/* Hide filtered-out cards properly */
+.project-card[style*="display: none"] {
+  display: none !important;
+}
+
+@media (max-width: 1200px) {
+  body[data-page="projects-list"] .projects-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  body[data-page="projects-list"] .projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  body[data-page="projects-list"] .project-card {
+    max-width: 500px !important;
+  }
+  
+  body[data-page="projects-list"] .project-image {
+    height: 220px !important;
+  }
+}/* ---------------------------------------------
+	 Global side padding (horizontal gutters)
+	 - Adds breathing room on left/right
+	 - Keeps mobile friendly at 1rem
+---------------------------------------------- */
+.container {
+	padding-left: 2rem !important;
+	padding-right: 2rem !important;
+}
+
+.p-container {
+	padding-left: 2rem !important;
+	padding-right: 2rem !important;
+}
+
+@media (min-width: 1400px) {
+	.container {
+		padding-left: 2.5rem !important;
+		padding-right: 2.5rem !important;
+	}
+	.p-container {
+		padding-left: 2.5rem !important;
+		padding-right: 2.5rem !important;
+	}
+}
+
+@media (max-width: 768px) {
+	.container,
+	.p-container {
+		padding-left: 1rem !important;
+		padding-right: 1rem !important;
+	}
 }

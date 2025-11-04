@@ -1078,7 +1078,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Build Projects filter buttons like Gallery if container exists
       const projFilters = document.querySelector('.project-filters');
       if (projFilters) {
+        console.log('[DEBUG] Building project filter buttons...');
         const uniqueCats = Array.from(new Set(sorted.map(p => (p.category || '').trim()).filter(Boolean)));
+        console.log('[DEBUG] Found categories:', uniqueCats);
         const makeBtn = (label, value, active=false) => {
           const btn = document.createElement('button');
           btn.className = 'filter-btn' + (active ? ' active' : '');
@@ -1099,21 +1101,35 @@ document.addEventListener('DOMContentLoaded', function() {
         projFilters.innerHTML = '';
         projFilters.appendChild(makeBtn('All Projects', 'all', true));
         uniqueCats.forEach(cat => projFilters.appendChild(makeBtn(cat, cat)));
+        console.log('[DEBUG] Created', uniqueCats.length + 1, 'filter buttons');
 
         const pfBtns = projFilters.querySelectorAll('.filter-btn');
+        console.log('[DEBUG] Found', pfBtns.length, 'filter buttons to attach listeners');
         pfBtns.forEach(b => b.addEventListener('click', function() {
+          console.log('[DEBUG] Filter button clicked:', this.getAttribute('data-filter'));
           pfBtns.forEach(x => x.classList.remove('active'));
           this.classList.add('active');
           const v = this.getAttribute('data-filter');
           const cards = document.querySelectorAll('.project-card');
+          console.log('[DEBUG] Total cards:', cards.length);
           cards.forEach(card => {
             const cat = (card.getAttribute('data-category') || '').trim();
             const show = (v === 'all' || cat === v);
-            card.style.display = show ? '' : 'none';
+            if (show) {
+              card.style.display = '';
+              card.style.visibility = 'visible';
+              card.style.opacity = '1';
+              card.removeAttribute('hidden');
+            } else {
+              card.style.display = 'none';
+              card.style.visibility = 'hidden';
+              card.style.opacity = '0';
+            }
           });
+          const visibleCount = Array.from(cards).filter(el => el.style.display !== 'none').length;
+          console.log('[DEBUG] Visible cards after filter:', visibleCount);
           // Toggle single layout if only one card remains visible
           try {
-            const visibleCount = Array.from(cards).filter(el => el.style.display !== 'none').length;
             if (visibleCount === 1) {
               projectsGrid.classList.add('single');
             } else {
