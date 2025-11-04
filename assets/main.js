@@ -986,6 +986,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const list = isAllProjectsPage ? sorted : sorted.slice(0, homepageLimit);
       list.forEach(proj => {
         const imgSrc = resolveMedia(proj.main_image || proj.image || '');
+        const fbGallery = (Array.isArray(proj.gallery_images) && proj.gallery_images.length) ? resolveMedia(proj.gallery_images[0]) : '';
         const article = document.createElement('article');
         article.className = 'project-card';
         // expose category for filtering
@@ -993,7 +994,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         article.innerHTML = `
           <div class="project-image">
-            <img src="${imgSrc}" alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy" onerror="this.onerror=null; this.src='${pickPlaceholder(proj.id || proj.title)}'">
+            <img src="${imgSrc}" ${fbGallery ? `data-fbk="${fbGallery}"` : ''} alt="${escapeHtml(proj.title?.en || proj.title)}" loading="lazy" onerror="if(this.dataset.fbk){var u=this.dataset.fbk; this.dataset.fbk=''; this.src=u;} else { this.onerror=null; this.src='${pickPlaceholder(proj.id || proj.title)}'; }">
             <div class="project-overlay">
               <div class="project-overlay-content">
                 <h3 data-en="${escapeHtml(proj.title?.en || proj.title)}" data-si="${escapeHtml(proj.title?.si || '')}" data-ta="${escapeHtml(proj.title?.ta || '')}">${escapeHtml(proj.title?.en || proj.title)}</h3>
