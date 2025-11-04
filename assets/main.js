@@ -987,22 +987,22 @@ document.addEventListener('DOMContentLoaded', function() {
       list.forEach(proj => {
         const rawMain = (proj.main_image || proj.image || '') || '';
         const rawGallery0 = (Array.isArray(proj.gallery_images) && proj.gallery_images.length) ? (proj.gallery_images[0] || '') : '';
-        // Choose primary/alternate sources: prefer /server/uploads in prod for reliability
+  // Choose primary/alternate sources
         let primarySrc = resolveMedia(rawMain);
         let fbGallery = rawGallery0 ? resolveMedia(rawGallery0) : '';
         let altPath = '';
         let altFbk = '';
-        // Prefer the mirrored assets/ path first on static hosting; keep /server as fallback.
+        // Prefer the mirrored assets/ path first on static hosting; keep bundled server copy as relative fallback.
         if (!API_BASE && typeof rawMain === 'string' && rawMain.startsWith('/uploads/')) {
           primarySrc = 'assets' + rawMain; // mirror in assets for static hosting
-          altPath = '/server' + rawMain;   // fallback to bundled server copy
+          altPath = 'server' + rawMain;   // relative fallback to bundled server copy
         } else if (typeof rawMain === 'string' && rawMain.startsWith('/uploads/')) {
           // Dev: admin API already handled by resolveMedia; keep /server as last resort
           altPath = '/server' + rawMain;
         }
         if (!API_BASE && typeof rawGallery0 === 'string' && rawGallery0.startsWith('/uploads/')) {
           fbGallery = 'assets' + rawGallery0; // mirror first
-          altFbk = '/server' + rawGallery0;   // bundled server copy as last resort
+          altFbk = 'server' + rawGallery0;   // relative bundled server copy as last resort
         } else if (typeof rawGallery0 === 'string' && rawGallery0.startsWith('/uploads/')) {
           altFbk = '/server' + rawGallery0;
         }
@@ -1303,14 +1303,14 @@ document.addEventListener('DOMContentLoaded', function() {
         div.setAttribute('data-tags', (it.tags || []).join(','));
         const moreLink = it.projectId ? `<a class="btn-overlay" href="projects.html?id=${encodeURIComponent(it.projectId)}" data-en="Learn More" data-si="තව දැනගන්න" data-ta="மேலும் அறிக">Learn More</a>` : '';
         const rawUrl = it.url || '';
-        // In prod prefer server/uploads as primary if applicable
+        // In prod prefer assets/uploads as primary, with relative server/ fallback
         let primary = resolveMedia(it.url);
         let altPath = '';
         if (!API_BASE && typeof rawUrl === 'string' && rawUrl.startsWith('/uploads/')) {
-          primary = '/server' + rawUrl;
-          altPath = 'assets' + rawUrl;
+          primary = 'assets' + rawUrl;
+          altPath = 'server' + rawUrl;
         } else if (typeof rawUrl === 'string' && rawUrl.startsWith('/uploads/')) {
-          altPath = '/server' + rawUrl;
+          altPath = '/server' + rawUrl; // dev last resort
         }
     div.innerHTML = `
           <img src="${primary}" ${altPath ? `data-alt=\"${altPath}\"` : ''} alt="Gallery item" loading="lazy" onerror="if(this.dataset.alt){var a=this.dataset.alt; this.dataset.alt=''; this.src=a;} else { this.onerror=null; const gi=this.closest('.gallery-item'); if(gi) gi.remove(); }">

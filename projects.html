@@ -263,7 +263,7 @@
         const coverWrap = document.getElementById('cover-wrap');
         if (coverUrl) {
           const img = document.getElementById('cover');
-          const altPath = (!API_BASE && typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('/server' + rawCover) : ((typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('/server' + rawCover) : '');
+          const altPath = (!API_BASE && typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('server' + rawCover) : ((typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('/server' + rawCover) : '');
           img.src = coverUrl; img.alt = proj.title?.en || proj.title || 'Project image';
           if (altPath) { img.setAttribute('data-alt', altPath); img.onerror = function(){ const a=this.getAttribute('data-alt'); if(a){ this.removeAttribute('data-alt'); this.src=a; } }; }
           coverWrap.hidden = false;
@@ -324,7 +324,7 @@
             div.setAttribute('data-category', proj.category || 'community');
             const rawU = u || '';
             const primaryU = (!API_BASE && typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('assets' + rawU) : resolveMedia(u);
-            const altU = (!API_BASE && typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('/server' + rawU) : ((typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('/server' + rawU) : '');
+            const altU = (!API_BASE && typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('server' + rawU) : ((typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('/server' + rawU) : '');
             div.innerHTML = `<img data-idx='${String(idx)}' src='${escapeHtml(primaryU)}' ${altU ? `data-alt='${escapeHtml(altU)}'` : ''} alt='${escapeHtml(proj.title?.en || 'Project image')}' onerror="if(this.dataset.alt){var a=this.dataset.alt; this.dataset.alt=''; this.src=a;} else { this.onerror=null; }" />`;
             grid.appendChild(div);
           });
@@ -392,7 +392,7 @@
             top.forEach(pj => {
               const rawRel = (pj.main_image || pj.image || '') || '';
               const imgSrc = (!API_BASE && typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('assets' + rawRel) : resolveMedia(rawRel);
-              const altRel = (!API_BASE && typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('/server' + rawRel) : ((typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('/server' + rawRel) : '');
+              const altRel = (!API_BASE && typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('server' + rawRel) : ((typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('/server' + rawRel) : '');
               const card = document.createElement('article');
               card.className = 'project-card';
               card.setAttribute('data-category', (pj.category||'').trim());
