@@ -1185,11 +1185,42 @@ document.addEventListener('DOMContentLoaded', function() {
     return fetch('assets/projects.json').then(r => r.json()).then(deriveGalleryFromProjects).catch(() => []);
   }
 
+  // Helper: build a Set of featured project IDs (from API or static)
+  async function getFeaturedProjectSet() {
+    try {
+      let projects = null;
+      if (API_BASE) {
+        projects = await fetchWithTimeout(`${API_BASE}/api/projects`, { timeout: 2000 }).then(r=>r.json()).catch(()=>null);
+      }
+      if (!Array.isArray(projects)) {
+        projects = await fetch('assets/projects.json').then(r=>r.json()).catch(()=>[]);
+      }
+      if (!Array.isArray(projects)) return new Set();
+      const isTruthy = (v)=>{
+        const s = String(v).toLowerCase();
+        return v===true || s==='true' || s==='yes' || s==='1';
+      };
+      return new Set(projects.filter(p=>isTruthy(p.featured)).map(p=>p.id));
+    } catch { return new Set(); }
+  }
+
   loadGallery()
     .then(items => items || loadProjectsFallback())
     .catch(() => loadProjectsFallback())
-    .then(items => {
-      const allItems = Array.isArray(items) ? items : [];
+    .then(async items => {
+      const allItemsRaw = Array.isArray(items) ? items : [];
+
+      // Reorder so that images from featured projects appear first
+      const featuredSet = await getFeaturedProjectSet();
+      const withIndex = allItemsRaw.map((it, i) => ({ it, i }));
+      const isFeaturedItem = (x)=> x && x.projectId != null && featuredSet.has(x.projectId);
+      withIndex.sort((a,b)=>{
+        const af = isFeaturedItem(a.it) ? 1 : 0;
+        const bf = isFeaturedItem(b.it) ? 1 : 0;
+        if (af !== bf) return bf - af; // featured first
+        return a.i - b.i; // stable
+      });
+      const allItems = withIndex.map(x=>x.it);
 
       // Limit on homepage to first 25; show all on dedicated gallery page
       const isFullGalleryPage = document.body && document.body.getAttribute('data-page') === 'gallery';
