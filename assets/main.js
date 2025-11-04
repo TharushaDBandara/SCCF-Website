@@ -992,17 +992,17 @@ document.addEventListener('DOMContentLoaded', function() {
         let fbGallery = rawGallery0 ? resolveMedia(rawGallery0) : '';
         let altPath = '';
         let altFbk = '';
+        // Prefer the mirrored assets/ path first on static hosting; keep /server as fallback.
         if (!API_BASE && typeof rawMain === 'string' && rawMain.startsWith('/uploads/')) {
-          // Hosted/static: use bundled server/uploads first
-          primarySrc = '/server' + rawMain;
-          altPath = 'assets' + rawMain; // then mirrored assets if present
+          primarySrc = 'assets' + rawMain; // mirror in assets for static hosting
+          altPath = '/server' + rawMain;   // fallback to bundled server copy
         } else if (typeof rawMain === 'string' && rawMain.startsWith('/uploads/')) {
           // Dev: admin API already handled by resolveMedia; keep /server as last resort
           altPath = '/server' + rawMain;
         }
         if (!API_BASE && typeof rawGallery0 === 'string' && rawGallery0.startsWith('/uploads/')) {
-          fbGallery = '/server' + rawGallery0; // prefer bundled gallery image
-          altFbk = 'assets' + rawGallery0;
+          fbGallery = 'assets' + rawGallery0; // mirror first
+          altFbk = '/server' + rawGallery0;   // bundled server copy as last resort
         } else if (typeof rawGallery0 === 'string' && rawGallery0.startsWith('/uploads/')) {
           altFbk = '/server' + rawGallery0;
         }
