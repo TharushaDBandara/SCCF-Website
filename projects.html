@@ -33,8 +33,8 @@
     .p-header { margin: 0 0 1rem; }
     .p-title { font-size: clamp(1.9rem, 2.2vw + 1rem, 2.6rem); font-weight: 800; margin: .25rem 0 .5rem; }
     .p-summary { max-width: 75ch; color: var(--text-secondary); }
-    .p-cover { margin: 1rem 0 1.25rem; }
-    .p-cover img { width: 100%; height: auto; border-radius: 12px; box-shadow: var(--shadow-lg); display:block; }
+  .p-cover { margin: 0.5rem 0 0.75rem; max-height: 360px; overflow:hidden; border-radius: 14px; box-shadow: var(--shadow-lg); }
+  .p-cover img { width: 100%; height: 360px; object-fit: cover; display:block; }
 
     /* Breadcrumbs + meta */
     .p-breadcrumbs { font-size: .9rem; color: var(--text-secondary); display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
@@ -47,12 +47,13 @@
     .share-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
     .share-btn svg { width:16px; height:16px; }
 
-    .p-info { margin: .5rem 0 2rem; display: grid; gap: 1rem; grid-template-columns: 1fr; }
-    @media (min-width: 900px) { .p-info { grid-template-columns: 1fr 1fr; } }
-    .p-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; box-shadow: var(--shadow); transition: var(--transition); }
+  .p-info { margin: .5rem 0 2rem; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  /* Keep single column layout so stats take full width */
+  @media (min-width: 900px) { .p-info { grid-template-columns: 1fr; } }
+  .p-card { display:none; }
     .p-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
     .p-card strong { color: var(--primary); }
-    .p-stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; }
+  .p-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
     .p-stat { text-align:center; background: var(--background-secondary); border-radius: 14px; padding: 1rem; border:1px solid var(--border); position:relative; overflow:hidden; }
     .p-stat::before { content:''; position:absolute; inset:auto 0 0 0; height:4px; background: var(--gradient-accent); }
     .p-stat .num { display:block; font-size: clamp(1.25rem, 1.6vw, 2rem); font-weight: 800; color: var(--accent); }
@@ -233,6 +234,8 @@
         } else {
           coverWrap.hidden = true;
         }
+        // Move meta (category/status pills + share) below the cover for a cleaner layout
+        try { const meta = document.querySelector('.p-meta'); if (meta && coverWrap && !coverWrap.hidden) { coverWrap.insertAdjacentElement('afterend', meta); } } catch {}
 
         // Meta + stats
         const catText = proj.category || '';
