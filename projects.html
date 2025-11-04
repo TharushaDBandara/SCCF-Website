@@ -212,13 +212,13 @@
     function escapeHtml(str){ return String(str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'})[s]); }
     function resolveMedia(url){ 
       if(!url) return ''; 
-      // In dev, point /uploads/* to the admin server
+      // Dev: point /uploads/* to the admin server
       if (API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
         return API_BASE + url;
       }
-      // In static/prod, keep /uploads/* as-is from the site root
-      if (typeof url === 'string' && url.startsWith('/uploads/')) {
-        return url; 
+      // Static/Prod: map /uploads/* to assets/uploads/* mirror
+      if (!API_BASE && typeof url === 'string' && url.startsWith('/uploads/')) {
+        return 'assets' + url; 
       }
       if(API_BASE && typeof url==='string' && url.startsWith('/')) return API_BASE+url; 
       return url; 
@@ -258,11 +258,12 @@
 
         // Cover image
         const rawCover = (proj.main_image || proj.image || '') || '';
-        const coverUrl = resolveMedia(rawCover);
+        // Prefer bundled /server/uploads in prod
+        const coverUrl = (!API_BASE && typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('/server' + rawCover) : resolveMedia(rawCover);
         const coverWrap = document.getElementById('cover-wrap');
         if (coverUrl) {
           const img = document.getElementById('cover');
-          const altPath = (typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('/server' + rawCover) : '';
+          const altPath = (!API_BASE && typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('assets' + rawCover) : ((typeof rawCover === 'string' && rawCover.startsWith('/uploads/')) ? ('/server' + rawCover) : '');
           img.src = coverUrl; img.alt = proj.title?.en || proj.title || 'Project image';
           if (altPath) { img.setAttribute('data-alt', altPath); img.onerror = function(){ const a=this.getAttribute('data-alt'); if(a){ this.removeAttribute('data-alt'); this.src=a; } }; }
           coverWrap.hidden = false;
@@ -322,8 +323,9 @@
             div.className = 'item';
             div.setAttribute('data-category', proj.category || 'community');
             const rawU = u || '';
-            const altU = (typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('/server' + rawU) : '';
-            div.innerHTML = `<img data-idx='${String(idx)}' src='${escapeHtml(resolveMedia(u))}' ${altU ? `data-alt='${escapeHtml(altU)}'` : ''} alt='${escapeHtml(proj.title?.en || 'Project image')}' onerror="if(this.dataset.alt){var a=this.dataset.alt; this.dataset.alt=''; this.src=a;} else { this.onerror=null; }" />`;
+            const primaryU = (!API_BASE && typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('/server' + rawU) : resolveMedia(u);
+            const altU = (!API_BASE && typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('assets' + rawU) : ((typeof rawU === 'string' && rawU.startsWith('/uploads/')) ? ('/server' + rawU) : '');
+            div.innerHTML = `<img data-idx='${String(idx)}' src='${escapeHtml(primaryU)}' ${altU ? `data-alt='${escapeHtml(altU)}'` : ''} alt='${escapeHtml(proj.title?.en || 'Project image')}' onerror="if(this.dataset.alt){var a=this.dataset.alt; this.dataset.alt=''; this.src=a;} else { this.onerror=null; }" />`;
             grid.appendChild(div);
           });
         }
@@ -389,8 +391,8 @@
             if (!grid || !top.length) { relWrap.remove(); return; }
             top.forEach(pj => {
               const rawRel = (pj.main_image || pj.image || '') || '';
-              const imgSrc = resolveMedia(rawRel);
-              const altRel = (typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('/server' + rawRel) : '';
+              const imgSrc = (!API_BASE && typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('/server' + rawRel) : resolveMedia(rawRel);
+              const altRel = (!API_BASE && typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('assets' + rawRel) : ((typeof rawRel === 'string' && rawRel.startsWith('/uploads/')) ? ('/server' + rawRel) : '');
               const card = document.createElement('article');
               card.className = 'project-card';
               card.setAttribute('data-category', (pj.category||'').trim());
