@@ -102,8 +102,8 @@ header {
   
   /* Glass Effect - Enhanced with fallback */
   background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
   
   /* Floating Design */
   border-radius: 2rem;
@@ -126,8 +126,8 @@ header {
 header.scrolled {
   background: rgba(255, 255, 255, 0.95); /* Fallback */
   background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(25px) saturate(200%);
   -webkit-backdrop-filter: blur(25px) saturate(200%);
+  backdrop-filter: blur(25px) saturate(200%);
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
     0 12px 40px rgba(31, 38, 135, 0.2),
@@ -251,6 +251,7 @@ header.visible {
   right: 0;
   bottom: 0;
   background: rgba(99, 102, 241, 0.1);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 0.5rem;
   opacity: 0;
@@ -286,6 +287,7 @@ header.visible {
   border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: 
     0 4px 20px rgba(99, 102, 241, 0.25),
@@ -323,6 +325,7 @@ header.visible {
   height: 2.5rem;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #1f2937;
@@ -386,6 +389,7 @@ header.visible {
   align-items: center;
   gap: 0.25rem;
   background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 1.5rem;
@@ -526,8 +530,8 @@ header.visible {
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
       0 8px 32px rgba(31, 38, 135, 0.15),
@@ -713,6 +717,7 @@ body[data-page='projects-list'] main.section {
   background: transparent;
   color: var(--primary);
   border: 2px solid var(--primary);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
@@ -782,8 +787,8 @@ body[data-page='projects-list'] main.section {
   position: relative;
   background: none;
   background-color: transparent;
-  backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .hero h1 {
@@ -796,8 +801,8 @@ body[data-page='projects-list'] main.section {
   gap: 0.5rem;
   background: none;
   background-color: transparent;
-  backdrop-filter: none;
   -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .hero-welcome {
@@ -806,8 +811,8 @@ body[data-page='projects-list'] main.section {
   color: #ffffff;
   background: none !important;
   background-color: transparent !important;
-  backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   box-shadow: none !important;
   border: none !important;
   outline: none !important;
@@ -2070,6 +2075,22 @@ body[data-page='projects-list'] main.section {
   border-color: var(--secondary);
   box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
   background: white;
+}
+
+/* Enhanced validation states */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown) {
+  border-color: #ef4444;
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group textarea:valid:not(:placeholder-shown) {
+  border-color: #10b981;
+}
+
+.form-group input:required:focus,
+.form-group textarea:required:focus {
+  border-color: var(--accent);
 }
 
 .form-group textarea {

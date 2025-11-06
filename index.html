@@ -509,7 +509,7 @@
             </div>
             
             <div class="volunteer-action">
-              <a href="https://forms.gle/jvxJN4tNd9aCiiY66" target="_blank" class="btn btn-primary volunteer-form-btn" 
+              <a href="https://forms.gle/jvxJN4tNd9aCiiY66" target="_blank" rel="noopener noreferrer" class="btn btn-primary volunteer-form-btn" 
                  data-en="Fill Volunteer Application" 
                  data-si="ස්වේච්ඡා සේවක අයදුම්පත් පුරවන්න" 
                  data-ta="தொண்டர் விண்ணப்பத்தை பூர்த்தி செய்யுங்கள்">
@@ -569,29 +569,29 @@
           </div>
           <div class="contact-form-container">
             <h3>Send us a Message</h3>
-            <form id="contact-form" class="contact-form" action="mailto:Contact@sccf.live" method="post" enctype="text/plain">
+            <form id="contact-form" class="contact-form" action="mailto:Contact@sccf.live" method="post" enctype="text/plain" novalidate>
               <div class="form-group">
                 <label for="contact-name">Full Name *</label>
-                <input type="text" id="contact-name" name="name" required>
+                <input type="text" id="contact-name" name="name" required placeholder="Enter your full name" aria-required="true">
               </div>
               <div class="form-group">
                 <label for="contact-email">Email Address *</label>
-                <input type="email" id="contact-email" name="email" required>
+                <input type="email" id="contact-email" name="email" required placeholder="you@example.com" aria-required="true">
               </div>
               <div class="form-group">
                 <label for="contact-phone">Phone Number</label>
-                <input type="tel" id="contact-phone" name="phone">
+                <input type="tel" id="contact-phone" name="phone" placeholder="+94 XX XXX XXXX">
               </div>
               <div class="form-group">
                 <label for="contact-subject">Subject *</label>
-                <input type="text" id="contact-subject" name="subject" required>
+                <input type="text" id="contact-subject" name="subject" required placeholder="What is this regarding?" aria-required="true">
               </div>
               <div class="form-group">
                 <label for="contact-message">Message *</label>
-                <textarea id="contact-message" name="message" rows="6" required placeholder="Tell us how we can help you..."></textarea>
+                <textarea id="contact-message" name="message" rows="6" required placeholder="Tell us how we can help you..." aria-required="true"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+              <button type="submit" class="btn btn-primary" aria-label="Submit contact form">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20" height="20" aria-hidden="true">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
                 </svg>
                 Send Message
