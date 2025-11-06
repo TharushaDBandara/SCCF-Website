@@ -823,13 +823,13 @@ This message was sent from the SCCF website contact form.
 Please reply directly to: ${email}`;
       
       // Create mailto link with formatted content
-  const mailtoLink = `mailto:sccf.lk@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+  const mailtoLink = `mailto:Contact@sccf.live?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       
       // Open email client
       window.location.href = mailtoLink;
       
       // Show success message
-  showFormMessage('Thank you for your message! Your email client should open shortly. If it doesn\'t, please copy the information and send it manually to sccf.lk@gmail.com', 'success');
+  showFormMessage('Thank you for your message! Your email client should open shortly. If it doesn\'t, please copy the information and send it manually to Contact@sccf.live', 'success');
       
       // Reset form after a delay
       setTimeout(() => {
