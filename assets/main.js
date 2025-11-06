@@ -1473,3 +1473,35 @@ function applyAdaptiveTitleSizes(selector) {
     el.style.lineHeight = '1.2';
   });
 }
+
+// ============================================
+// BACK TO TOP BUTTON
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+  const backToTopBtn = document.getElementById('back-to-top');
+  if (!backToTopBtn) return;
+
+  // Show/hide button based on scroll position
+  function toggleBackToTopButton() {
+    if (window.pageYOffset > 300) {
+      backToTopBtn.classList.add('visible');
+    } else {
+      backToTopBtn.classList.remove('visible');
+    }
+  }
+
+  // Smooth scroll to top
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  // Event listeners
+  window.addEventListener('scroll', toggleBackToTopButton, { passive: true });
+  backToTopBtn.addEventListener('click', scrollToTop);
+
+  // Initial check
+  toggleBackToTopButton();
+});
