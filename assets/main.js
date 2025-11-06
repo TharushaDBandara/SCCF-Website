@@ -1289,9 +1289,9 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       const allItems = withIndex.map(x=>x.it);
 
-      // Limit on homepage to first 25; show all on dedicated gallery page
+      // Limit on homepage to first 12; show all on dedicated gallery page
       const isFullGalleryPage = document.body && document.body.getAttribute('data-page') === 'gallery';
-      const renderItems = isFullGalleryPage ? allItems : allItems.slice(0, 25);
+      const renderItems = isFullGalleryPage ? allItems : allItems.slice(0, 12);
 
       const truncate = (text, n = 90) => {
         const t = String(text || '').trim();
