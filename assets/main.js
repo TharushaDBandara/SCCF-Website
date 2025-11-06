@@ -408,12 +408,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const filterValue = this.getAttribute('data-filter');
         
+        // Determine if we're on the full gallery page or homepage
+        const isFullGalleryPage = document.body && document.body.getAttribute('data-page') === 'gallery';
+        const maxVisibleItems = isFullGalleryPage ? Infinity : 12;
+        let visibleCount = 0;
+        
         galleryItems.forEach(item => {
           const itemCategory = item.getAttribute('data-category');
+          const shouldShow = (filterValue === 'all' || itemCategory === filterValue);
           
-          if (filterValue === 'all' || itemCategory === filterValue) {
+          if (shouldShow && visibleCount < maxVisibleItems) {
             item.classList.remove('hidden');
             item.style.display = 'block';
+            visibleCount++;
           } else {
             item.classList.add('hidden');
             setTimeout(() => {
@@ -1289,9 +1296,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       const allItems = withIndex.map(x=>x.it);
 
-      // Limit on homepage to first 12; show all on dedicated gallery page
+      // Determine page type
       const isFullGalleryPage = document.body && document.body.getAttribute('data-page') === 'gallery';
-      const renderItems = isFullGalleryPage ? allItems : allItems.slice(0, 12);
+      
+      // On homepage, we'll render all items but initially show only 12 with "All Photos" filter
+      // This allows filtering to work properly with the full dataset
+      const renderItems = allItems;
 
       const truncate = (text, n = 90) => {
         const t = String(text || '').trim();
@@ -1312,11 +1322,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
       galleryGrid.innerHTML = '';
 
-      renderItems.forEach(it => {
+      renderItems.forEach((it, index) => {
         const div = document.createElement('div');
         div.className = 'gallery-item';
         div.setAttribute('data-category', it.category || 'community');
         div.setAttribute('data-tags', (it.tags || []).join(','));
+        
+        // On homepage, initially hide items beyond index 11 (first 12 are 0-11)
+        if (!isFullGalleryPage && index >= 12) {
+          div.classList.add('hidden');
+          div.style.display = 'none';
+        }
+        
         const moreLink = it.projectId ? `<a class="btn-overlay" href="projects.html?id=${encodeURIComponent(it.projectId)}" data-en="Learn More" data-si="තව දැනගන්න" data-ta="மேலும் அறிக">Learn More</a>` : '';
         const rawUrl = it.url || '';
         // In prod prefer assets/uploads as primary, with relative server/ fallback
@@ -1382,11 +1399,19 @@ document.addEventListener('DOMContentLoaded', function() {
           this.classList.add('active');
           const filterValue = this.getAttribute('data-filter');
           const galleryItems = document.querySelectorAll('.gallery-item');
+          
+          // On homepage, limit filtered results to 12 items
+          const maxVisibleItems = isFullGalleryPage ? Infinity : 12;
+          let visibleCount = 0;
+          
           galleryItems.forEach(item => {
             const itemCategory = item.getAttribute('data-category');
-            if (filterValue === 'all' || itemCategory === filterValue) {
+            const shouldShow = (filterValue === 'all' || itemCategory === filterValue);
+            
+            if (shouldShow && visibleCount < maxVisibleItems) {
               item.classList.remove('hidden');
               item.style.display = 'block';
+              visibleCount++;
             } else {
               item.classList.add('hidden');
               setTimeout(() => {
