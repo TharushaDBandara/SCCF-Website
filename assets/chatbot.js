@@ -108,6 +108,9 @@
       const savedLang = localStorage.getItem('preferredLanguage') || 'en';
       this.currentLang = savedLang;
       this.updateLanguageButtons();
+      this.updatePlaceholder();
+      this.updateQuickActions();
+      this.updateWelcomeMessage();
     },
 
     // Create the chat widget HTML
@@ -158,17 +161,18 @@
           <!-- Messages Area -->
           <div class="chat-messages" id="chat-messages">
             <div class="welcome-message">
-              <h4 data-en="Welcome to SCCF!" data-si="SCCF වෙත සාදරයෙන් පිළිගනිමු!" data-ta="SCCF க்கு வரவேற்கிறோம்!">Welcome to SCCF!</h4>
-              <p data-en="How can I help you today?" data-si="අද මම ඔබට කෙසේ උදව් කළ හැකිද?" data-ta="இன்று நான் உங்களுக்கு எப்படி உதவ முடியும்?">How can I help you today?</p>
+              <div class="welcome-emoji">👋</div>
+              <h4 data-en="Hi there! Welcome to SCCF" data-si="ආයුබෝවන්! SCCF වෙත සාදරයෙන් පිළිගනිමු" data-ta="வணக்கம்! SCCF க்கு வரவேற்கிறோம்">Hi there! Welcome to SCCF</h4>
+              <p data-en="I'm here to help you learn about our work. Ask me anything! 😊" data-si="අපගේ වැඩ ගැන දැන ගැනීමට මම මෙහි සිටිමි. ඕනෑම දෙයක් අහන්න! 😊" data-ta="எங்கள் பணிகளைப் பற்றி அறிய நான் இங்கே இருக்கிறேன். எதையும் கேளுங்கள்! 😊">I'm here to help you learn about our work. Ask me anything! 😊</p>
             </div>
           </div>
 
           <!-- Quick Actions -->
           <div class="chat-quick-actions" id="chat-quick-actions">
-            <button class="quick-action-btn" data-message="What projects does SCCF work on?">Our Projects</button>
-            <button class="quick-action-btn" data-message="How can I volunteer with SCCF?">Volunteer</button>
-            <button class="quick-action-btn" data-message="How can I donate to SCCF?">Donate</button>
-            <button class="quick-action-btn" data-message="How can I contact SCCF?">Contact</button>
+            <button class="quick-action-btn" data-message-en="What projects does SCCF work on?" data-message-si="SCCF කුමන ව්‍යාපෘති වලද ක්‍රියා කරන්නේ?" data-message-ta="SCCF என்ன திட்டங்களில் செயல்படுகிறது?" data-en="🎯 Our Projects" data-si="🎯 ව්‍යාපෘති" data-ta="🎯 திட்டங்கள்">🎯 Our Projects</button>
+            <button class="quick-action-btn" data-message-en="How can I volunteer with SCCF?" data-message-si="මම SCCF සමඟ ස්වේච්ඡාවෙන් සේවය කරන්නේ කෙසේද?" data-message-ta="SCCF உடன் தன்னார்வத் தொண்டு செய்வது எப்படி?" data-en="🤝 Volunteer" data-si="🤝 ස්වේච්ඡා" data-ta="🤝 தன்னார்வலர்">🤝 Volunteer</button>
+            <button class="quick-action-btn" data-message-en="How can I donate to support SCCF?" data-message-si="SCCF සඳහා ආධාර කිරීමට මට කෙසේ පරිත්‍යාග කළ හැකිද?" data-message-ta="SCCF க்கு நன்கொடை வழங்குவது எப்படி?" data-en="💝 Donate" data-si="💝 පරිත්‍යාග" data-ta="💝 நன்கொடை">💝 Donate</button>
+            <button class="quick-action-btn" data-message-en="How can I contact SCCF?" data-message-si="SCCF අමතන්නේ කෙසේද?" data-message-ta="SCCF ஐ தொடர்பு கொள்வது எப்படி?" data-en="📞 Contact Us" data-si="📞 අමතන්න" data-ta="📞 தொடர்பு">📞 Contact Us</button>
           </div>
 
           <!-- Input Area -->
@@ -220,10 +224,11 @@
         e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
       });
 
-      // Quick actions
+      // Quick actions - use language-specific messages
       document.querySelectorAll('.quick-action-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const message = btn.dataset.message;
+          const langKey = `data-message-${this.currentLang}`;
+          const message = btn.getAttribute(langKey) || btn.dataset.messageEn || btn.dataset.message;
           document.getElementById('chat-input').value = message;
           this.sendMessage();
         });
@@ -235,6 +240,8 @@
           this.currentLang = btn.dataset.lang;
           this.updateLanguageButtons();
           this.updatePlaceholder();
+          this.updateQuickActions();
+          this.updateWelcomeMessage();
         });
       });
 
@@ -280,6 +287,25 @@
         'ta': 'உங்கள் செய்தியை தட்டச்சு செய்யுங்கள்...'
       };
       document.getElementById('chat-input').placeholder = placeholders[this.currentLang] || placeholders['en'];
+    },
+
+    // Update quick action buttons text based on language
+    updateQuickActions() {
+      document.querySelectorAll('.quick-action-btn').forEach(btn => {
+        const text = btn.getAttribute(`data-${this.currentLang}`) || btn.getAttribute('data-en');
+        if (text) btn.textContent = text;
+      });
+    },
+
+    // Update welcome message based on language
+    updateWelcomeMessage() {
+      const welcomeEl = document.querySelector('.welcome-message');
+      if (welcomeEl) {
+        const h4 = welcomeEl.querySelector('h4');
+        const p = welcomeEl.querySelector('p');
+        if (h4) h4.textContent = h4.getAttribute(`data-${this.currentLang}`) || h4.getAttribute('data-en');
+        if (p) p.textContent = p.getAttribute(`data-${this.currentLang}`) || p.getAttribute('data-en');
+      }
     },
 
     // Send message
@@ -363,24 +389,58 @@
       this.saveConversation();
     },
 
-    // Fallback responses for local development
+    // Fallback responses for local development - more friendly!
     getFallbackResponse(message) {
       const lowerMessage = message.toLowerCase();
+      const lang = this.currentLang;
       
-      if (lowerMessage.includes('project')) {
-        return "SCCF works on civic education, youth empowerment, community development, and human rights awareness programs across Sri Lanka. Visit our Projects page to learn more!";
+      // Check for Sinhala/Tamil script in the message
+      const hasSinhala = /[\u0D80-\u0DFF]/.test(message);
+      const hasTamil = /[\u0B80-\u0BFF]/.test(message);
+      const detectedLang = hasSinhala ? 'si' : hasTamil ? 'ta' : lang;
+      
+      const responses = {
+        project: {
+          en: "Great question! 🎯 SCCF works on civic education, youth empowerment, and community development across Sri Lanka. We run NIC mobile services, voter education programs, and human rights training. Check out our Projects page for more details!",
+          si: "හොඳ ප්‍රශ්නයක්! 🎯 SCCF ශ්‍රී ලංකාව පුරා පුරවැසි අධ්‍යාපනය, තරුණ සවිබලගැන්වීම සහ ප්‍රජා සංවර්ධනය සඳහා ක්‍රියා කරයි. අපි NIC ජංගම සේවා, ඡන්දදායක අධ්‍යාපන වැඩසටහන් සහ මානව හිමිකම් පුහුණුව පවත්වමු. වැඩි විස්තර සඳහා අපගේ ව්‍යාපෘති පිටුව බලන්න!",
+          ta: "நல்ல கேள்வி! 🎯 SCCF இலங்கை முழுவதும் குடிமை கல்வி, இளைஞர் அதிகாரமளித்தல் மற்றும் சமூக மேம்பாட்டில் செயல்படுகிறது. NIC மொபைல் சேவைகள், வாக்காளர் கல்வி நிகழ்ச்சிகள் மற்றும் மனித உரிமைகள் பயிற்சி நடத்துகிறோம். மேலும் விவரங்களுக்கு எங்கள் திட்டங்கள் பக்கத்தைப் பாருங்கள்!"
+        },
+        volunteer: {
+          en: "We'd love to have you on our team! 🤝 You can sign up through the 'Get Involved' section on our website. Or email us at contact@sccflk.org - we'll get back to you soon!",
+          si: "ඔබ අපේ කණ්ඩායමට එකතු වීමට අපි සතුටු වෙමු! 🤝 ඔබට අපගේ වෙබ් අඩවියේ 'සහභාගී වන්න' කොටස හරහා ලියාපදිංචි විය හැක. නැතහොත් contact@sccflk.org වෙත ඊමේල් කරන්න - අපි ඉක්මනින් ඔබව සම්බන්ධ කර ගනිමු!",
+          ta: "நீங்கள் எங்கள் குழுவில் சேர்வதை நாங்கள் விரும்புகிறோம்! 🤝 எங்கள் இணையதளத்தில் 'ஈடுபடுங்கள்' பகுதி மூலம் பதிவு செய்யலாம். அல்லது contact@sccflk.org க்கு மின்னஞ்சல் அனுப்புங்கள் - விரைவில் தொடர்பு கொள்வோம்!"
+        },
+        donate: {
+          en: "Thank you so much for wanting to support our work! 💝 Your contribution makes a real difference. Please email us at contact@sccflk.org for donation details. Every bit helps!",
+          si: "අපගේ වැඩට සහාය වීමට කැමති වීම ගැන ඔබට බොහොම ස්තූතියි! 💝 ඔබේ දායකත්වය සැබෑ වෙනසක් ඇති කරයි. පරිත්‍යාග විස්තර සඳහා contact@sccflk.org වෙත ඊමේල් කරන්න. සෑම දායකත්වයක්ම වැදගත්!",
+          ta: "எங்கள் பணிக்கு ஆதரவளிக்க விரும்புவதற்கு மிக்க நன்றி! 💝 உங்கள் பங்களிப்பு உண்மையான மாற்றத்தை ஏற்படுத்துகிறது. நன்கொடை விவரங்களுக்கு contact@sccflk.org க்கு மின்னஞ்சல் அனுப்புங்கள். ஒவ்வொரு பங்களிப்பும் முக்கியம்!"
+        },
+        contact: {
+          en: "Here's how you can reach us! 📞\n\n📧 Email: contact@sccflk.org\n💬 WhatsApp: +94 70 136 5412\n🌐 Website: www.sccflk.org\n\nWe usually respond within 24 hours!",
+          si: "ඔබට අප සම්බන්ධ කර ගත හැකි ආකාරය මෙන්න! 📞\n\n📧 ඊමේල්: contact@sccflk.org\n💬 WhatsApp: +94 70 136 5412\n🌐 වෙබ් අඩවිය: www.sccflk.org\n\nඅපි සාමාන්‍යයෙන් පැය 24ක් ඇතුළත ප්‍රතිචාර දක්වමු!",
+          ta: "எங்களை தொடர்பு கொள்ள வழிகள்! 📞\n\n📧 மின்னஞ்சல்: contact@sccflk.org\n💬 WhatsApp: +94 70 136 5412\n🌐 இணையதளம்: www.sccflk.org\n\nநாங்கள் வழக்கமாக 24 மணி நேரத்திற்குள் பதிலளிப்போம்!"
+        },
+        default: {
+          en: "Thanks for your message! 😊 For the best AI-powered experience, please visit our hosted website at sccflk.org. In the meantime, feel free to explore the site or contact us at contact@sccflk.org - we're always happy to help!",
+          si: "ඔබේ පණිවිඩයට ස්තූතියි! 😊 හොඳම AI අත්දැකීම සඳහා, කරුණාකර sccflk.org හි අපගේ වෙබ් අඩවියට පිවිසෙන්න. එතෙක්, වෙබ් අඩවිය ගවේෂණය කරන්න හෝ contact@sccflk.org වෙත අපව සම්බන්ධ කර ගන්න - අපි සැමවිටම උදව් කිරීමට සතුටු වෙමු!",
+          ta: "உங்கள் செய்திக்கு நன்றி! 😊 சிறந்த AI அனுபவத்திற்கு, sccflk.org இல் எங்கள் இணையதளத்தைப் பார்வையிடவும். இதற்கிடையில், தளத்தை ஆராயுங்கள் அல்லது contact@sccflk.org இல் எங்களை தொடர்பு கொள்ளுங்கள் - உதவ எப்போதும் மகிழ்ச்சி!"
+        }
+      };
+      
+      if (lowerMessage.includes('project') || lowerMessage.includes('ව්‍යාපෘති') || lowerMessage.includes('திட்ட')) {
+        return responses.project[detectedLang];
       }
-      if (lowerMessage.includes('volunteer')) {
-        return "We'd love to have you volunteer! You can sign up through our Get Involved section on the website, or email us at contact@sccflk.org";
+      if (lowerMessage.includes('volunteer') || lowerMessage.includes('ස්වේච්ඡා') || lowerMessage.includes('தன்னார்வ')) {
+        return responses.volunteer[detectedLang];
       }
-      if (lowerMessage.includes('donat')) {
-        return "Thank you for your interest in supporting SCCF! Please contact us at contact@sccflk.org for donation information.";
+      if (lowerMessage.includes('donat') || lowerMessage.includes('පරිත්‍යාග') || lowerMessage.includes('நன்கொடை')) {
+        return responses.donate[detectedLang];
       }
-      if (lowerMessage.includes('contact')) {
-        return "You can reach us at:\n📧 Email: contact@sccflk.org\n📱 WhatsApp: +94 70 136 5412\n🌐 Website: sccflk.org";
+      if (lowerMessage.includes('contact') || lowerMessage.includes('අමත') || lowerMessage.includes('தொடர்பு')) {
+        return responses.contact[detectedLang];
       }
       
-      return "Thank you for your message! For the best experience with our AI assistant, please access the website from our hosted domain. In the meantime, feel free to explore our website or contact us at contact@sccflk.org";
+      return responses.default[detectedLang];
     },
 
     // Add message to UI
