@@ -70,7 +70,7 @@ let currentLanguage = 'en';
 function switchLanguage(lang) {
   currentLanguage = lang;
   
-  // Update all translatable elements
+  // Update all translatable elements with manual translations
   // Re-query elements to include any dynamically injected content
   const elementsToTranslate = document.querySelectorAll('[data-en]');
   elementsToTranslate.forEach(element => {
@@ -90,6 +90,15 @@ function switchLanguage(lang) {
   
   // Store language preference
   localStorage.setItem('preferredLanguage', lang);
+
+  // Trigger AI translation for elements without manual translations
+  // This eliminates the need for manual translation work!
+  if (lang !== 'en' && window.SCCFTranslationService) {
+    // Small delay to let manual translations apply first
+    setTimeout(() => {
+      window.SCCFTranslationService.translatePageElements(lang);
+    }, 100);
+  }
 
   // Re-apply adaptive title sizing after language updates (titles may change length)
   try {

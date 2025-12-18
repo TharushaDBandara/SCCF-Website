@@ -17,9 +17,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { text, targetLang } = req.body;
+    const { text, texts, targetLang } = req.body;
 
-    if (!text || !targetLang) {
+    // Support both single text and batch translations
+    const isBatch = Array.isArray(texts) && texts.length > 0;
+    const textsToTranslate = isBatch ? texts : [text];
+
+    if ((!text && !isBatch) || !targetLang) {
       return res.status(400).json({ error: 'Missing text or targetLang' });
     }
 
@@ -32,6 +36,10 @@ export default async function handler(req, res) {
 
     const targetLanguage = langNames[targetLang] || targetLang;
 
+    // For batch translations, join texts with special separator
+    const separator = '|||TRANSLATE_SEP|||';
+    const combinedText = textsToTranslate.join(separator);
+
     // Call Gemini API using the secure environment variable
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
@@ -43,21 +51,25 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a professional translator for an NGO website. Translate the following text to ${targetLanguage}. 
-              
-Rules:
-- Return ONLY the translated text, nothing else
-- Maintain the same tone and formality
-- Keep proper nouns unchanged (like "SCCF", names of places)
-- If the text is already in the target language, return it as-is
+              text: `You are a professional translator for SCCF (Social Community Contribution Foundation), an NGO website in Sri Lanka. Translate the following text(s) to ${targetLanguage}.
 
-Text to translate:
-${text}`
+CRITICAL RULES:
+1. Return ONLY the translated text(s), nothing else - no explanations, no notes
+2. Maintain the exact same tone, formality, and formatting
+3. Keep these unchanged: "SCCF", email addresses, phone numbers, URLs, dates, numbers
+4. If multiple texts are separated by "${separator}", translate each one and keep them separated by the same separator
+5. If text is already in ${targetLanguage}, return it unchanged
+6. For Sinhala: Use proper සිංහල script, natural and warm tone
+7. For Tamil: Use proper தமிழ் script, respectful and clear tone
+8. Keep translations concise - don't add words unnecessarily
+
+Text(s) to translate:
+${combinedText}`
             }]
           }],
           generationConfig: {
-            temperature: 0.3,
-            maxOutputTokens: 1024,
+            temperature: 0.2,
+            maxOutputTokens: 2048,
           }
         })
       }
@@ -68,7 +80,25 @@ ${text}`
     }
 
     const data = await response.json();
-    const translatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || text;
+    const translatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || combinedText;
+
+    // Split back if batch translation
+    if (isBatch) {
+      const translations = translatedText.split(separator).map(t => t.trim());
+      
+      // Ensure we have the same number of translations as inputs
+      const results = textsToTranslate.map((original, i) => ({
+        original,
+        translation: translations[i] || original
+      }));
+
+      return res.status(200).json({ 
+        success: true,
+        translations: results,
+        targetLang: targetLang,
+        count: results.length
+      });
+    }
 
     return res.status(200).json({ 
       success: true,

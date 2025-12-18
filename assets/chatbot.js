@@ -17,7 +17,11 @@
     CHAT_ENDPOINT: '/api/chat',
     
     // Fallback for local development (uses static translations)
-    USE_FALLBACK: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    USE_FALLBACK: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
+    
+    // Translation batch settings
+    BATCH_SIZE: 20, // Number of texts to translate at once
+    TRANSLATION_DELAY: 50 // Delay between batches (ms)
   };
 
   // ============================================
@@ -26,68 +30,276 @@
   const TranslationService = {
     cache: new Map(),
     currentLang: 'en',
+    isTranslating: false,
+    pendingQueue: [],
 
+    // Initialize and load cached translations from sessionStorage
+    init() {
+      try {
+        const cached = sessionStorage.getItem('sccf_translations');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          Object.entries(parsed).forEach(([key, value]) => {
+            this.cache.set(key, value);
+          });
+        }
+      } catch (e) {
+        console.log('[Translation] No cached translations found');
+      }
+    },
+
+    // Save cache to sessionStorage
+    saveCache() {
+      try {
+        const obj = {};
+        this.cache.forEach((value, key) => {
+          obj[key] = value;
+        });
+        sessionStorage.setItem('sccf_translations', JSON.stringify(obj));
+      } catch (e) {
+        // Storage might be full, ignore
+      }
+    },
+
+    // Single text translation
     async translate(text, targetLang) {
-      if (!text || text.trim() === '') return text;
+      if (!text || text.trim() === '' || targetLang === 'en') return text;
       
       // Check cache first
-      const cacheKey = `${text}_${targetLang}`;
+      const cacheKey = `${text.substring(0, 100)}_${targetLang}`;
       if (this.cache.has(cacheKey)) {
         return this.cache.get(cacheKey);
       }
 
       // For local development without API, return original
       if (CONFIG.USE_FALLBACK) {
-        console.log('[Translation] Fallback mode - API not available locally');
         return text;
       }
 
       try {
         const response = await fetch(`${CONFIG.API_BASE}${CONFIG.TRANSLATE_ENDPOINT}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: text,
-            targetLang: targetLang
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, targetLang })
         });
 
-        if (!response.ok) {
-          throw new Error(`Translation failed: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Translation failed: ${response.status}`);
 
         const data = await response.json();
         
         if (data.success && data.translation) {
-          // Cache the result
           this.cache.set(cacheKey, data.translation);
+          this.saveCache();
           return data.translation;
         }
 
         return text;
       } catch (error) {
         console.error('[Translation Error]', error);
-        return text; // Return original on error
+        return text;
       }
     },
 
-    // Translate all dynamic content on the page
-    async translatePage(targetLang) {
-      this.currentLang = targetLang;
-      
-      // Find elements that need AI translation (those without data-en/si/ta attributes)
-      const dynamicElements = document.querySelectorAll('[data-translate-ai]');
-      
-      for (const element of dynamicElements) {
-        const originalText = element.dataset.originalText || element.textContent;
-        element.dataset.originalText = originalText;
+    // Batch translation for multiple texts
+    async translateBatch(texts, targetLang) {
+      if (!texts || texts.length === 0 || targetLang === 'en') return texts;
+
+      // Filter out already cached texts
+      const uncached = [];
+      const results = new Map();
+
+      texts.forEach((text, index) => {
+        if (!text || text.trim() === '') {
+          results.set(index, text);
+          return;
+        }
         
-        const translated = await this.translate(originalText, targetLang);
-        element.textContent = translated;
+        const cacheKey = `${text.substring(0, 100)}_${targetLang}`;
+        if (this.cache.has(cacheKey)) {
+          results.set(index, this.cache.get(cacheKey));
+        } else {
+          uncached.push({ index, text, cacheKey });
+        }
+      });
+
+      // If all cached, return immediately
+      if (uncached.length === 0) {
+        return texts.map((_, i) => results.get(i));
+      }
+
+      // For local development, return original texts
+      if (CONFIG.USE_FALLBACK) {
+        return texts;
+      }
+
+      try {
+        const response = await fetch(`${CONFIG.API_BASE}${CONFIG.TRANSLATE_ENDPOINT}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            texts: uncached.map(u => u.text), 
+            targetLang 
+          })
+        });
+
+        if (!response.ok) throw new Error(`Batch translation failed: ${response.status}`);
+
+        const data = await response.json();
+        
+        if (data.success && data.translations) {
+          data.translations.forEach((item, i) => {
+            const { index, cacheKey } = uncached[i];
+            const translation = item.translation || item.original;
+            results.set(index, translation);
+            this.cache.set(cacheKey, translation);
+          });
+          this.saveCache();
+        }
+
+        return texts.map((_, i) => results.get(i) || texts[i]);
+      } catch (error) {
+        console.error('[Batch Translation Error]', error);
+        return texts;
+      }
+    },
+
+    // Translate page elements that need AI translation
+    async translatePageElements(targetLang) {
+      if (this.isTranslating || targetLang === 'en') return;
+      
+      this.currentLang = targetLang;
+      this.isTranslating = true;
+
+      // Show translation indicator
+      this.showTranslatingIndicator();
+
+      try {
+        // Find elements without manual translations for target language
+        const elements = document.querySelectorAll('[data-en]');
+        const needsTranslation = [];
+
+        elements.forEach(el => {
+          const hasManualTranslation = el.getAttribute(`data-${targetLang}`);
+          if (!hasManualTranslation) {
+            const englishText = el.getAttribute('data-en');
+            if (englishText && englishText.trim()) {
+              needsTranslation.push({ el, text: englishText });
+            }
+          }
+        });
+
+        if (needsTranslation.length === 0) {
+          this.hideTranslatingIndicator();
+          this.isTranslating = false;
+          return;
+        }
+
+        console.log(`[Translation] Translating ${needsTranslation.length} elements to ${targetLang}`);
+
+        // Process in batches
+        for (let i = 0; i < needsTranslation.length; i += CONFIG.BATCH_SIZE) {
+          const batch = needsTranslation.slice(i, i + CONFIG.BATCH_SIZE);
+          const texts = batch.map(item => item.text);
+          
+          const translations = await this.translateBatch(texts, targetLang);
+          
+          // Apply translations
+          batch.forEach((item, index) => {
+            const translation = translations[index];
+            if (translation && translation !== item.text) {
+              // Store the AI translation
+              item.el.setAttribute(`data-${targetLang}`, translation);
+              item.el.textContent = translation;
+            }
+          });
+
+          // Small delay between batches to avoid rate limiting
+          if (i + CONFIG.BATCH_SIZE < needsTranslation.length) {
+            await new Promise(resolve => setTimeout(resolve, CONFIG.TRANSLATION_DELAY));
+          }
+        }
+
+        console.log(`[Translation] Completed translating to ${targetLang}`);
+      } catch (error) {
+        console.error('[Page Translation Error]', error);
+      } finally {
+        this.hideTranslatingIndicator();
+        this.isTranslating = false;
+      }
+    },
+
+    // Show a subtle indicator that translation is in progress
+    showTranslatingIndicator() {
+      if (document.getElementById('sccf-translating-indicator')) return;
+      
+      const indicator = document.createElement('div');
+      indicator.id = 'sccf-translating-indicator';
+      indicator.innerHTML = `
+        <div class="translating-content">
+          <svg class="translating-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="20"/>
+          </svg>
+          <span data-en="Translating..." data-si="පරිවර්තනය කරමින්..." data-ta="மொழிபெயர்க்கிறது...">Translating...</span>
+        </div>
+      `;
+      indicator.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        right: 24px;
+        background: linear-gradient(135deg, #152530 0%, #1e3a4c 100%);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 24px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        z-index: 9998;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        animation: slideInUp 0.3s ease;
+      `;
+      
+      // Add CSS animation
+      if (!document.getElementById('sccf-translation-styles')) {
+        const style = document.createElement('style');
+        style.id = 'sccf-translation-styles';
+        style.textContent = `
+          @keyframes slideInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+          .translating-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .translating-spinner {
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      document.body.appendChild(indicator);
+    },
+
+    hideTranslatingIndicator() {
+      const indicator = document.getElementById('sccf-translating-indicator');
+      if (indicator) {
+        indicator.style.animation = 'slideInUp 0.3s ease reverse';
+        setTimeout(() => indicator.remove(), 300);
       }
     }
+  };
+
+  // Initialize translation service
+  TranslationService.init();
+
+  // Expose to global scope for main.js integration
+  window.SCCFTranslationService = TranslationService;
   };
 
   // ============================================
