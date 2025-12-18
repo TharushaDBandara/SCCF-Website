@@ -1505,3 +1505,110 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial check
   toggleBackToTopButton();
 });
+
+// ============================================
+// IMPACT STATISTICS COUNTER ANIMATION
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+  const impactStats = document.querySelectorAll('.impact-stat');
+  const projectsCounter = document.getElementById('projects-counter');
+  
+  if (!impactStats.length) return;
+
+  // Function to animate counting
+  function animateCounter(element, target, suffix = '') {
+    const numberElement = element.querySelector('.impact-number');
+    if (!numberElement) return;
+    
+    const duration = 2000; // 2 seconds
+    const start = 0;
+    const increment = target / (duration / 16); // 60fps
+    let current = start;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      numberElement.textContent = Math.floor(current) + suffix;
+    }, 16);
+  }
+
+  // Function to load project count from JSON
+  async function loadProjectCount() {
+    try {
+      // Try API first (for localhost), then fallback to static JSON
+      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const apiUrl = isLocal ? 'http://127.0.0.1:5000/api/projects' : null;
+      const staticUrl = 'assets/projects.json';
+      
+      let projects = [];
+      
+      if (apiUrl) {
+        try {
+          const response = await fetch(apiUrl);
+          if (response.ok) {
+            projects = await response.json();
+          }
+        } catch (e) {
+          // Fall through to static JSON
+        }
+      }
+      
+      if (projects.length === 0) {
+        const response = await fetch(staticUrl);
+        if (response.ok) {
+          projects = await response.json();
+        }
+      }
+      
+      // Count only published projects
+      const publishedCount = projects.filter(p => p.published !== false).length;
+      
+      if (projectsCounter) {
+        projectsCounter.dataset.target = publishedCount;
+      }
+      
+      return publishedCount;
+    } catch (error) {
+      console.warn('Could not load project count:', error);
+      return 15; // Default fallback
+    }
+  }
+
+  // Intersection Observer for triggering animation when in view
+  let hasAnimated = false;
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !hasAnimated) {
+        hasAnimated = true;
+        
+        // Add animation class to each stat
+        impactStats.forEach((stat, index) => {
+          setTimeout(() => {
+            stat.classList.add('animate');
+            
+            const target = parseInt(stat.dataset.target) || 0;
+            const suffix = stat.dataset.suffix || '';
+            animateCounter(stat, target, suffix);
+          }, index * 150);
+        });
+        
+        observer.disconnect();
+      }
+    });
+  }, {
+    threshold: 0.3,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  // Load project count and then start observing
+  loadProjectCount().then(() => {
+    const statsSection = document.getElementById('impact-stats');
+    if (statsSection) {
+      observer.observe(statsSection);
+    }
+  });
+});

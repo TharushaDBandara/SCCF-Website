@@ -10,30 +10,38 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/logo.png">
   
+  <!-- DNS Prefetch and Preconnect for faster external resource loading -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+  <link rel="dns-prefetch" href="//www.googletagmanager.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
   <!-- Preload critical resources -->
   <link rel="preload" href="assets/styles.css" as="style">
   <link rel="preload" href="assets/main.js" as="script">
+  <link rel="preload" href="assets/logo.png" as="image">
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/custom-overrides.css">
   <link rel="stylesheet" href="assets/project-cards-ux.css">
   
-  <!-- Site configuration (projects ordering, limits) -->
-  <script src="assets/config.js"></script>
+  <!-- Site configuration (projects ordering, limits) - defer non-critical -->
+  <script src="assets/config.js" defer></script>
   
   <!-- Theme color for browsers -->
   <meta name="theme-color" content="#152530">
   
   <!-- Favicon -->
   <link rel="icon" href="assets/logo.png" type="image/png">
-  <!-- Google tag (gtag.js) -->
+  
+  <!-- Google tag (gtag.js) - load async for performance -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17705728933"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);} 
     gtag('js', new Date());
-
     gtag('config', 'AW-17705728933');
   </script>
 </head>
@@ -199,6 +207,67 @@
             <div class="image-overlay">
               <span class="overlay-text">Education</span>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact Statistics Banner -->
+    <section id="impact-stats" class="impact-stats-section">
+      <div class="container">
+        <div class="impact-stats-grid">
+          <div class="impact-stat" data-target="500" data-suffix="+">
+            <div class="impact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span class="impact-number" data-en="0" data-si="0" data-ta="0">0</span>
+            <span class="impact-label" 
+              data-en="Beneficiaries Reached" 
+              data-si="ප්‍රතිලාභීන් ළඟා විය" 
+              data-ta="பயனாளிகளை அடைந்தது">Beneficiaries Reached</span>
+          </div>
+          <div class="impact-stat" data-target="0" data-suffix="" id="projects-counter">
+            <div class="impact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <span class="impact-number" data-en="0" data-si="0" data-ta="0">0</span>
+            <span class="impact-label" 
+              data-en="Projects Completed" 
+              data-si="සම්පූර්ණ කළ ව්‍යාපෘති" 
+              data-ta="திட்டங்கள் நிறைவடைந்தன">Projects Completed</span>
+          </div>
+          <div class="impact-stat" data-target="5" data-suffix="+">
+            <div class="impact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <span class="impact-number" data-en="0" data-si="0" data-ta="0">0</span>
+            <span class="impact-label" 
+              data-en="Districts Covered" 
+              data-si="ආවරණය කළ දිස්ත්‍රික්" 
+              data-ta="மாவட்டங்கள் உள்ளடக்கப்பட்டன">Districts Covered</span>
+          </div>
+          <div class="impact-stat" data-target="50" data-suffix="+">
+            <div class="impact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <span class="impact-number" data-en="0" data-si="0" data-ta="0">0</span>
+            <span class="impact-label" 
+              data-en="Volunteers Engaged" 
+              data-si="සම්බන්ධ ස්වේච්ඡා සේවකයන්" 
+              data-ta="தொண்டர்கள் ஈடுபட்டனர்">Volunteers Engaged</span>
           </div>
         </div>
       </div>

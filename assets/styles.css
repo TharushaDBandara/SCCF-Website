@@ -1,6 +1,8 @@
 /* SCCF Website Modern Styles */
+/* Google Fonts with display=swap for faster text rendering */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
+/* Critical CSS Variables */
 :root {
   --primary: #0f172a;
   --primary-light: #1e293b;
@@ -3267,4 +3269,262 @@ img[loading="lazy"].loaded {
 ::-moz-selection {
   background: var(--secondary-light);
   color: var(--primary);
+}
+
+/* ============================================
+   IMPACT STATISTICS BANNER
+   ============================================ */
+.impact-stats-section {
+  background: linear-gradient(135deg, var(--primary) 0%, #1e3a4f 50%, #0f2a38 100%);
+  padding: 4rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.impact-stats-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.impact-stats-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+}
+
+.impact-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.impact-stat {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.impact-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-accent);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.impact-stat:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.impact-stat:hover::before {
+  transform: scaleX(1);
+}
+
+.impact-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.25rem;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(16, 185, 129, 0.2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+}
+
+.impact-icon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--secondary);
+  transition: all 0.4s ease;
+}
+
+.impact-stat:hover .impact-icon {
+  background: linear-gradient(135deg, var(--secondary), var(--accent));
+  transform: scale(1.1) rotate(5deg);
+}
+
+.impact-stat:hover .impact-icon svg {
+  color: white;
+}
+
+.impact-number {
+  display: block;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 800;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-heading);
+  background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.impact-label {
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+/* Responsive - Impact Stats */
+@media (max-width: 1024px) {
+  .impact-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .impact-stats-section {
+    padding: 3rem 0;
+  }
+  
+  .impact-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  
+  .impact-stat {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 1.25rem;
+  }
+  
+  .impact-icon {
+    margin: 0;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .impact-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .impact-stat-content {
+    flex: 1;
+  }
+  
+  .impact-number {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .impact-label {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+  }
+}
+
+/* Animation for counting numbers */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.impact-stat.animate {
+  animation: countUp 0.6s ease forwards;
+}
+
+.impact-stat:nth-child(1).animate { animation-delay: 0.1s; }
+.impact-stat:nth-child(2).animate { animation-delay: 0.2s; }
+.impact-stat:nth-child(3).animate { animation-delay: 0.3s; }
+.impact-stat:nth-child(4).animate { animation-delay: 0.4s; }
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* GPU-accelerated animations for better performance */
+.hero-image img,
+.gallery-item img,
+.project-image img,
+.team-member img,
+.grid-item img {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Optimize image rendering */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Content visibility for below-fold sections */
+.section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Reduce layout shifts with aspect ratio boxes */
+.project-image {
+  aspect-ratio: 16 / 10;
+}
+
+.gallery-item {
+  aspect-ratio: 4 / 3;
+}
+
+.team-member img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+/* Lazy loading placeholder animation */
+img[loading="lazy"] {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+img[loading="lazy"].loaded {
+  animation: none;
+  background: none;
 }
