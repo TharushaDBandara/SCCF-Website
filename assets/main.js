@@ -93,17 +93,35 @@ function switchLanguage(lang) {
 
   // Trigger AI translation for elements without manual translations
   // This eliminates the need for manual translation work!
-  if (lang !== 'en' && window.SCCFTranslationService) {
-    // Small delay to let manual translations apply first
-    setTimeout(() => {
-      window.SCCFTranslationService.translatePageElements(lang);
-    }, 100);
+  if (lang !== 'en') {
+    triggerAITranslation(lang);
   }
 
   // Re-apply adaptive title sizing after language updates (titles may change length)
   try {
     applyAdaptiveTitleSizes && applyAdaptiveTitleSizes('.project-overlay-content h3, .gallery-info h4');
   } catch {}
+}
+
+// Function to trigger AI translation with retry
+function triggerAITranslation(lang) {
+  if (window.SCCFTranslationService) {
+    window.SCCFTranslationService.translatePageElements(lang);
+  } else {
+    // Translation service not loaded yet, wait and retry
+    let retries = 0;
+    const maxRetries = 10;
+    const checkInterval = setInterval(() => {
+      retries++;
+      if (window.SCCFTranslationService) {
+        clearInterval(checkInterval);
+        window.SCCFTranslationService.translatePageElements(lang);
+      } else if (retries >= maxRetries) {
+        clearInterval(checkInterval);
+        console.log('[Translation] Service not available');
+      }
+    }, 200);
+  }
 }
 
 // Add event listeners to language buttons

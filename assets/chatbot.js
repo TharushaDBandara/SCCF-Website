@@ -300,7 +300,17 @@
 
   // Expose to global scope for main.js integration
   window.SCCFTranslationService = TranslationService;
-  };
+
+  // Auto-translate on page load if user prefers non-English
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang && savedLang !== 'en') {
+      // Delay to ensure page content is loaded
+      setTimeout(() => {
+        TranslationService.translatePageElements(savedLang);
+      }, 500);
+    }
+  });
 
   // ============================================
   // AI CHATBOT WIDGET
