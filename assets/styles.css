@@ -2642,7 +2642,7 @@ body[data-page='projects-list'] main.section {
 }
 
 .footer-bottom p {
-  color: rgba(203, 213, 225, 0.7);
+  color: rgba(203, 213, 225, 0.9);
   font-size: 0.875rem;
   margin: 0;
   letter-spacing: 0.025em;
@@ -3099,6 +3099,12 @@ body[data-page='projects-list'] main.section {
     padding: 0.875rem 1.5rem;
     font-size: 0.875rem;
   }
+}
+
+/* Map Embed Styling */
+.map-embed {
+  border: 0;
+  border-radius: var(--border-radius);
 }
 
 /* Modern Accessibility & Motion */
