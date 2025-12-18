@@ -6,6 +6,7 @@
   <title>Project Details - SCCF</title>
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/custom-overrides.css">
+  <link rel="stylesheet" href="assets/chatbot.css">
   <style>
     /* Force full-width sticky header on this page (override floating glass) */
     body[data-page='project'] header,
@@ -522,5 +523,9 @@
       })
       .catch(err => { console.error(err); document.getElementById('title').textContent = 'Failed to load project data'; });
   </script>
+
+  <!-- Chatbot Widget -->
+  <div id="sccf-chatbot"></div>
+  <script src="assets/chatbot.js" defer></script>
 </body>
 </html>
