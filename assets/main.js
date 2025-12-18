@@ -1510,10 +1510,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // IMPACT STATISTICS COUNTER ANIMATION
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-  const impactStats = document.querySelectorAll('.impact-stat');
+  const impactCards = document.querySelectorAll('.impact-stat-card');
   const projectsCounter = document.getElementById('projects-counter');
   
-  if (!impactStats.length) return;
+  if (!impactCards.length) return;
 
   // Function to animate counting
   function animateCounter(element, target, suffix = '') {
@@ -1531,8 +1531,22 @@ document.addEventListener('DOMContentLoaded', function() {
         current = target;
         clearInterval(timer);
       }
-      numberElement.textContent = Math.floor(current) + suffix;
+      numberElement.textContent = Math.floor(current);
     }, 16);
+  }
+
+  // Function to animate ring progress
+  function animateRing(card) {
+    const ring = card.querySelector('.ring-progress');
+    if (!ring) return;
+    
+    const percent = parseInt(ring.dataset.percent) || 0;
+    card.style.setProperty('--percent', percent);
+    
+    // Trigger the CSS animation
+    requestAnimationFrame(() => {
+      ring.style.strokeDashoffset = 283 - (283 * percent / 100);
+    });
   }
 
   // Function to load project count from JSON
@@ -1585,15 +1599,16 @@ document.addEventListener('DOMContentLoaded', function() {
       if (entry.isIntersecting && !hasAnimated) {
         hasAnimated = true;
         
-        // Add animation class to each stat
-        impactStats.forEach((stat, index) => {
+        // Add animation class to each card with stagger
+        impactCards.forEach((card, index) => {
           setTimeout(() => {
-            stat.classList.add('animate');
+            card.classList.add('animate');
             
-            const target = parseInt(stat.dataset.target) || 0;
-            const suffix = stat.dataset.suffix || '';
-            animateCounter(stat, target, suffix);
-          }, index * 150);
+            const target = parseInt(card.dataset.target) || 0;
+            const suffix = card.dataset.suffix || '';
+            animateCounter(card, target, suffix);
+            animateRing(card);
+          }, index * 200);
         });
         
         observer.disconnect();
