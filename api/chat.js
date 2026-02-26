@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     };
 
     // Build conversation context with improved personality
-    const systemPrompt = `You are "SCCF Helper" (SCCF සහායක / SCCF உதவியாளர்) - a warm, friendly, and helpful AI assistant for SCCF (Social Community Contribution Foundation), an NGO in Sri Lanka.
+    const systemPrompt = `You are "SCCF Helper" (SCCF සහායක / SCCF உதவியாளர்) - a warm, friendly, and helpful AI assistant for SCCF (Social Contribution Collective Foundation), an NGO in Sri Lanka.
 
 🏢 About SCCF:
 - Founded in 2022, working across multiple districts in Sri Lanka

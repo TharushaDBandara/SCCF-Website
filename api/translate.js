@@ -51,7 +51,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a professional translator for SCCF (Social Community Contribution Foundation), an NGO website in Sri Lanka. Translate the following text(s) to ${targetLanguage}.
+              text: `You are a professional translator for SCCF (Social Contribution Collective Foundation), an NGO website in Sri Lanka. Translate the following text(s) to ${targetLanguage}.
 
 CRITICAL RULES:
 1. Return ONLY the translated text(s), nothing else - no explanations, no notes
